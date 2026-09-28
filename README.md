@@ -53,8 +53,10 @@ La vidéo n'est chargée qu'au clic (performance).
 ```
 /                     choix de langue + redirection (langue mémorisée ou du navigateur) — x-default
 /fr/  /en/  /ru/      accueil : hero → œuvres → artiste → Art in Motion → expositions → masterclasses → presse → contact
-/fr/oeuvres/          œuvres par catégorie (#art, #performance, #masterclass)
-/fr/oeuvres/<slug>/   page d'œuvre (gabarit unique : photo, titre, année, médium/lieu, texte, œuvre suivante)
+/fr/oeuvres/                     sommaire : les 3 catégories et la liste de leurs œuvres, visibles d'un coup d'œil
+/fr/oeuvres/art/                 une page par catégorie (art, performance, masterclass)
+/fr/oeuvres/<catégorie>/<slug>/  page d'œuvre (gabarit unique : photo, titre, année, médium/lieu, texte,
+                                 œuvre suivante dans la même catégorie)
 /fr/expositions/      liste chronologique (expositions, collections, représentation)
 /fr/a-propos/         biographie, démarche, CV
 /fr/presse/           mentions presse, dossier de presse
@@ -62,6 +64,10 @@ La vidéo n'est chargée qu'au clic (performance).
 
 Slugs localisés : `work / exhibitions / about / press` (en), `raboty / vystavki / o-khudozhnike / pressa` (ru).
 Le contact est la section de fermeture de chaque page (`#contact`).
+
+Navigation dans les œuvres : sous-menu Art / Performance / Masterclass sous « Œuvres » dans l'en-tête
+(desktop et menu mobile), barre d'onglets fixe (Tout · Art · Performance · Masterclass) sur le sommaire
+et les pages de catégorie, fil d'Ariane sur les pages de catégorie et d'œuvre.
 
 ## SEO
 

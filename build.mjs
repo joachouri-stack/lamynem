@@ -44,6 +44,11 @@ function path(lang, route, slug) {
   return `/${lang}/${seg ? seg + '/' : ''}${slug ? slug + '/' : ''}`;
 }
 
+const CATEGORIES = ['art', 'performance', 'masterclass'];
+const catPath = (lang, cat) => path(lang, 'work', cat);
+const workPath = (lang, w) => `${catPath(lang, w.category)}${w.slug}/`;
+const workBySlug = slug => WORKS.find(w => w.slug === slug);
+
 const hash = file => createHash('sha1').update(readFileSync(join(SRC, file))).digest('hex').slice(0, 8);
 const ASSET_V = {
   css: hash('assets/css/main.css'),
@@ -93,7 +98,7 @@ function workMedia(w, lang, sizes) {
 function workCard(w, lang, num) {
   const s = STRINGS[lang];
   const kind = tr(w.medium, lang) || s.categories[w.category];
-  return `<a class="card reveal" href="${path(lang, 'work', w.slug)}">`
+  return `<a class="card reveal" href="${workPath(lang, w)}">`
     + `<div class="card__media">${workMedia(w, lang, '(max-width: 720px) 100vw, 50vw')}</div>`
     + `<div class="card__meta"><h3 class="card__title">${num ? `<span class="card__num">${num}.</span> ` : ''}${esc(w.title)}</h3>`
     + `<p class="eyebrow">${esc(kind)}</p></div></a>`;
@@ -119,9 +124,16 @@ function header(lang, current, alternates, over) {
     ['contact', '#contact'],
   ];
   const link = ([k, href]) => `<a href="${href}"${k === current ? ' aria-current="page"' : ''}>${esc(s.nav[k])}</a>`;
+  const sub = CATEGORIES.map(c => `<li><a href="${catPath(lang, c)}">${esc(s.categories[c])}</a></li>`).join('');
+  const deskItem = i => (i[0] === 'work'
+    ? `<div class="nav-drop">${link(i)}<ul class="nav-drop__panel">${sub}</ul></div>`
+    : link(i));
+  const mobItem = i => (i[0] === 'work'
+    ? `<li>${link(i)}<ul class="menu-sub">${sub}</ul></li>`
+    : `<li>${link(i)}</li>`);
   return `<header class="site-header${over ? ' site-header--over' : ''}">`
     + `<a class="brand" href="${path(lang, 'home')}">LAMYNE M</a>`
-    + `<div class="nav-desktop"><nav aria-label="${esc(s.mainNav)}" class="nav-links">${items.map(link).join('')}</nav>`
+    + `<div class="nav-desktop"><nav aria-label="${esc(s.mainNav)}" class="nav-links">${items.map(deskItem).join('')}</nav>`
     + `<span class="nav-sep" aria-hidden="true"></span>${langSwitch(lang, alternates)}</div>`
     + `<div class="header-mobile">${langSwitch(lang, alternates)}`
     + `<button class="burger" type="button" data-menu-open aria-expanded="false" aria-controls="menu"><span></span><span></span><span class="visually-hidden">${esc(s.menu)}</span></button></div>`
@@ -129,7 +141,7 @@ function header(lang, current, alternates, over) {
     + `<div class="menu-overlay on-dark" id="menu" role="dialog" aria-modal="true" aria-label="${esc(s.menu)}" inert>`
     + `<div class="menu-overlay__top"><a class="brand" href="${path(lang, 'home')}">LAMYNE M</a>`
     + `<button class="menu-close" type="button" data-menu-close><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="1"/></svg><span class="visually-hidden">${esc(s.close)}</span></button></div>`
-    + `<nav class="menu-nav" aria-label="${esc(s.mainNav)}"><ul>${items.map(i => `<li>${link(i)}</li>`).join('')}</ul></nav>`
+    + `<nav class="menu-nav" aria-label="${esc(s.mainNav)}"><ul>${items.map(mobItem).join('')}</ul></nav>`
     + `<div class="menu-foot"><p class="eyebrow">${esc(s.tagline)}</p>${langSwitch(lang, alternates)}</div>`
     + '</div>';
 }
@@ -327,7 +339,7 @@ function renderHome(lang) {
     ${label(h.masterclassEyebrow, { tag: 'h2', id: 'mc-title' })}
     <p class="h-lead">${esc(h.masterclassTitle)}</p>
   </div>
-  <a class="eyebrow link-line" href="${path(lang, 'work')}#masterclass">${esc(h.masterclassCta)} ${ARROW}</a>
+  <a class="eyebrow link-line" href="${catPath(lang, 'masterclass')}">${esc(h.masterclassCta)} ${ARROW}</a>
 </section>
 
 <section class="section press" aria-labelledby="press-title">
@@ -354,7 +366,7 @@ function exList(lang, { detailed = false } = {}) {
     const title = detailed
       ? `<span class="ex-title">${esc(tr(e.title, lang))}</span>`
         + `<span class="ex-sub eyebrow">${esc(s.exhibitions.types[e.type])}${detail ? ` · ${esc(detail)}` : ''}`
-        + (e.work ? `<a href="${path(lang, 'work', e.work)}">${esc(s.exhibitions.linkedWork)}</a>` : '') + '</span>'
+        + (e.work ? `<a href="${workPath(lang, workBySlug(e.work))}">${esc(s.exhibitions.linkedWork)}</a>` : '') + '</span>'
       : `<span class="ex-title">${esc(tr(e.title, lang))}${detail ? ` <small>(${esc(detail)})</small>` : ''}</span>`;
     if (!e.year) TODOS.add(`Année : ${tr(e.title, 'fr')}`);
     return `<li class="ex-item reveal"${detailed ? ` id="${e.id}"` : ''}><div class="ex-item__main"><span class="ex-year">${e.year ? esc(e.year) : '<span aria-hidden="true">—</span>'}</span><div>${title}</div></div>`
@@ -369,38 +381,82 @@ function pressKit(lang) {
   return `<p class="press-kit"><span class="todo">${esc(s.pressKitTodo)}</span></p>`;
 }
 
+/** Barre d'onglets fixe : Tout · Art · Performance · Masterclass. */
+function catNav(lang, current) {
+  const s = STRINGS[lang];
+  const tab = (href, text, n, on) => `<li><a href="${href}"${on ? ' aria-current="page"' : ''}>${esc(text)} <sup>${n}</sup></a></li>`;
+  return `<nav class="cat-nav" aria-label="${esc(s.work.browse)}"><ul>`
+    + tab(path(lang, 'work'), s.work.all, WORKS.length, !current)
+    + CATEGORIES.map(c => tab(catPath(lang, c), s.categories[c], WORKS.filter(w => w.category === c).length, c === current)).join('')
+    + '</ul></nav>';
+}
+
 function renderWorkIndex(lang) {
   const s = STRINGS[lang];
-  const groups = ['art', 'performance', 'masterclass'];
   const body = `
 <div class="page-intro">
   <p class="watermark" aria-hidden="true">01</p>
   ${label(s.work.eyebrow)}
   <h1>${esc(s.work.heading)}</h1>
 </div>
-${groups.map(cat => {
+${catNav(lang, null)}
+<div class="cat-rows">
+${CATEGORIES.map((cat, i) => {
   const list = WORKS.filter(w => w.category === cat);
-  return `<section class="work-group" id="${cat}" aria-labelledby="g-${cat}">
-  <div class="work-group__head"><div><h2 id="g-${cat}">${esc(s.categories[cat])}</h2><p>${esc(s.categoryIntro[cat])}</p></div><p class="eyebrow">${esc(s.work.count(list.length))}</p></div>
-  <div class="work-grid">${list.map((w, i) => workCard(w, lang, roman(i + 1))).join('')}</div>
+  const cover = list.find(w => w.image) || list[0];
+  return `<section class="cat-row reveal" aria-labelledby="c-${cat}">
+  <a class="cat-row__media" href="${catPath(lang, cat)}" tabindex="-1" aria-hidden="true">${cover.image ? picture(cover.image, lang, { sizes: '(max-width: 860px) 100vw, 50vw' }) : swatch(cover.tone, lang, false)}</a>
+  <div class="cat-row__text">
+    <p class="eyebrow">${pad2(i + 1)} · ${esc(s.work.count(list.length))}</p>
+    <h2 id="c-${cat}"><a href="${catPath(lang, cat)}">${esc(s.categories[cat])}</a></h2>
+    <p class="cat-row__intro">${esc(s.categoryIntro[cat])}</p>
+    <ul class="cat-row__list">${list.map(w => `<li><a href="${workPath(lang, w)}">${esc(w.title)}</a></li>`).join('')}</ul>
+    <a class="eyebrow link-line" href="${catPath(lang, cat)}">${esc(s.work.seeCat(s.categories[cat]))} ${ARROW}</a>
+  </div>
 </section>`;
-}).join('\n')}`;
+}).join('\n')}
+</div>`;
   page({
     lang, route: 'work', alternates: alts('work'), xDefault: path(DEFAULT_LANG, 'work'), current: 'work',
     title: s.work.title, description: s.work.description, body,
     jsonld: [{
       '@type': 'CollectionPage', name: s.work.title, url: `${SITE_URL}${path(lang, 'work')}`, inLanguage: lang,
-      hasPart: WORKS.map(w => ({ '@type': 'CreativeWork', name: w.title, url: `${SITE_URL}${path(lang, 'work', w.slug)}` })),
+      hasPart: CATEGORIES.map(c => ({ '@type': 'CollectionPage', name: s.categories[c], url: `${SITE_URL}${catPath(lang, c)}` })),
+    }],
+  });
+}
+
+function renderCategory(cat, lang) {
+  const s = STRINGS[lang];
+  const list = WORKS.filter(w => w.category === cat);
+  const body = `
+<div class="page-intro page-intro--cat">
+  <p class="watermark" aria-hidden="true">${pad2(CATEGORIES.indexOf(cat) + 1)}</p>
+  <nav class="crumbs eyebrow" aria-label="${esc(s.work.crumbs)}"><a href="${path(lang, 'work')}">${esc(s.work.eyebrow)}</a> <span aria-hidden="true">/</span> <span aria-current="page">${esc(s.categories[cat])}</span></nav>
+  <h1>${esc(s.categories[cat])}</h1>
+  <p>${esc(s.categoryIntro[cat])} — ${esc(s.work.count(list.length))}</p>
+</div>
+${catNav(lang, cat)}
+<section class="work-group" aria-labelledby="g-${cat}">
+  <h2 class="visually-hidden" id="g-${cat}">${esc(s.categories[cat])}</h2>
+  <div class="work-grid">${list.map((w, i) => workCard(w, lang, roman(i + 1))).join('')}</div>
+</section>`;
+  page({
+    lang, route: 'work', slug: cat, alternates: Object.fromEntries(LANGS.map(l => [l, catPath(l, cat)])),
+    xDefault: catPath(DEFAULT_LANG, cat), current: 'work',
+    title: `${s.categories[cat]} — ${s.work.title}`, description: `${s.categoryIntro[cat]} ${s.work.description}`, body,
+    jsonld: [{
+      '@type': 'CollectionPage', name: `${s.categories[cat]} — Lamyne M`, url: `${SITE_URL}${catPath(lang, cat)}`, inLanguage: lang,
+      hasPart: list.map(w => ({ '@type': 'CreativeWork', name: w.title, url: `${SITE_URL}${workPath(lang, w)}` })),
     }],
   });
 }
 
 function renderWork(w, lang) {
   const s = STRINGS[lang];
-  const idx = WORKS.indexOf(w);
-  const next = WORKS[(idx + 1) % WORKS.length];
   const inCat = WORKS.filter(x => x.category === w.category);
   const num = inCat.indexOf(w) + 1;
+  const next = inCat[num % inCat.length];
   const medium = tr(w.medium, lang);
   const place = w.category === 'masterclass' ? tr(w.place, lang) : undefined;
   const text = tr(w.text, lang);
@@ -423,7 +479,7 @@ function renderWork(w, lang) {
     ${w.image ? picture(w.image, lang, { eager: true }) : swatch(w.tone, lang)}
     <p class="watermark watermark--light" aria-hidden="true">${pad2(num)}</p>
     <div class="work-hero__caption">
-      <p class="eyebrow">${esc(s.categories[w.category])}${w.year ? ` · ${esc(w.year)}` : ''}</p>
+      <nav class="crumbs eyebrow" aria-label="${esc(s.work.crumbs)}"><a href="${path(lang, 'work')}">${esc(s.work.eyebrow)}</a> <span aria-hidden="true">/</span> <a href="${catPath(lang, w.category)}">${esc(s.categories[w.category])}</a>${w.year ? ` <span aria-hidden="true">·</span> ${esc(w.year)}` : ''}</nav>
       <h1>${esc(w.title)}</h1>
     </div>
   </header>
@@ -432,14 +488,14 @@ function renderWork(w, lang) {
     <div class="work-text">${text ? (Array.isArray(text) ? text : [text]).map(p => `<p>${esc(p)}</p>`).join('') : `<p class="todo-block">${esc(s.work.textTodo)}</p>`}</div>
   </div>
 </article>
-<p class="back-link"><a class="eyebrow link-line" href="${path(lang, 'work')}#${w.category}"><span aria-hidden="true">←</span> ${esc(s.work.back)}</a></p>
-<a class="next-work on-dark" href="${path(lang, 'work', next.slug)}" style="margin-top:clamp(64px,8vw,120px)">
+<p class="back-link"><a class="eyebrow link-line" href="${catPath(lang, w.category)}"><span aria-hidden="true">←</span> ${esc(s.work.backCat(s.categories[w.category]))}</a></p>
+<a class="next-work on-dark" href="${workPath(lang, next)}" style="margin-top:clamp(64px,8vw,120px)">
   <span class="glow" aria-hidden="true"></span>
-  <span class="eyebrow">${esc(s.work.next)}</span>
+  <span class="eyebrow">${esc(s.work.next)} · ${esc(s.categories[w.category])} ${num % inCat.length + 1}/${inCat.length}</span>
   <span class="next-work__title" style="display:block">${esc(next.title)} ${ARROW}</span>
 </a>`;
 
-  const url = `${SITE_URL}${path(lang, 'work', w.slug)}`;
+  const url = `${SITE_URL}${workPath(lang, w)}`;
   const creator = { '@id': `${SITE_URL}/#lamyne-m` };
   const ld = w.category === 'masterclass'
     ? {
@@ -461,7 +517,7 @@ function renderWork(w, lang) {
     : `${w.title} — ${medium || s.categories[w.category]}, Lamyne M.`;
 
   page({
-    lang, route: 'work', slug: w.slug, alternates: alts('work', w.slug), xDefault: path(DEFAULT_LANG, 'work', w.slug),
+    lang, route: 'work', slug: w.slug, alternates: Object.fromEntries(LANGS.map(l => [l, workPath(l, w)])), xDefault: workPath(DEFAULT_LANG, w),
     current: 'work', over: true, ogType: 'article', ogImage: w.image || undefined,
     title: `${w.title} — Lamyne M`, description: desc, body,
     jsonld: [ld, personLd(lang)],
@@ -670,6 +726,7 @@ if (existsSync(join(SRC, 'static'))) cpSync(join(SRC, 'static'), OUT, { recursiv
 for (const lang of LANGS) {
   renderHome(lang);
   renderWorkIndex(lang);
+  CATEGORIES.forEach(c => renderCategory(c, lang));
   WORKS.forEach(w => renderWork(w, lang));
   renderExhibitions(lang);
   renderAbout(lang);
