@@ -128,8 +128,10 @@ function langSwitch(lang, alternates, extraCls = '') {
     + '</nav>';
 }
 
+const BRAND_THREAD = '<svg class="brand__thread" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M0 4 Q7.5 0 15 4 T30 4 T45 4 T60 4 T75 4 T90 4 T105 4 T120 4"/></svg>';
+
 function header(lang, current, alternates, over) {
-  const s = STRINGS[lang];
+  const s = STRINGS[lang], c = s.contact;
   const items = [
     ['work', path(lang, 'work')],
     ['exhibitions', path(lang, 'exhibitions')],
@@ -137,26 +139,35 @@ function header(lang, current, alternates, over) {
     ['press', path(lang, 'press')],
     ['contact', '#contact'],
   ];
-  const link = ([k, href]) => `<a href="${href}"${k === current ? ' aria-current="page"' : ''}>${esc(s.nav[k])}</a>`;
-  const sub = CATEGORIES.map(c => `<li><a href="${catPath(lang, c)}">${esc(s.categories[c])}</a></li>`).join('');
-  const deskItem = i => (i[0] === 'work'
-    ? `<div class="nav-drop">${link(i)}<ul class="nav-drop__panel">${sub}</ul></div>`
-    : link(i));
-  const mobItem = i => (i[0] === 'work'
-    ? `<li>${link(i)}<ul class="menu-sub">${sub}</ul></li>`
-    : `<li>${link(i)}</li>`);
-  return `<header class="site-header${over ? ' site-header--over' : ''}" id="top">`
-    + `<a class="brand" href="${path(lang, 'home')}">LAMYNE M</a>`
+  const cur = k => (k === current ? ' aria-current="page"' : '');
+  const sub = CATEGORIES.map(k => `<li><a href="${catPath(lang, k)}">${esc(s.categories[k])}</a></li>`).join('');
+  const deskItem = ([k, href]) => {
+    if (k === 'contact') return `<a class="nav-cta" href="${href}">${esc(s.nav[k])} <span aria-hidden="true">→</span></a>`;
+    const a = `<a class="nav-link" href="${href}"${cur(k)}>${esc(s.nav[k])}</a>`;
+    return k === 'work' ? `<div class="nav-drop">${a}<ul class="nav-drop__panel">${sub}</ul></div>` : a;
+  };
+  const mobItem = ([k, href], i) => `<li style="--i:${i}"><a href="${href}"${cur(k)}><span class="menu-num" aria-hidden="true">${pad2(i + 1)}</span>${esc(s.nav[k])}</a>`
+    + (k === 'work' ? `<ul class="menu-sub">${sub}</ul>` : '') + '</li>';
+  const socials = [['Instagram', CONTACT.instagram], ['Facebook', CONTACT.facebook]].filter(([, u]) => u)
+    .map(([n, u]) => `<a href="${esc(u)}" rel="me noopener" target="_blank">${n} <span aria-hidden="true">↗</span><span class="visually-hidden"> ${esc(c.newTab)}</span></a>`).join('');
+  const brand = `<a class="brand" href="${path(lang, 'home')}"><span class="brand__name">LAMYNE M</span>${BRAND_THREAD}</a>`;
+  return `<header class="site-header${over ? ' site-header--over' : ''}" id="top" data-header>`
+    + brand
     + `<div class="nav-desktop"><nav aria-label="${esc(s.mainNav)}" class="nav-links">${items.map(deskItem).join('')}</nav>`
     + `<span class="nav-sep" aria-hidden="true"></span>${langSwitch(lang, alternates)}</div>`
     + `<div class="header-mobile">${langSwitch(lang, alternates)}`
     + `<button class="burger" type="button" data-menu-open aria-expanded="false" aria-controls="menu"><span></span><span></span><span class="visually-hidden">${esc(s.menu)}</span></button></div>`
+    + '<span class="site-header__progress" aria-hidden="true"></span>'
     + '</header>'
     + `<div class="menu-overlay on-dark" id="menu" role="dialog" aria-modal="true" aria-label="${esc(s.menu)}" inert>`
-    + `<div class="menu-overlay__top"><a class="brand" href="${path(lang, 'home')}">LAMYNE M</a>`
+    + '<div class="glow" aria-hidden="true"></div>'
+    + `<div class="menu-overlay__top">${brand}`
     + `<button class="menu-close" type="button" data-menu-close><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="1"/></svg><span class="visually-hidden">${esc(s.close)}</span></button></div>`
     + `<nav class="menu-nav" aria-label="${esc(s.mainNav)}"><ul>${items.map(mobItem).join('')}</ul></nav>`
-    + `<div class="menu-foot"><p class="eyebrow">${esc(s.tagline)}</p>${langSwitch(lang, alternates)}</div>`
+    + `<div class="menu-foot"><div class="menu-foot__contact"><p class="eyebrow">${esc(c.write)}</p>`
+    + `<a class="menu-mail" href="mailto:${CONTACT.email}">${esc(CONTACT.email)}</a>`
+    + (socials ? `<p class="menu-social">${socials}</p>` : '') + '</div>'
+    + `${langSwitch(lang, alternates)}</div>`
     + '</div>';
 }
 
@@ -296,7 +307,7 @@ function renderHome(lang) {
     : (TODOS.add('Vidéo « Art in Motion »'), `<span class="video__play" aria-hidden="true"></span><p class="eyebrow video__note">[${esc(h.videoTodo)}]</p>`);
 
   const body = `
-<section class="hero${HERO.image ? '' : ' hero--plain'}" data-hero aria-labelledby="hero-title">
+<section class="hero${HERO.image ? '' : ' hero--plain'}" data-hero data-header-over aria-labelledby="hero-title">
   <div class="hero__stage">
     ${HERO.image ? picture(HERO.image, lang, { eager: true, cls: 'hero__media', style: `object-position:${HERO.focus}` }) : ''}
     <div class="hero__veil hero__veil--a" aria-hidden="true"></div>
@@ -509,7 +520,7 @@ function renderWork(w, lang) {
 
   const body = `
 <article>
-  <header class="work-hero">
+  <header class="work-hero" data-header-over>
     ${w.image ? picture(w.image, lang, { eager: true }) : swatch(w.tone, lang)}
     <p class="watermark watermark--light" aria-hidden="true">${pad2(num)}</p>
     <div class="work-hero__caption">
