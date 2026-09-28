@@ -379,6 +379,7 @@ button.video__play:hover { background: rgba(247,243,236,.1); transform: translat
 .site-foot { position: relative; margin-top: clamp(84px, 9vw, 130px); padding-top: 32px; border-top: 1px solid var(--rule-dark); display: flex; justify-content: space-between; align-items: center; gap: 24px; }
 .site-foot .eyebrow { color: rgba(247,243,236,.62); }
 .site-foot .lang-switch { color: var(--ivory); }
+.site-credit { position: relative; margin-top: 20px; color: rgba(247,243,236,.62) !important; }
 
 /* --- Pages intérieures ------------------------------------------------- */
 
