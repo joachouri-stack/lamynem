@@ -1,5 +1,14 @@
 {
-  "robe-brune-traine-au-vent": {
+  "robe-patchwork-jean-donjon": {
+    "width": 1200,
+    "height": 1799,
+    "widths": [
+      480,
+      800,
+      1200
+    ]
+  },
+  "robe-vitraux-voute-bleue": {
     "width": 1920,
     "height": 2879,
     "widths": [
@@ -8,15 +17,6 @@
       1200,
       1600,
       1920
-    ]
-  },
-  "robe-patchwork-jean-donjon": {
-    "width": 1200,
-    "height": 1799,
-    "widths": [
-      480,
-      800,
-      1200
     ]
   },
   "seconde-vie-villa-d-2026": {
