@@ -24,10 +24,7 @@ WIDTHS = [480, 800, 1200, 1600, 2400]
 # Photos dont aucun original plus grand n'existe mais qui servent en plein écran :
 # on les agrandit jusqu'à cette largeur (Lanczos + accentuation légère).
 # À retirer dès qu'un original en haute définition est disponible.
-UPSCALE_TO = {
-    "robe-vitraux-voute-bleue": 1920,
-    "robe-patchwork-jean-donjon": 1200,
-}
+UPSCALE_TO = {}
 
 
 def main():

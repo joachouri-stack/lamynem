@@ -39,6 +39,20 @@ export const MOTION_VIDEO = TODO;
 
 // Photos disponibles (générées par scripts/images.py depuis src/originals/).
 export const IMAGES = {
+  'robe-doree-cape-rouge-vitraux': {
+    alt: {
+      fr: 'Une haute robe bleu nuit au plastron brodé d’or et à la cape rouge bordée d’or, dressée sur un chapiteau de pierre entre deux vitraux ; un homme pieds nus, vêtu de lin clair, la contemple.',
+      en: 'A tall midnight-blue gown with a gold-embroidered bodice and a gold-trimmed red cape, raised on a stone capital between two stained-glass windows; a barefoot man in pale linen gazes up at it.',
+      ru: 'Высокое тёмно-синее платье с расшитым золотом лифом и красной накидкой с золотой каймой, установленное на каменной капители между двумя витражами; босой мужчина в светлом льне смотрит на него.',
+    },
+  },
+  'robe-brune-traine-au-vent': {
+    alt: {
+      fr: 'Une robe monumentale en tissu brun, coiffée d’une collerette de volants bruns et bleus, dressée seule dans un champ ; sa longue traîne se soulève au vent sous un ciel nuageux.',
+      en: 'A monumental gown in brown fabric, crowned with a ruffled collar of brown and blue, standing alone in a field; its long train lifts in the wind under a cloudy sky.',
+      ru: 'Монументальное платье из коричневой ткани с воротником из коричневых и синих оборок, одиноко стоящее в поле; длинный шлейф поднимается на ветру под облачным небом.',
+    },
+  },
   'robe-patchwork-jean-donjon': {
     alt: {
       fr: 'Une robe monumentale en patchwork de jeans aux nombreuses nuances de bleu, sur mannequin, photographiée en contre-plongée ; sa longue traîne s’étale sur le gravier devant un donjon médiéval et un clocher de pierre.',
@@ -63,14 +77,12 @@ export const IMAGES = {
 };
 
 // Photo de couverture de l'accueil (sous l'effet « tissu numérique »).
-// focus : cadrage CSS (object-position) — garde le haut de la robe et les vitraux dans le cadre.
-// Titre de l'œuvre, lieu et crédit photo à confirmer par Lamyne M.
+// TODO tant qu'aucune photo en haute définition (≥ 3000 px de large) n'est fournie :
+// le hero reste alors un fond sombre, le tissu se soulève sur le nom seul.
+// focus : cadrage CSS (object-position) de la photo une fois ajoutée.
 export const HERO = {
-  image: 'robe-vitraux-voute-bleue',
-  focus: 'center 45%',
-  work: TODO,
-  place: TODO,
-  credit: TODO,
+  image: TODO,
+  focus: 'center 50%',
 };
 
 // ---------------------------------------------------------------------------
@@ -136,16 +148,19 @@ export const WORKS = [
 ].map((w, i) => ({ ...w, tone: TONES[i % TONES.length] }));
 
 // Œuvres mises en avant sur l'accueil (après la pièce « Seconde vie » en plein cadre).
-export const FEATURED = ['peau-d-ane', 'marabout-3-0'];
-
-// Grand visuel vertical des « Œuvres sélectionnées » (robe en patchwork de jeans).
-// work : slug de l'œuvre correspondante, à renseigner une fois confirmé par
-// Lamyne M — la carte prend alors son titre et renvoie vers sa page.
-export const FEATURED_VISUAL = {
-  image: 'robe-patchwork-jean-donjon',
-  work: TODO,
+// Robes en format vertical des « Œuvres sélectionnées » (accueil), dans l'ordre
+// d'affichage. work : slug de l'œuvre correspondante, à renseigner une fois
+// confirmé par Lamyne M — la carte prend alors son titre et renvoie vers sa page.
+const robe = (image, label) => ({
+  image, label, work: TODO,
   medium: { fr: 'Textile', en: 'Textile', ru: 'Текстиль' },
-};
+});
+export const FEATURED_ROBES = [
+  robe('robe-doree-cape-rouge-vitraux', 'robe dorée à la cape rouge (vitraux)'),
+  robe('robe-brune-traine-au-vent', 'robe brune à la traîne au vent'),
+  robe('robe-vitraux-voute-bleue', 'robe rouge et or sous la voûte bleue'),
+  robe('robe-patchwork-jean-donjon', 'robe en patchwork de jeans'),
+];
 
 // ---------------------------------------------------------------------------
 // Expositions, collections, représentation — informations confirmées seulement.

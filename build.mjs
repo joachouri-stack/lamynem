@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
-  BIO, CONTACT, COUNTRIES, DEFAULT_LANG, EXHIBITIONS, FEATURED, FEATURED_VISUAL, HERO, IMAGES, LANGS,
+  BIO, CONTACT, COUNTRIES, DEFAULT_LANG, EXHIBITIONS, FEATURED_ROBES, HERO, IMAGES, LANGS,
   MOTION_VIDEO, PRESS, PRESS_KIT, ROUTES, SITE_URL, WORKS,
 } from './src/content/site.mjs';
 import { STRINGS } from './src/content/i18n.mjs';
@@ -104,18 +104,18 @@ function workCard(w, lang, num) {
     + `<p class="eyebrow">${esc(kind)}</p></div></a>`;
 }
 
-/** Grand visuel vertical des « Œuvres sélectionnées » : lien vers l'œuvre dès qu'elle est confirmée. */
-function featuredVisual(lang, num) {
+/** Robe verticale des « Œuvres sélectionnées » : lien vers l'œuvre dès qu'elle est confirmée. */
+function robeCard(r, lang, num) {
   const s = STRINGS[lang];
-  const w = FEATURED_VISUAL.work && workBySlug(FEATURED_VISUAL.work);
-  if (!w) TODOS.add('Œuvres sélectionnées : titre de l’œuvre de la robe en patchwork de jeans (lieu et crédit photo)');
+  const w = r.work && workBySlug(r.work);
+  if (!w) TODOS.add(`Œuvres sélectionnées : titre de l’œuvre (${r.label}), lieu et crédit photo`);
   const title = w ? esc(w.title) : `<span class="todo">${esc(s.todo)}</span>`;
-  const inner = `<div class="card__media card__media--tall">${picture(FEATURED_VISUAL.image, lang, { sizes: '(max-width: 720px) 100vw, 42vw' })}</div>`
-    + `<div class="card__meta"><h3 class="card__title"><span class="card__num">${num}.</span> ${title}</h3>`
-    + `<p class="eyebrow">${esc(tr(FEATURED_VISUAL.medium, lang))}</p></div>`;
+  const inner = `<div class="robe__media">${picture(r.image, lang, { sizes: '(max-width: 1024px) 50vw, 26vw' })}</div>`
+    + `<div class="robe__meta"><span class="robe__num">${num}</span><h3 class="robe__title">${title}</h3>`
+    + `<p class="eyebrow">${esc(tr(r.medium, lang))}</p></div>`;
   return w
-    ? `<a class="card card--tall reveal" href="${workPath(lang, w)}">${inner}</a>`
-    : `<div class="card card--tall reveal">${inner}</div>`;
+    ? `<a class="robe reveal" href="${workPath(lang, w)}">${inner}</a>`
+    : `<div class="robe reveal">${inner}</div>`;
 }
 
 // --- Gabarit commun -------------------------------------------------------
@@ -269,20 +269,17 @@ const alts = (route, slug) => Object.fromEntries(LANGS.map(l => [l, path(l, rout
 function renderHome(lang) {
   const s = STRINGS[lang], h = s.home;
   const alternates = alts('home');
-  const featured = FEATURED.map(slug => WORKS.find(w => w.slug === slug));
   const secondeVie = EXHIBITIONS.find(e => e.id === 'seconde-vie');
-  if (!HERO.work) TODOS.add('Photo de couverture : titre de l’œuvre (robe rouge et or sous les vitraux)');
-  if (!HERO.place) TODOS.add('Photo de couverture : lieu de la prise de vue');
-  if (!HERO.credit) TODOS.add('Photo de couverture : nom du photographe (crédit)');
+  if (!HERO.image) TODOS.add('Photo de couverture de l’accueil en haute définition (≥ 3000 px de large), avec titre, lieu et crédit');
 
   const video = MOTION_VIDEO
     ? `<button class="video__play" type="button" data-video="/assets/${esc(MOTION_VIDEO.src)}"${MOTION_VIDEO.poster ? ` data-poster="/assets/${esc(MOTION_VIDEO.poster)}"` : ''} aria-label="${esc(s.home.play)} — ${esc(tr(MOTION_VIDEO.title, lang) || '')}"></button>`
     : (TODOS.add('Vidéo « Art in Motion »'), `<span class="video__play" aria-hidden="true"></span><p class="eyebrow video__note">[${esc(h.videoTodo)}]</p>`);
 
   const body = `
-<section class="hero" data-hero aria-labelledby="hero-title">
+<section class="hero${HERO.image ? '' : ' hero--plain'}" data-hero aria-labelledby="hero-title">
   <div class="hero__stage">
-    ${picture(HERO.image, lang, { eager: true, cls: 'hero__media', style: `object-position:${HERO.focus}` })}
+    ${HERO.image ? picture(HERO.image, lang, { eager: true, cls: 'hero__media', style: `object-position:${HERO.focus}` }) : ''}
     <div class="hero__veil hero__veil--a" aria-hidden="true"></div>
     <div class="glow" aria-hidden="true"></div>
     <div class="grain" aria-hidden="true"></div>
@@ -315,11 +312,8 @@ function renderHome(lang) {
       </div>
     </div>
   </div>
-  <div class="works-trio">
-    ${featuredVisual(lang, roman(2))}
-    <div class="works-stack">
-      ${featured.map((w, i) => workCard(w, lang, roman(i + 3))).join('\n      ')}
-    </div>
+  <div class="robes">
+    ${FEATURED_ROBES.map((r, i) => robeCard(r, lang, roman(i + 2))).join('\n    ')}
   </div>
   <div class="works-more"><a class="eyebrow link-line" href="${path(lang, 'work')}">${esc(h.allWorks)} ${ARROW}</a></div>
 </section>
@@ -373,7 +367,7 @@ function renderHome(lang) {
 </section>`;
 
   page({
-    lang, route: 'home', alternates, xDefault: '/', current: null, over: true, fabric: true, ogImage: HERO.image,
+    lang, route: 'home', alternates, xDefault: '/', current: null, over: true, fabric: true, ogImage: HERO.image || undefined,
     title: h.title, description: h.description, body,
     jsonld: [personLd(lang), { '@type': 'WebSite', name: 'Lamyne M', url: `${SITE_URL}/`, inLanguage: lang }],
   });
