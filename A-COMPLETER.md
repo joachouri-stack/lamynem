@@ -45,7 +45,7 @@ Compléter `src/content/site.mjs` (et `src/originals/` pour les photos), puis re
 - [ ] Œuvres sélectionnées : titre de l’œuvre de la robe en patchwork de jeans (lieu et crédit photo)
 - [ ] Photo de couverture : lieu de la prise de vue
 - [ ] Photo de couverture : nom du photographe (crédit)
-- [ ] Photo de couverture : titre de l’œuvre (robe brune à la traîne au vent)
+- [ ] Photo de couverture : titre de l’œuvre (robe rouge et or sous les vitraux)
 - [ ] Photo de l'œuvre « Autoportrait »
 - [ ] Photo de l'œuvre « Corona curius »
 - [ ] Photo de l'œuvre « Djins et forêt »
