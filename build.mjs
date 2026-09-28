@@ -162,6 +162,7 @@ function contactFooter(lang, alternates) {
     + `<div><dt class="eyebrow">${esc(s.contact.social)}</dt><dd>${socialLinks || todo(lang, 'Liens réseaux sociaux')}</dd></div>`
     + '</dl>'
     + `<div class="site-foot"><p class="eyebrow">© ${new Date().getFullYear()} Lamyne M</p>${langSwitch(lang, alternates)}</div>`
+    + `<p class="eyebrow site-credit">Design by Johane A.</p>`
     + '</footer>';
 }
 
