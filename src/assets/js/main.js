@@ -51,6 +51,42 @@
     });
   }
 
+  // --- En-tête : transparent sur les zones sombres, barre ivoire ensuite,
+  //     caché en descendant, visible en remontant, fil de progression ------
+  var hdr = document.querySelector('[data-header]');
+  if (hdr) {
+    var overEl = document.querySelector('[data-header-over]');
+    var startsOver = hdr.classList.contains('site-header--over');
+    var lastY = window.scrollY;
+    var ticking = false;
+
+    var updateHeader = function () {
+      ticking = false;
+      var y = window.scrollY;
+      // Fin de la zone sombre, mesurée en coordonnées de page.
+      var limit = overEl ? overEl.getBoundingClientRect().bottom + y - hdr.offsetHeight : 0;
+      var solid = y > Math.max(limit, 8);
+      hdr.classList.toggle('is-solid', solid);
+      if (startsOver) hdr.classList.toggle('site-header--over', !solid);
+      if (Math.abs(y - lastY) > 6) {
+        var down = y > lastY;
+        hdr.classList.toggle('is-hidden', down && solid && y > limit + 240 && !document.body.classList.contains('menu-open'));
+        lastY = y;
+      }
+      // Barre d'onglets fixe (rubrique Œuvres) : se range sous l'en-tête quand il est visible.
+      document.body.classList.toggle('header-shown', solid && !hdr.classList.contains('is-hidden'));
+      document.documentElement.style.setProperty('--header-h', hdr.offsetHeight + 'px');
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      hdr.style.setProperty('--progress', max > 0 ? Math.min(y / max, 1).toFixed(4) : '0');
+    };
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; window.requestAnimationFrame(updateHeader); }
+    }, { passive: true });
+    window.addEventListener('resize', updateHeader, { passive: true });
+    updateHeader();
+  }
+
   // --- Mémorisation de la langue choisie (utilisée par la page racine) ----
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[data-lang]');
