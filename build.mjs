@@ -388,12 +388,31 @@ function renderHome(lang) {
 </section>
 
 <section class="section press" aria-labelledby="press-title">
-  <div class="section__head">
-    ${label(h.pressEyebrow)}
-    <h2 class="h-section" id="press-title">${esc(h.pressTitle)}</h2>
+  <p class="watermark" aria-hidden="true">06</p>
+  <div class="press__head">
+    <div>
+      ${label(h.pressEyebrow)}
+      <h2 class="h-section" id="press-title">${esc(h.pressTitle)}</h2>
+    </div>
+    <a class="eyebrow link-line" href="${path(lang, 'press')}">${esc(h.pressAll)} ${ARROW}</a>
   </div>
-  <ul class="press-names">${PRESS.map(p => `<li>${p.url ? `<a href="${esc(p.url)}" rel="noopener" target="_blank">${esc(p.name)}</a>` : esc(p.name)}</li>`).join('')}</ul>
-  ${pressKit(lang)}
+  ${pressMarquee()}
+  <div class="press__grid">
+    <div class="press__aside">
+      <p class="press__intro">${esc(h.pressIntro)}</p>
+      <dl class="press__meta">
+        <div><dt class="eyebrow">${esc(h.pressKitLabel)}</dt><dd>${pressKit(lang)}</dd></div>
+        <div><dt class="eyebrow">${esc(s.press.contactPress)}</dt><dd><a class="link-line" href="mailto:${CONTACT.email}">${esc(CONTACT.email)}</a></dd></div>
+      </dl>
+    </div>
+    <ol class="press-rows">${PRESS.map((p, i) => {
+      const inner = `<span class="press-row__num">${pad2(i + 1)}</span><span class="press-row__name">${esc(p.name)}</span>`
+        + `<span class="press-row__arrow" aria-hidden="true">${p.url ? '↗' : '→'}</span>`;
+      return `<li>${p.url
+        ? `<a class="press-row" href="${esc(p.url)}" rel="noopener" target="_blank">${inner}<span class="visually-hidden"> ${esc(s.contact.newTab)}</span></a>`
+        : `<a class="press-row" href="${path(lang, 'press')}">${inner}</a>`}</li>`;
+    }).join('')}</ol>
+  </div>
 </section>`;
 
   page({
@@ -419,11 +438,17 @@ function exList(lang, { detailed = false } = {}) {
   }).join('')}</ul>`;
 }
 
+/** Bandeau défilant des noms (décoratif : la liste accessible est juste en dessous). */
+function pressMarquee() {
+  const seq = PRESS.map(p => `<span class="press-marquee__name">${esc(p.name)}</span>${THREAD}`).join('');
+  return `<div class="press-marquee" aria-hidden="true"><div class="press-marquee__track"><div class="press-marquee__seq">${seq}</div><div class="press-marquee__seq">${seq}</div></div></div>`;
+}
+
 function pressKit(lang) {
   const s = STRINGS[lang];
   if (PRESS_KIT) return `<a class="eyebrow press-kit link-line" href="/assets/${esc(PRESS_KIT)}" download>${esc(s.pressKit)} <span aria-hidden="true">↓</span></a>`;
   TODOS.add('Dossier de presse PDF');
-  return `<p class="press-kit"><span class="todo">${esc(s.pressKitTodo)}</span></p>`;
+  return `<span class="press-kit"><span class="todo">${esc(s.pressKitTodo)}</span></span>`;
 }
 
 /** Barre d'onglets fixe : Tout · Art · Performance · Masterclass. */
