@@ -390,19 +390,58 @@ button.video__play:hover { background: rgba(247,243,236,.1); transform: translat
 
 /* --- Contact / pied de page -------------------------------------------- */
 
-.contact { padding: clamp(100px, 12.5vw, 180px) var(--gutter) clamp(64px, 7.6vw, 110px); }
-.contact .glow { width: 45%; height: 70%; right: -12%; top: -10%; background: #8a3d22; filter: blur(170px); opacity: .4; }
+.contact { padding: clamp(100px, 12.5vw, 180px) var(--gutter) clamp(28px, 3vw, 40px); }
+.contact .glow { width: 45%; height: 60%; right: -12%; top: -10%; background: #8a3d22; filter: blur(170px); opacity: .4; }
+.contact .glow--b { width: 50%; height: 40%; left: -15%; right: auto; top: auto; bottom: 8%; background: #5a2414; opacity: .35; }
+.contact__top { position: relative; }
 .contact__lines { position: relative; font-family: var(--font-display); font-size: clamp(29px, 3.2vw, 46px); line-height: 1.32; max-width: 840px; }
 .contact__lines span { color: var(--terracotta-light); display: block; }
-.contact__mail { position: relative; display: inline-block; margin-top: clamp(32px, 3.3vw, 48px); color: var(--ivory); border-bottom: 1px solid var(--ivory); padding-bottom: 6px; font-family: var(--font-ui); font-weight: 500; font-size: clamp(13px, 1vw, 15px); letter-spacing: .14em; text-transform: uppercase; }
-.contact__info { position: relative; margin-top: 48px; display: flex; gap: 24px 56px; flex-wrap: wrap; }
-.contact__info dt { margin-bottom: 6px; }
-.contact__info dd { font-family: var(--font-display); font-size: 18px; color: var(--ivory); }
-.contact__info dd a { margin-right: 18px; }
-.site-foot { position: relative; margin-top: clamp(84px, 9vw, 130px); padding-top: 32px; border-top: 1px solid var(--rule-dark); display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+
+/* Adresse e-mail en grand, soulignement qui se trace au survol */
+.contact__mail { position: relative; display: inline-grid; grid-template-columns: auto auto; align-items: center; column-gap: clamp(16px, 2vw, 32px); margin-top: clamp(48px, 5vw, 72px); color: var(--ivory); }
+.contact__mail-label { grid-column: 1 / -1; margin-bottom: 10px; color: var(--ink-3-soft) !important; }
+.contact__mail-addr { position: relative; font-family: var(--font-display); font-size: clamp(30px, 5.4vw, 84px); line-height: 1.05; letter-spacing: -.01em; }
+.contact__mail-addr::after { content: ''; position: absolute; left: 0; right: 0; bottom: -.08em; height: 1px; background: currentColor; transform: scaleX(.18); transform-origin: left; transition: transform .8s var(--ease); }
+.contact__mail:hover .contact__mail-addr::after, .contact__mail:focus-visible .contact__mail-addr::after { transform: scaleX(1); }
+.contact__mail-arrow { display: inline-flex; align-items: center; justify-content: center; width: clamp(44px, 4.6vw, 72px); aspect-ratio: 1; border: 1px solid rgba(247,243,236,.4); border-radius: 50%; font-size: clamp(16px, 1.6vw, 24px); transition: background .4s var(--ease), color .4s var(--ease), transform .6s var(--ease), border-color .4s; }
+.contact__mail:hover { color: var(--ivory); }
+.contact__mail:hover .contact__mail-arrow { background: var(--terracotta-light); border-color: var(--terracotta-light); color: var(--night); transform: rotate(-45deg); }
+
+/* Fil cousu */
+.stitch { position: relative; display: block; width: max(100%, 1100px); max-width: none; height: 24px; margin: clamp(64px, 7vw, 100px) 0 clamp(40px, 4.4vw, 64px); overflow: visible; }
+.stitch path { fill: none; vector-effect: non-scaling-stroke; }
+.stitch__thread { stroke: rgba(247,243,236,.1); stroke-width: 1; }
+.stitch__dash { stroke: var(--terracotta-light); stroke-width: 1.2; stroke-dasharray: 7 9; opacity: .75; animation: stitch 14s linear infinite; }
+@keyframes stitch { to { stroke-dashoffset: -320; } }
+
+.foot-grid { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px 32px; }
+.foot-col .eyebrow { margin-bottom: 18px; }
+.foot-col li + li { margin-top: 10px; }
+.foot-col li { font-family: var(--font-display); font-size: clamp(16px, 1.3vw, 19px); color: var(--ivory); }
+.foot-col a { display: inline-block; position: relative; }
+.foot-col a::after { content: ''; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease); }
+.foot-col a:hover::after { transform: scaleX(1); }
+
+/* Signature géante qui fait écho au hero */
+.wordmark { position: relative; margin: clamp(56px, 7vw, 110px) 0 0; font-family: var(--font-display); font-weight: 400; font-size: calc((100vw - 2 * var(--gutter)) / 5.02); line-height: .8; letter-spacing: -.02em; margin-left: -.035em; white-space: nowrap; user-select: none;
+  background: linear-gradient(to bottom, rgba(247,243,236,.92) 10%, rgba(247,243,236,.05) 95%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.site-foot { position: relative; margin-top: clamp(24px, 3vw, 40px); padding-top: 24px; border-top: 1px solid var(--rule-dark); display: flex; align-items: center; gap: 16px 40px; flex-wrap: wrap; }
 .site-foot .eyebrow { color: rgba(247,243,236,.62); }
-.site-foot .lang-switch { color: var(--ivory); }
-.site-credit { position: relative; margin-top: 20px; color: rgba(247,243,236,.62) !important; }
+.site-foot .lang-switch { color: var(--ivory); margin-left: auto; }
+.site-foot .to-top { color: var(--ivory); }
+.site-foot .to-top span { display: inline-block; transition: transform .4s var(--ease); }
+.site-foot .to-top:hover span { transform: translateY(-3px); }
+
+@media (max-width: 860px) {
+  .foot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .contact__mail-arrow { display: none; }
+  .contact__mail-addr { font-size: clamp(26px, 8.6vw, 40px); }
+  .site-foot { gap: 12px 24px; }
+  .site-foot .lang-switch { margin-left: 0; }
+}
 
 /* --- Pages intérieures ------------------------------------------------- */
 

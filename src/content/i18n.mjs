@@ -55,6 +55,10 @@ export const STRINGS = {
       write: 'Écrire à Lamyne M',
       based: 'Basé à',
       social: 'Réseaux',
+      explore: 'Explorer',
+      basedLine: city => `Basé à ${city}`,
+      top: 'Haut de page',
+      newTab: '(nouvel onglet)',
     },
     work: {
       title: 'Œuvres — Lamyne M',
@@ -169,6 +173,10 @@ export const STRINGS = {
       write: 'Write to Lamyne M',
       based: 'Based in',
       social: 'Social',
+      explore: 'Explore',
+      basedLine: city => `Based in ${city}`,
+      top: 'Back to top',
+      newTab: '(opens in a new tab)',
     },
     work: {
       title: 'Work — Lamyne M',
@@ -283,6 +291,10 @@ export const STRINGS = {
       write: 'Написать Lamyne M',
       based: 'Город',
       social: 'Соцсети',
+      explore: 'Разделы',
+      basedLine: city => `${city}, Франция`,
+      top: 'Наверх',
+      newTab: '(в новой вкладке)',
     },
     work: {
       title: 'Работы — Lamyne M',
