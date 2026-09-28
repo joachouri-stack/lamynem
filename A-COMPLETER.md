@@ -30,7 +30,6 @@ Compléter `src/content/site.mjs` (et `src/originals/` pour les photos), puis re
 - [ ] Lien presse : Axis Gallery
 - [ ] Lien presse : Explore Paris
 - [ ] Lien presse : La Friche Belle de Mai
-- [ ] Liens réseaux sociaux
 - [ ] Lieu de « Masterclass Grandes robes »
 - [ ] Liste des résidences (CV)
 - [ ] Médium de « Autoportrait »
@@ -83,6 +82,4 @@ Compléter `src/content/site.mjs` (et `src/originals/` pour les photos), puis re
 - [ ] Texte de présentation de « Sur leurs 31 » (fr, en, ru)
 - [ ] Texte de présentation de « Teintuer » (fr, en, ru)
 - [ ] Texte de présentation de « VENTiLATE » (fr, en, ru)
-- [ ] URL du profil Facebook
-- [ ] URL du profil Instagram
 - [ ] Vidéo « Art in Motion »
