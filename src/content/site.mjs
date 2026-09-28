@@ -46,6 +46,13 @@ export const IMAGES = {
       ru: 'Монументальное платье из коричневой ткани с воротником из коричневых и синих оборок, одиноко стоящее в поле; длинный шлейф поднимается на ветру под облачным небом.',
     },
   },
+  'robe-patchwork-jean-donjon': {
+    alt: {
+      fr: 'Une robe monumentale en patchwork de jeans aux nombreuses nuances de bleu, sur mannequin, photographiée en contre-plongée ; sa longue traîne s’étale sur le gravier devant un donjon médiéval et un clocher de pierre.',
+      en: 'A monumental gown made of patchwork denim in many shades of blue, on a mannequin, photographed from below; its long train spreads over the gravel in front of a medieval keep and a stone bell tower.',
+      ru: 'Монументальное платье из лоскутов джинсовой ткани разных оттенков синего на манекене, снятое снизу; длинный шлейф расстилается по гравию перед средневековым донжоном и каменной колокольней.',
+    },
+  },
   'seconde-vie-villa-d-2026': {
     alt: {
       fr: "Vue de l'exposition Seconde vie à la Villa D : une grande robe patchwork à pois, rouge, violette et bleue, à longue traîne, sur un socle blanc ; au fond, un mannequin en costume patchwork coiffé de bois de cerf et des œuvres graphiques encadrées.",
@@ -130,6 +137,15 @@ export const WORKS = [
 
 // Œuvres mises en avant sur l'accueil (après la pièce « Seconde vie » en plein cadre).
 export const FEATURED = ['peau-d-ane', 'marabout-3-0'];
+
+// Grand visuel vertical des « Œuvres sélectionnées » (robe en patchwork de jeans).
+// work : slug de l'œuvre correspondante, à renseigner une fois confirmé par
+// Lamyne M — la carte prend alors son titre et renvoie vers sa page.
+export const FEATURED_VISUAL = {
+  image: 'robe-patchwork-jean-donjon',
+  work: TODO,
+  medium: { fr: 'Textile', en: 'Textile', ru: 'Текстиль' },
+};
 
 // ---------------------------------------------------------------------------
 // Expositions, collections, représentation — informations confirmées seulement.
