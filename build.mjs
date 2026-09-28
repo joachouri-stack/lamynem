@@ -257,7 +257,7 @@ function renderHome(lang) {
   const alternates = alts('home');
   const featured = FEATURED.map(slug => WORKS.find(w => w.slug === slug));
   const secondeVie = EXHIBITIONS.find(e => e.id === 'seconde-vie');
-  if (!HERO.work) TODOS.add('Photo de couverture : titre de l’œuvre (robe en patchwork de jeans)');
+  if (!HERO.work) TODOS.add('Photo de couverture : titre de l’œuvre (robe brune à la traîne au vent)');
   if (!HERO.place) TODOS.add('Photo de couverture : lieu de la prise de vue');
   if (!HERO.credit) TODOS.add('Photo de couverture : nom du photographe (crédit)');
 

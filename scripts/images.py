@@ -25,7 +25,7 @@ WIDTHS = [480, 800, 1200, 1600, 2400]
 # on les agrandit jusqu'à cette largeur (Lanczos + accentuation légère).
 # À retirer dès qu'un original en haute définition est disponible.
 UPSCALE_TO = {
-    "robe-patchwork-jean-donjon": 1920,
+    "robe-brune-traine-au-vent": 1920,
 }
 
 
