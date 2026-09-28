@@ -1,0 +1,58 @@
+# Exemple de configuration Nginx pour lamyne-m.com (site 100 % statique).
+# Copier le contenu de dist/ dans /var/www/lamyne-m (ou adapter `root`).
+# Certificats : par ex. `certbot --nginx -d lamyne-m.com -d www.lamyne-m.com`.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name lamyne-m.com www.lamyne-m.com;
+    return 301 https://lamyne-m.com$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name www.lamyne-m.com;
+    # ssl_certificate / ssl_certificate_key : voir certbot
+    return 301 https://lamyne-m.com$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name lamyne-m.com;
+    # ssl_certificate     /etc/letsencrypt/live/lamyne-m.com/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/lamyne-m.com/privkey.pem;
+
+    root /var/www/lamyne-m;
+    index index.html;
+    charset utf-8;
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    add_header X-Frame-Options SAMEORIGIN always;
+
+    gzip on;
+    gzip_types text/css application/javascript image/svg+xml application/xml text/plain application/ld+json;
+
+    # Anciennes URLs du site WordPress → nouvelles pages (compléter si besoin).
+    location = /about-me/ { return 301 /fr/a-propos/; }
+    location = /about-me  { return 301 /fr/a-propos/; }
+    location = /press/    { return 301 /fr/presse/; }
+    location = /contact/  { return 301 /fr/#contact; }
+
+    # Assets versionnés (?v=hash) et images : cache long.
+    location /assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+    location / {
+        # Pages HTML : toujours revalidées.
+        add_header Cache-Control "no-cache";
+        try_files $uri $uri/ =404;
+    }
+
+    error_page 404 /404.html;
+}

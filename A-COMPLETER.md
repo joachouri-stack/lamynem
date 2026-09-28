@@ -1,0 +1,88 @@
+# Informations à fournir par Lamyne M
+
+Généré automatiquement par `node build.mjs` — ne pas éditer à la main.
+Chaque ligne correspond à un espace affiché « à compléter » sur le site.
+Compléter `src/content/site.mjs` (et `src/originals/` pour les photos), puis relancer le build.
+
+- [ ] Année : Représentation — Axis Gallery
+- [ ] Année : Teintuer — Friche la Belle de Mai
+- [ ] Année de « Autoportrait »
+- [ ] Année de « Corona curius »
+- [ ] Année de « Djins et forêt »
+- [ ] Année de « Endormissement »
+- [ ] Année de « Je les voies grandes »
+- [ ] Année de « LAMYNE Melchiore »
+- [ ] Année de « Les Grandes robes royales »
+- [ ] Année de « Lockdown »
+- [ ] Année de « Marabout 3.0 »
+- [ ] Année de « Masterclass Bordeaux »
+- [ ] Année de « Masterclass Grandes robes »
+- [ ] Année de « Masterclass Taiwan »
+- [ ] Année de « Nombrilisme »
+- [ ] Année de « Page Blanche »
+- [ ] Année de « Peau d'âne »
+- [ ] Année de « Sculpter par le vent »
+- [ ] Année de « Sur leurs 31 »
+- [ ] Année de « Teintuer »
+- [ ] Année de « VENTiLATE »
+- [ ] Dossier de presse PDF
+- [ ] Lien presse : 14 Minutes de Paris
+- [ ] Lien presse : Axis Gallery
+- [ ] Lien presse : Explore Paris
+- [ ] Lien presse : La Friche Belle de Mai
+- [ ] Liens réseaux sociaux
+- [ ] Lieu de « Masterclass Grandes robes »
+- [ ] Liste des résidences (CV)
+- [ ] Médium de « Autoportrait »
+- [ ] Médium de « Corona curius »
+- [ ] Médium de « Djins et forêt »
+- [ ] Médium de « Je les voies grandes »
+- [ ] Médium de « LAMYNE Melchiore »
+- [ ] Médium de « Les Grandes robes royales »
+- [ ] Médium de « Nombrilisme »
+- [ ] Médium de « Sculpter par le vent »
+- [ ] Médium de « Sur leurs 31 »
+- [ ] Médium de « VENTiLATE »
+- [ ] Photo de l'œuvre « Autoportrait »
+- [ ] Photo de l'œuvre « Corona curius »
+- [ ] Photo de l'œuvre « Djins et forêt »
+- [ ] Photo de l'œuvre « Endormissement »
+- [ ] Photo de l'œuvre « Je les voies grandes »
+- [ ] Photo de l'œuvre « LAMYNE Melchiore »
+- [ ] Photo de l'œuvre « Les Grandes robes royales »
+- [ ] Photo de l'œuvre « Lockdown »
+- [ ] Photo de l'œuvre « Marabout 3.0 »
+- [ ] Photo de l'œuvre « Masterclass Bordeaux »
+- [ ] Photo de l'œuvre « Masterclass Grandes robes »
+- [ ] Photo de l'œuvre « Masterclass Taiwan »
+- [ ] Photo de l'œuvre « Nombrilisme »
+- [ ] Photo de l'œuvre « Page Blanche »
+- [ ] Photo de l'œuvre « Peau d'âne »
+- [ ] Photo de l'œuvre « Sculpter par le vent »
+- [ ] Photo de l'œuvre « Sur leurs 31 »
+- [ ] Photo de l'œuvre « Teintuer »
+- [ ] Photo de l'œuvre « VENTiLATE »
+- [ ] Portrait de l’artiste
+- [ ] Texte de démarche artistique (page À propos)
+- [ ] Texte de présentation de « Autoportrait » (fr, en, ru)
+- [ ] Texte de présentation de « Corona curius » (fr, en, ru)
+- [ ] Texte de présentation de « Djins et forêt » (fr, en, ru)
+- [ ] Texte de présentation de « Endormissement » (fr, en, ru)
+- [ ] Texte de présentation de « Je les voies grandes » (fr, en, ru)
+- [ ] Texte de présentation de « LAMYNE Melchiore » (fr, en, ru)
+- [ ] Texte de présentation de « Les Grandes robes royales » (fr, en, ru)
+- [ ] Texte de présentation de « Lockdown » (fr, en, ru)
+- [ ] Texte de présentation de « Marabout 3.0 » (fr, en, ru)
+- [ ] Texte de présentation de « Masterclass Bordeaux » (fr, en, ru)
+- [ ] Texte de présentation de « Masterclass Grandes robes » (fr, en, ru)
+- [ ] Texte de présentation de « Masterclass Taiwan » (fr, en, ru)
+- [ ] Texte de présentation de « Nombrilisme » (fr, en, ru)
+- [ ] Texte de présentation de « Page Blanche » (fr, en, ru)
+- [ ] Texte de présentation de « Peau d'âne » (fr, en, ru)
+- [ ] Texte de présentation de « Sculpter par le vent » (fr, en, ru)
+- [ ] Texte de présentation de « Sur leurs 31 » (fr, en, ru)
+- [ ] Texte de présentation de « Teintuer » (fr, en, ru)
+- [ ] Texte de présentation de « VENTiLATE » (fr, en, ru)
+- [ ] URL du profil Facebook
+- [ ] URL du profil Instagram
+- [ ] Vidéo « Art in Motion »
