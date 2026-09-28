@@ -27,9 +27,8 @@ export const ROUTES = {
 export const CONTACT = {
   email: 'lamyne@yahoo.fr',
   location: { fr: 'Paris', en: 'Paris', ru: 'Париж' },
-  // URLs exactes des profils à confirmer.
-  instagram: TODO,
-  facebook: TODO,
+  instagram: 'https://www.instagram.com/lamyne_m',
+  facebook: 'https://www.facebook.com/ben.lamyne',
 };
 
 // Dossier de presse PDF (chemin relatif à src/assets/, ex. 'press/dossier-de-presse.pdf').
