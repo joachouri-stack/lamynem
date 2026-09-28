@@ -42,10 +42,11 @@ Compléter `src/content/site.mjs` (et `src/originals/` pour les photos), puis re
 - [ ] Médium de « Sculpter par le vent »
 - [ ] Médium de « Sur leurs 31 »
 - [ ] Médium de « VENTiLATE »
-- [ ] Œuvres sélectionnées : titre de l’œuvre de la robe en patchwork de jeans (lieu et crédit photo)
-- [ ] Photo de couverture : lieu de la prise de vue
-- [ ] Photo de couverture : nom du photographe (crédit)
-- [ ] Photo de couverture : titre de l’œuvre (robe rouge et or sous les vitraux)
+- [ ] Œuvres sélectionnées : titre de l’œuvre (robe brune à la traîne au vent), lieu et crédit photo
+- [ ] Œuvres sélectionnées : titre de l’œuvre (robe dorée à la cape rouge (vitraux)), lieu et crédit photo
+- [ ] Œuvres sélectionnées : titre de l’œuvre (robe en patchwork de jeans), lieu et crédit photo
+- [ ] Œuvres sélectionnées : titre de l’œuvre (robe rouge et or sous la voûte bleue), lieu et crédit photo
+- [ ] Photo de couverture de l’accueil en haute définition (≥ 3000 px de large), avec titre, lieu et crédit
 - [ ] Photo de l'œuvre « Autoportrait »
 - [ ] Photo de l'œuvre « Corona curius »
 - [ ] Photo de l'œuvre « Djins et forêt »
