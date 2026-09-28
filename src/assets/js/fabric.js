@@ -5,9 +5,13 @@
  * l'œuvre ; en desktop, la souris le soulève localement.
  *
  * WebGL pur, sans dépendance : un seul triangle plein écran + shader.
- * Repli : si le mouvement est réduit, si l'appareil est modeste (détecté dans
- * <head>, qui ne pose alors pas la classe .has-fabric) ou si WebGL échoue,
- * la classe est retirée et le hero reste une image statique.
+ * Activé partout sauf si le visiteur demande moins d'animations ou le mode
+ * économie de données (test dans <head>, qui pose la classe .has-fabric).
+ * Les capacités annoncées par le navigateur (cœurs, mémoire) sont peu fiables,
+ * surtout sous Safari : on mesure plutôt la fluidité réelle pendant les
+ * premières secondes et on baisse la résolution du rendu si besoin ; si
+ * l'appareil reste trop lent, ou si WebGL échoue, le tissu est retiré et le
+ * hero reste statique.
  */
 (function () {
   'use strict';
@@ -140,9 +144,13 @@
   var running = false, visible = true, raf = 0;
   var fine = window.matchMedia('(pointer: fine)').matches;
 
+  // Qualité adaptative : 1 = pleine résolution, réduite si les images tardent.
+  var quality = 1;
+  var perf = { frames: 0, time: 0, checks: 0 };
+
   function resize() {
     var mobile = window.innerWidth < 720;
-    var dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5) * (mobile ? 0.75 : 0.85);
+    var dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5) * (mobile ? 0.75 : 0.85) * quality;
     var w = Math.max(1, Math.round(canvas.clientWidth * dpr));
     var h = Math.max(1, Math.round(canvas.clientHeight * dpr));
     if (canvas.width !== w || canvas.height !== h) {
@@ -161,8 +169,24 @@
 
   function frame(now) {
     raf = 0;
-    var dt = Math.min((now - last) / 1000, 0.05);
+    var rawDt = (now - last) / 1000;
+    var dt = Math.min(rawDt, 0.05);
     last = now;
+
+    // Mesure de fluidité sur des fenêtres de 40 images (hors onglet caché).
+    if (perf.checks < 3 && rawDt > 0 && rawDt < 0.5) {
+      perf.frames++; perf.time += rawDt;
+      if (perf.frames === 40) {
+        var fps = perf.frames / perf.time;
+        perf.checks++; perf.frames = 0; perf.time = 0;
+        if (fps < 24) {
+          if (quality > 0.4) { quality = quality > 0.6 ? 0.6 : 0.4; }
+          else { stop(); fallback(); return; }
+        } else {
+          perf.checks = 3;
+        }
+      }
+    }
     var t = (now - start) / 1000;
 
     // Intro : le tissu se soulève légèrement après le chargement.

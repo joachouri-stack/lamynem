@@ -83,9 +83,12 @@ et les pages de catégorie, fil d'Ariane sur les pages de catégorie et d'œuvre
 de l'artiste, recouvre la photo et le nom ; au scroll il se soulève comme pris dans le vent,
 la souris le soulève localement en desktop. Le rendu s'arrête hors écran et une fois le tissu levé.
 
-Repli propre (image statique, hero de hauteur normale) si :
-`prefers-reduced-motion`, appareil modeste (< 4 cœurs ou < 4 Go de RAM, mode économie de données),
-WebGL indisponible ou contexte perdu. Sans JavaScript, le site reste entièrement lisible.
+Actif sur tous les appareils, sauf si le visiteur a demandé moins d'animations (`prefers-reduced-motion`)
+ou le mode économie de données. Plutôt que de se fier aux cœurs ou à la mémoire annoncés par le
+navigateur (peu fiables, surtout sous Safari), le script mesure la fluidité réelle au démarrage : sous
+24 images/s, il baisse la résolution du rendu (60 %, puis 40 %) ; si c'est encore trop lent, ou si WebGL
+est indisponible ou perd son contexte, le tissu est retiré et le hero reste statique.
+Sans JavaScript, le site reste entièrement lisible.
 
 ## Typographie & cyrillique
 

@@ -271,7 +271,7 @@ ${LANGS.filter(l => l !== lang).map(l => `<meta property="og:locale:alternate" c
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="${fontsHref(lang)}">
 <link rel="stylesheet" href="/assets/css/main.css?v=${ASSET_V.css}">
-${fabric ? `<script>(function(h){try{var n=navigator,c=n.connection,low=(n.hardwareConcurrency&&n.hardwareConcurrency<4)||(n.deviceMemory&&n.deviceMemory<4)||(c&&c.saveData);if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!low)h.classList.add('has-fabric')}catch(e){}})(document.documentElement)</script>\n` : ''}<script src="/assets/js/main.js?v=${ASSET_V.main}" defer></script>
+${fabric ? `<script>(function(h){try{var c=navigator.connection;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(c&&c.saveData))h.classList.add('has-fabric')}catch(e){}})(document.documentElement)</script>\n` : ''}<script src="/assets/js/main.js?v=${ASSET_V.main}" defer></script>
 ${fabric ? `<script src="/assets/js/fabric.js?v=${ASSET_V.fabric}" defer></script>\n` : ''}${ld}
 </head>
 <body>
