@@ -26,6 +26,7 @@ WIDTHS = [480, 800, 1200, 1600, 2400]
 # À retirer dès qu'un original en haute définition est disponible.
 UPSCALE_TO = {
     "robe-brune-traine-au-vent": 1920,
+    "robe-patchwork-jean-donjon": 1200,
 }
 
 

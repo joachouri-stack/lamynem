@@ -42,6 +42,7 @@ Compléter `src/content/site.mjs` (et `src/originals/` pour les photos), puis re
 - [ ] Médium de « Sculpter par le vent »
 - [ ] Médium de « Sur leurs 31 »
 - [ ] Médium de « VENTiLATE »
+- [ ] Œuvres sélectionnées : titre de l’œuvre de la robe en patchwork de jeans (lieu et crédit photo)
 - [ ] Photo de couverture : lieu de la prise de vue
 - [ ] Photo de couverture : nom du photographe (crédit)
 - [ ] Photo de couverture : titre de l’œuvre (robe brune à la traîne au vent)

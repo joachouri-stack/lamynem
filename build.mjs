@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
-  BIO, CONTACT, COUNTRIES, DEFAULT_LANG, EXHIBITIONS, FEATURED, HERO, IMAGES, LANGS,
+  BIO, CONTACT, COUNTRIES, DEFAULT_LANG, EXHIBITIONS, FEATURED, FEATURED_VISUAL, HERO, IMAGES, LANGS,
   MOTION_VIDEO, PRESS, PRESS_KIT, ROUTES, SITE_URL, WORKS,
 } from './src/content/site.mjs';
 import { STRINGS } from './src/content/i18n.mjs';
@@ -102,6 +102,20 @@ function workCard(w, lang, num) {
     + `<div class="card__media">${workMedia(w, lang, '(max-width: 720px) 100vw, 50vw')}</div>`
     + `<div class="card__meta"><h3 class="card__title">${num ? `<span class="card__num">${num}.</span> ` : ''}${esc(w.title)}</h3>`
     + `<p class="eyebrow">${esc(kind)}</p></div></a>`;
+}
+
+/** Grand visuel vertical des « Œuvres sélectionnées » : lien vers l'œuvre dès qu'elle est confirmée. */
+function featuredVisual(lang, num) {
+  const s = STRINGS[lang];
+  const w = FEATURED_VISUAL.work && workBySlug(FEATURED_VISUAL.work);
+  if (!w) TODOS.add('Œuvres sélectionnées : titre de l’œuvre de la robe en patchwork de jeans (lieu et crédit photo)');
+  const title = w ? esc(w.title) : `<span class="todo">${esc(s.todo)}</span>`;
+  const inner = `<div class="card__media card__media--tall">${picture(FEATURED_VISUAL.image, lang, { sizes: '(max-width: 720px) 100vw, 42vw' })}</div>`
+    + `<div class="card__meta"><h3 class="card__title"><span class="card__num">${num}.</span> ${title}</h3>`
+    + `<p class="eyebrow">${esc(tr(FEATURED_VISUAL.medium, lang))}</p></div>`;
+  return w
+    ? `<a class="card card--tall reveal" href="${workPath(lang, w)}">${inner}</a>`
+    : `<div class="card card--tall reveal">${inner}</div>`;
 }
 
 // --- Gabarit commun -------------------------------------------------------
@@ -301,8 +315,11 @@ function renderHome(lang) {
       </div>
     </div>
   </div>
-  <div class="works-pair">
-    ${featured.map((w, i) => workCard(w, lang, roman(i + 2))).join('\n    ')}
+  <div class="works-trio">
+    ${featuredVisual(lang, roman(2))}
+    <div class="works-stack">
+      ${featured.map((w, i) => workCard(w, lang, roman(i + 3))).join('\n      ')}
+    </div>
   </div>
   <div class="works-more"><a class="eyebrow link-line" href="${path(lang, 'work')}">${esc(h.allWorks)} ${ARROW}</a></div>
 </section>
