@@ -1,4 +1,15 @@
 {
+  "robe-patchwork-jean-donjon": {
+    "width": 1920,
+    "height": 2879,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600,
+      1920
+    ]
+  },
   "seconde-vie-villa-d-2026": {
     "width": 1440,
     "height": 960,

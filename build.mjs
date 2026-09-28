@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
-  BIO, CONTACT, COUNTRIES, DEFAULT_LANG, EXHIBITIONS, FEATURED, IMAGES, LANGS,
+  BIO, CONTACT, COUNTRIES, DEFAULT_LANG, EXHIBITIONS, FEATURED, HERO, IMAGES, LANGS,
   MOTION_VIDEO, PRESS, PRESS_KIT, ROUTES, SITE_URL, WORKS,
 } from './src/content/site.mjs';
 import { STRINGS } from './src/content/i18n.mjs';
@@ -257,6 +257,9 @@ function renderHome(lang) {
   const alternates = alts('home');
   const featured = FEATURED.map(slug => WORKS.find(w => w.slug === slug));
   const secondeVie = EXHIBITIONS.find(e => e.id === 'seconde-vie');
+  if (!HERO.work) TODOS.add('Photo de couverture : titre de l’œuvre (robe en patchwork de jeans)');
+  if (!HERO.place) TODOS.add('Photo de couverture : lieu de la prise de vue');
+  if (!HERO.credit) TODOS.add('Photo de couverture : nom du photographe (crédit)');
 
   const video = MOTION_VIDEO
     ? `<button class="video__play" type="button" data-video="/assets/${esc(MOTION_VIDEO.src)}"${MOTION_VIDEO.poster ? ` data-poster="/assets/${esc(MOTION_VIDEO.poster)}"` : ''} aria-label="${esc(s.home.play)} — ${esc(tr(MOTION_VIDEO.title, lang) || '')}"></button>`
@@ -265,7 +268,7 @@ function renderHome(lang) {
   const body = `
 <section class="hero" data-hero aria-labelledby="hero-title">
   <div class="hero__stage">
-    ${picture('seconde-vie-villa-d-2026', lang, { eager: true, cls: 'hero__media' })}
+    ${picture(HERO.image, lang, { eager: true, cls: 'hero__media', style: `object-position:${HERO.focus}` })}
     <div class="hero__veil hero__veil--a" aria-hidden="true"></div>
     <div class="glow" aria-hidden="true"></div>
     <div class="grain" aria-hidden="true"></div>
@@ -353,7 +356,7 @@ function renderHome(lang) {
 </section>`;
 
   page({
-    lang, route: 'home', alternates, xDefault: '/', current: null, over: true, fabric: true,
+    lang, route: 'home', alternates, xDefault: '/', current: null, over: true, fabric: true, ogImage: HERO.image,
     title: h.title, description: h.description, body,
     jsonld: [personLd(lang), { '@type': 'WebSite', name: 'Lamyne M', url: `${SITE_URL}/`, inLanguage: lang }],
   });

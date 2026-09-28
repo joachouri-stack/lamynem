@@ -42,6 +42,9 @@ Compléter `src/content/site.mjs` (et `src/originals/` pour les photos), puis re
 - [ ] Médium de « Sculpter par le vent »
 - [ ] Médium de « Sur leurs 31 »
 - [ ] Médium de « VENTiLATE »
+- [ ] Photo de couverture : lieu de la prise de vue
+- [ ] Photo de couverture : nom du photographe (crédit)
+- [ ] Photo de couverture : titre de l’œuvre (robe en patchwork de jeans)
 - [ ] Photo de l'œuvre « Autoportrait »
 - [ ] Photo de l'œuvre « Corona curius »
 - [ ] Photo de l'œuvre « Djins et forêt »
