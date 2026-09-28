@@ -39,11 +39,11 @@ export const MOTION_VIDEO = TODO;
 
 // Photos disponibles (générées par scripts/images.py depuis src/originals/).
 export const IMAGES = {
-  'robe-patchwork-jean-donjon': {
+  'robe-brune-traine-au-vent': {
     alt: {
-      fr: 'Une robe monumentale en patchwork de jeans aux nombreuses nuances de bleu, sur mannequin, photographiée en contre-plongée ; sa longue traîne s’étale sur le gravier devant un donjon médiéval et un clocher de pierre.',
-      en: 'A monumental gown made of patchwork denim in many shades of blue, on a mannequin, photographed from below; its long train spreads over the gravel in front of a medieval keep and a stone bell tower.',
-      ru: 'Монументальное платье из лоскутов джинсовой ткани разных оттенков синего на манекене, снятое снизу; длинный шлейф расстилается по гравию перед средневековым донжоном и каменной колокольней.',
+      fr: 'Une robe monumentale en tissu brun, coiffée d’une collerette de volants bruns et bleus, dressée seule dans un champ ; sa longue traîne se soulève au vent sous un ciel nuageux.',
+      en: 'A monumental gown in brown fabric, crowned with a ruffled collar of brown and blue, standing alone in a field; its long train lifts in the wind under a cloudy sky.',
+      ru: 'Монументальное платье из коричневой ткани с воротником из коричневых и синих оборок, одиноко стоящее в поле; длинный шлейф поднимается на ветру под облачным небом.',
     },
   },
   'seconde-vie-villa-d-2026': {
@@ -56,11 +56,11 @@ export const IMAGES = {
 };
 
 // Photo de couverture de l'accueil (sous l'effet « tissu numérique »).
-// focus : cadrage CSS (object-position) — garde le buste de la robe visible.
+// focus : cadrage CSS (object-position) — garde la collerette et la traîne dans le cadre.
 // Titre de l'œuvre, lieu et crédit photo à confirmer par Lamyne M.
 export const HERO = {
-  image: 'robe-patchwork-jean-donjon',
-  focus: 'center 22%',
+  image: 'robe-brune-traine-au-vent',
+  focus: 'center 48%',
   work: TODO,
   place: TODO,
   credit: TODO,
