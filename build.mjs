@@ -145,7 +145,7 @@ function header(lang, current, alternates, over) {
   const mobItem = i => (i[0] === 'work'
     ? `<li>${link(i)}<ul class="menu-sub">${sub}</ul></li>`
     : `<li>${link(i)}</li>`);
-  return `<header class="site-header${over ? ' site-header--over' : ''}">`
+  return `<header class="site-header${over ? ' site-header--over' : ''}" id="top">`
     + `<a class="brand" href="${path(lang, 'home')}">LAMYNE M</a>`
     + `<div class="nav-desktop"><nav aria-label="${esc(s.mainNav)}" class="nav-links">${items.map(deskItem).join('')}</nav>`
     + `<span class="nav-sep" aria-hidden="true"></span>${langSwitch(lang, alternates)}</div>`
@@ -160,23 +160,42 @@ function header(lang, current, alternates, over) {
     + '</div>';
 }
 
+/** Fil cousu (vague en pointillés) qui traverse le pied de page — clin d'œil au textile. */
+function stitchLine() {
+  let d = 'M0 12';
+  for (let x = 0; x < 1200; x += 60) d += ` Q${x + 15} 2 ${x + 30} 12 T${x + 60} 12`;
+  return `<svg class="stitch" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true" focusable="false">`
+    + `<path class="stitch__thread" d="${d}"/><path class="stitch__dash" d="${d}"/></svg>`;
+}
+
 function contactFooter(lang, alternates) {
-  const s = STRINGS[lang];
+  const s = STRINGS[lang], c = s.contact;
   const socials = [['Instagram', CONTACT.instagram], ['Facebook', CONTACT.facebook]];
   socials.forEach(([n, u]) => { if (!u) TODOS.add(`URL du profil ${n}`); });
   const socialLinks = socials.filter(([, u]) => u)
-    .map(([n, u]) => `<a href="${esc(u)}" rel="me noopener" target="_blank">${n}</a>`).join('');
+    .map(([n, u]) => `<li><a href="${esc(u)}" rel="me noopener" target="_blank">${n} <span aria-hidden="true">↗</span><span class="visually-hidden"> ${esc(c.newTab)}</span></a></li>`).join('');
+  const col = (title, items) => `<div class="foot-col"><p class="eyebrow">${esc(title)}</p><ul>${items}</ul></div>`;
+  const li = (href, text) => `<li><a href="${href}">${esc(text)}</a></li>`;
   return `<footer class="section section--dark contact on-dark" id="contact" aria-labelledby="contact-title">`
-    + '<div class="glow" aria-hidden="true"></div>'
-    + `<h2 class="visually-hidden" id="contact-title">${esc(s.contact.eyebrow)}</h2>`
-    + `<p class="contact__lines">${esc(s.contact.lines)}<span>${esc(s.contact.accent)}</span></p>`
-    + `<a class="contact__mail" href="mailto:${CONTACT.email}">${esc(CONTACT.email)} ${ARROW}</a>`
-    + '<dl class="contact__info">'
-    + `<div><dt class="eyebrow">${esc(s.contact.based)}</dt><dd>${esc(tr(CONTACT.location, lang))}</dd></div>`
-    + `<div><dt class="eyebrow">${esc(s.contact.social)}</dt><dd>${socialLinks || todo(lang, 'Liens réseaux sociaux')}</dd></div>`
-    + '</dl>'
-    + `<div class="site-foot"><p class="eyebrow">© ${new Date().getFullYear()} Lamyne M</p>${langSwitch(lang, alternates)}</div>`
+    + '<div class="glow" aria-hidden="true"></div><div class="glow glow--b" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>'
+    + `<div class="contact__top">${label(c.eyebrow, { tag: 'h2', id: 'contact-title' })}`
+    + `<p class="contact__lines">${esc(c.lines)}<span>${esc(c.accent)}</span></p></div>`
+    + `<a class="contact__mail" href="mailto:${CONTACT.email}">`
+    + `<span class="eyebrow contact__mail-label">${esc(c.write)}</span>`
+    + `<span class="contact__mail-addr">${esc(CONTACT.email)}</span>`
+    + `<span class="contact__mail-arrow" aria-hidden="true">→</span></a>`
+    + stitchLine()
+    + `<div class="foot-grid">`
+    + `<nav aria-label="${esc(c.explore)}">${col(c.explore, li(path(lang, 'work'), s.nav.work) + li(path(lang, 'exhibitions'), s.nav.exhibitions) + li(path(lang, 'about'), s.nav.about) + li(path(lang, 'press'), s.nav.press))}</nav>`
+    + `<nav aria-label="${esc(s.work.browse)}">${col(s.nav.work, CATEGORIES.map(k => li(catPath(lang, k), s.categories[k])).join(''))}</nav>`
+    + col(c.eyebrow, `<li><a href="mailto:${CONTACT.email}">${esc(CONTACT.email)}</a></li><li>${esc(c.basedLine(tr(CONTACT.location, lang)))}</li>`)
+    + col(c.social, socialLinks || `<li>${todo(lang, 'Liens réseaux sociaux')}</li>`)
+    + '</div>'
+    + '<p class="wordmark" aria-hidden="true">LAMYNE M</p>'
+    + `<div class="site-foot"><p class="eyebrow">© ${new Date().getFullYear()} Lamyne M</p>`
     + `<p class="eyebrow site-credit">Design by Johane A.</p>`
+    + `${langSwitch(lang, alternates)}`
+    + `<a class="eyebrow to-top" href="#top">${esc(c.top)} <span aria-hidden="true">↑</span></a></div>`
     + '</footer>';
 }
 
