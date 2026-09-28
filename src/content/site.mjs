@@ -39,6 +39,13 @@ export const MOTION_VIDEO = TODO;
 
 // Photos disponibles (générées par scripts/images.py depuis src/originals/).
 export const IMAGES = {
+  'robe-patchwork-jean-donjon': {
+    alt: {
+      fr: 'Une robe monumentale en patchwork de jeans aux nombreuses nuances de bleu, sur mannequin, photographiée en contre-plongée ; sa longue traîne s’étale sur le gravier devant un donjon médiéval et un clocher de pierre.',
+      en: 'A monumental gown made of patchwork denim in many shades of blue, on a mannequin, photographed from below; its long train spreads over the gravel in front of a medieval keep and a stone bell tower.',
+      ru: 'Монументальное платье из лоскутов джинсовой ткани разных оттенков синего на манекене, снятое снизу; длинный шлейф расстилается по гравию перед средневековым донжоном и каменной колокольней.',
+    },
+  },
   'seconde-vie-villa-d-2026': {
     alt: {
       fr: "Vue de l'exposition Seconde vie à la Villa D : une grande robe patchwork à pois, rouge, violette et bleue, à longue traîne, sur un socle blanc ; au fond, un mannequin en costume patchwork coiffé de bois de cerf et des œuvres graphiques encadrées.",
@@ -46,6 +53,17 @@ export const IMAGES = {
       ru: 'Вид выставки «Seconde vie» на Вилле D: длинное лоскутное платье в горошек красного, фиолетового и синего цветов со шлейфом на белом подиуме; на заднем плане — манекен в лоскутном костюме с головным убором из рогов и графические работы в рамах.',
     },
   },
+};
+
+// Photo de couverture de l'accueil (sous l'effet « tissu numérique »).
+// focus : cadrage CSS (object-position) — garde le buste de la robe visible.
+// Titre de l'œuvre, lieu et crédit photo à confirmer par Lamyne M.
+export const HERO = {
+  image: 'robe-patchwork-jean-donjon',
+  focus: 'center 22%',
+  work: TODO,
+  place: TODO,
+  credit: TODO,
 };
 
 // ---------------------------------------------------------------------------
