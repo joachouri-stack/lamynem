@@ -1505,3 +1505,17 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .enter__inner { gap: 14px; }
   .enter__btn { width: 112px; height: 112px; margin-top: 18px; }
 }
+
+/* Expositions sur mobile : année inconnue = pas de grand tiret rouge (le point de la
+   frise suffit) ; le lien vers l'œuvre passe après le lieu, en fin de fiche. */
+@media (max-width: 720px) {
+  .ex-card__year--none { visibility: hidden; }
+  .ex-card__body { display: contents; }
+  .ex-card__body > * { grid-column: 2; }
+  .ex-card__place { grid-column: 2; }
+  .ex-card__work { order: 1; justify-self: start; margin-top: 14px; }
+  /* Mots longs (russe) : la colonne ne s'élargit pas, le titre se coupe proprement */
+  .ex-card { grid-template-columns: 58px minmax(0, 1fr); }
+  .ex-card__title { overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
+}
+@media (max-width: 360px) { .ex-card__title { font-size: 19px; } }
