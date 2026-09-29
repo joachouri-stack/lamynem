@@ -1601,3 +1601,11 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 /* Expositions sur mobile : le lieu déjà cité dans le titre n'est pas répété
    (la ville reste affichée). */
 @media (max-width: 720px) { .ex-card__venue--dup { display: none; } }
+
+/* À propos sur mobile : naissance et ville sont déjà dans les chiffres clés et
+   le paragraphe « Parcours » ; le CV va directement aux expositions. */
+@media (max-width: 720px) { .about-cv .cv-id { display: none; } }
+@media (max-width: 720px) {
+  .about-cv .cv-group__head { flex-wrap: nowrap; align-items: baseline; gap: 10px; }
+  .about-cv .cv-group__head .eyebrow { flex-basis: auto; margin: 0 0 0 auto; padding: 0; white-space: nowrap; }
+}
