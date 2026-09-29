@@ -13,10 +13,12 @@
  * l'appareil reste trop lent, ou si WebGL échoue, le tissu est retiré et le
  * hero reste statique.
  *
- * Son (facultatif, coupé par défaut) : un bruissement de tissu synthétisé en
- * direct (Web Audio, aucun fichier), dont le volume et le timbre suivent la
- * vitesse du rideau. Les navigateurs interdisent le son sans geste du
- * visiteur : il s'active par le bouton « Son » du hero, et le choix est retenu.
+ * Son : un bruissement de tissu synthétisé en direct (Web Audio, aucun fichier),
+ * dont le volume et le timbre suivent la vitesse du rideau. Il est toujours
+ * actif, sans bouton. Limite imposée par les navigateurs : aucun son avant un
+ * premier geste du visiteur (clic, toucher bref, touche du clavier) ; la molette
+ * et le glissé du doigt ne comptent pas. Le son démarre donc dès que le
+ * navigateur l'autorise.
  */
 (function () {
   'use strict';
@@ -154,8 +156,7 @@
 
   // --- Son du rideau --------------------------------------------------------
   var AC = window.AudioContext || window.webkitAudioContext;
-  var soundBtn = hero.querySelector('[data-sound]');
-  var soundOn = false, audio = null, prevLift = 0;
+  var soundOn = !!AC, audio = null, prevLift = 0;
 
   function noiseBuffer(ctx) {
     // Bruit rose (plus doux que le blanc), 2 s bouclées.
@@ -186,18 +187,6 @@
     return { ctx: ctx, buf: buf, band: band, lfo: lfo, gain: gain };
   }
 
-  // Petit « froissé » joué à l'activation, pour entendre tout de suite l'effet.
-  function swoosh() {
-    var ctx = audio.ctx, t0 = ctx.currentTime;
-    var src = ctx.createBufferSource(); src.buffer = audio.buf;
-    var f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 0.9;
-    f.frequency.setValueAtTime(500, t0); f.frequency.exponentialRampToValueAtTime(2200, t0 + 0.35); f.frequency.exponentialRampToValueAtTime(700, t0 + 0.8);
-    var g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.3, t0 + 0.2); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.85);
-    src.connect(f); f.connect(g); g.connect(ctx.destination);
-    src.start(t0, Math.random()); src.stop(t0 + 0.9);
-  }
-
   function soundLevel(level) {
     if (!audio || !soundOn) return;
     var t = audio.ctx.currentTime;
@@ -206,41 +195,28 @@
     audio.lfo.frequency.setTargetAtTime(7 + 11 * level, t, 0.1);
   }
 
-  function setSound(on, fromClick) {
-    soundOn = on;
-    try { localStorage.setItem('fabric-sound', on ? 'on' : 'off'); } catch (e) { /* stockage indisponible */ }
-    if (soundBtn) {
-      soundBtn.setAttribute('aria-pressed', String(on));
-      soundBtn.setAttribute('aria-label', soundBtn.getAttribute(on ? 'data-label-off' : 'data-label-on'));
-    }
-    if (on) {
+  // Le contexte audio est créé tout de suite (il reste « suspendu ») et repris
+  // à chaque occasion : le navigateur l'autorise au premier geste du visiteur.
+  function wakeAudio() {
+    if (!soundOn) return;
+    try {
       if (!audio) audio = makeAudio();
-      if (audio.ctx.state !== 'running') audio.ctx.resume();
-      if (fromClick) swoosh();
-    } else if (audio) {
-      audio.gain.gain.setTargetAtTime(0, audio.ctx.currentTime, 0.05);
-      setTimeout(function () { if (!soundOn && audio) audio.ctx.suspend(); }, 400);
-    }
+      // Une seule demande de reprise à la fois (le scroll en déclenche beaucoup).
+      if (audio.ctx.state === 'suspended' && !audio.resuming) {
+        audio.resuming = true;
+        audio.ctx.resume().then(function () { audio && (audio.resuming = false); }, function () { audio && (audio.resuming = false); });
+      }
+    } catch (e) { soundOn = false; }
   }
-
-  if (soundBtn && AC) {
-    soundBtn.hidden = false;
-    soundBtn.addEventListener('click', function () { setSound(!soundOn, true); });
-    // Choix retenu d'une visite à l'autre : le son reprend au premier geste
-    // (le navigateur n'autorise rien avant).
-    var pref = null;
-    try { pref = localStorage.getItem('fabric-sound'); } catch (e) { /* stockage indisponible */ }
-    if (pref === 'on') {
-      soundBtn.setAttribute('aria-pressed', 'true');
-      soundBtn.setAttribute('aria-label', soundBtn.getAttribute('data-label-off'));
-      var unlock = function (e) {
-        if (soundBtn.contains(e.target)) return; // le bouton gère lui-même son clic
-        ['pointerdown', 'keydown', 'touchend'].forEach(function (n) { window.removeEventListener(n, unlock, true); });
-        if (soundBtn.getAttribute('aria-pressed') === 'true') setSound(true, false);
-      };
-      soundOn = true;
-      ['pointerdown', 'keydown', 'touchend'].forEach(function (n) { window.addEventListener(n, unlock, true); });
-    }
+  if (soundOn) {
+    wakeAudio();
+    var unlock = function () {
+      wakeAudio();
+      if (audio && audio.ctx.state === 'running') {
+        ['pointerdown', 'keydown', 'touchend', 'click'].forEach(function (n) { window.removeEventListener(n, unlock, true); });
+      }
+    };
+    ['pointerdown', 'keydown', 'touchend', 'click'].forEach(function (n) { window.addEventListener(n, unlock, true); });
   }
 
   // Qualité adaptative : 1 = pleine résolution, réduite si les images tardent.
@@ -340,13 +316,12 @@
 
   function fallback() {
     root.classList.remove('has-fabric');
-    if (typeof soundBtn !== 'undefined' && soundBtn) soundBtn.hidden = true;
     if (typeof audio !== 'undefined' && audio) { soundOn = false; audio.ctx.close(); audio = null; }
     if (canvas) canvas.remove();
   }
 
   // --- Événements -------------------------------------------------------
-  window.addEventListener('scroll', function () { readScroll(); play(); }, { passive: true });
+  window.addEventListener('scroll', function () { readScroll(); play(); wakeAudio(); }, { passive: true });
   window.addEventListener('resize', function () { readScroll(); play(); }, { passive: true });
 
   if (fine) {
