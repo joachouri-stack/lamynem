@@ -424,7 +424,7 @@ function renderHome(lang) {
     <p class="motion__title">${esc(h.motionTitle)}</p>
   </div>
   <div class="motion__grid">
-    <div class="video reveal">
+    <div class="video reveal${MOTION_VIDEO ? '' : ' video--empty'}">
       ${motionWaves()}
       <div class="grain" aria-hidden="true"></div>
       <span class="video__corner video__corner--tl" aria-hidden="true"></span><span class="video__corner video__corner--br" aria-hidden="true"></span>
