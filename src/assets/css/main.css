@@ -1404,3 +1404,11 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .mc-sessions { margin-top: 36px; }
   .press__grid { margin-top: 32px; }
 }
+
+/* --- Pages intérieures mobile : fil d'Ariane et filtres ------------------ */
+@media (max-width: 720px) {
+  .crumbs a { position: relative; }
+  .crumbs a::before { content: ''; position: absolute; inset: -17px -6px; }
+  .crumbs { line-height: 1.8; }
+  .ex-filter button { min-height: 44px; }
+}
