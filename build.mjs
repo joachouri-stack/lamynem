@@ -386,11 +386,29 @@ function renderHome(lang) {
 </section>
 
 <section class="section section--sand masterclass" aria-labelledby="mc-title">
-  <div>
-    ${label(h.masterclassEyebrow, { tag: 'h2', id: 'mc-title' })}
-    <p class="h-lead">${esc(h.masterclassTitle)}</p>
+  <p class="watermark" aria-hidden="true">05</p>
+  <div class="mc-top">
+    <div class="mc-top__text">
+      ${label(h.masterclassEyebrow, { tag: 'h2', id: 'mc-title' })}
+      <p class="h-lead">${esc(h.masterclassTitle)}</p>
+    </div>
+    <ol class="mc-pillars" aria-label="${esc(h.masterclassEyebrow)}">${h.masterclassPillars.map((w, i) => `<li><span class="mc-pillars__num">${pad2(i + 1)}</span><span class="mc-pillars__word">${esc(w)}</span></li>`).join('')}</ol>
   </div>
-  <a class="eyebrow link-line" href="${catPath(lang, 'masterclass')}">${esc(h.masterclassCta)} ${ARROW}</a>
+  <div class="mc-sessions">
+    <p class="eyebrow">${esc(h.masterclassSessions)}</p>
+    <ul>${WORKS.filter(w => w.category === 'masterclass').map((w, i) => {
+      const place = tr(w.place, lang);
+      return `<li><a class="mc-session reveal" href="${workPath(lang, w)}">`
+        + `<span class="mc-session__num">${roman(i + 1)}</span>`
+        + `<span class="mc-session__title">${esc(w.title)}</span>`
+        + `<span class="eyebrow mc-session__place">${place ? esc(place) : esc(s.categories.masterclass)}</span>`
+        + `<span class="mc-session__arrow" aria-hidden="true">→</span></a></li>`;
+    }).join('')}</ul>
+  </div>
+  <div class="mc-actions">
+    <a class="eyebrow link-line" href="${catPath(lang, 'masterclass')}">${esc(h.masterclassCta)} ${ARROW}</a>
+    <a class="mc-host" href="mailto:${CONTACT.email}?subject=Masterclass">${esc(h.masterclassHost)} <span aria-hidden="true">→</span></a>
+  </div>
 </section>
 
 <section class="section press" aria-labelledby="press-title">
