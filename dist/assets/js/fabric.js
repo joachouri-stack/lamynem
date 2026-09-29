@@ -90,7 +90,9 @@
     ' vec3 L=normalize(vec3(-.45,.65,.62));',
     ' float diff=.5+.5*dot(n,L);',
     ' vec3 V=vec3(0.,0.,1.);float spec=pow(max(dot(reflect(-L,n),V),0.),18.);',
-    ' vec3 base=patchwork(q+vec2(h*.012,h*.018));',
+    // Écran vertical : pièces plus petites, pour garder un vrai patchwork (≈ 3 pièces de large).
+    ' float ps=clamp(.75/asp,1.,1.6);',
+    ' vec3 base=patchwork(q*ps+vec2(h*.012,h*.018));',
     ' vec3 col=base*(.18+1.02*diff*diff)*.95+spec*.16*vec3(.85,.9,1.);',
     ' col*=1.+curl*.28;',
     // Doublure de satin doré visible sur l'ourlet retroussé.
@@ -151,7 +153,9 @@
 
   function resize() {
     var mobile = window.innerWidth < 720;
-    var dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.25 : 1.5) * (mobile ? 0.75 : 0.85) * quality;
+    // Mobile : écran plus petit, on peut monter la définition (pois et coutures nets) ;
+    // la qualité adaptative la redescend si le téléphone peine.
+    var dpr = Math.min(window.devicePixelRatio || 1, 1.5) * (mobile ? 0.9 : 0.85) * quality;
     var w = Math.max(1, Math.round(canvas.clientWidth * dpr));
     var h = Math.max(1, Math.round(canvas.clientHeight * dpr));
     if (canvas.width !== w || canvas.height !== h) {

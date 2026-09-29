@@ -1443,3 +1443,9 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 @media (max-width: 720px) {
   .site-header.is-solid { padding-top: 6px; padding-bottom: 6px; }
 }
+
+/* Rideau sur mobile : parcours plus court (le tissu se lève sur ~la moitié,
+   puis courte pause sur l'œuvre dévoilée), sans long défilement immobile. */
+@media (max-width: 720px) {
+  .has-fabric .hero { height: 195vh; }
+}
