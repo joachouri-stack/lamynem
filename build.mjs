@@ -171,7 +171,7 @@ function header(lang, current, alternates, over) {
     + '<div class="glow" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>'
     + '<p class="menu-mark" aria-hidden="true">M</p>'
     + `<div class="menu-overlay__top">${brand}`
-    + `<button class="menu-close" type="button" data-menu-close><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="1"/></svg><span class="visually-hidden">${esc(s.close)}</span></button></div>`
+    + `<button class="menu-close" type="button" data-menu-close><span class="menu-close__label">${esc(s.close)}</span><span class="menu-close__icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 18 18"><path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="1.2"/></svg></span></button></div>`
     + `<p class="eyebrow menu-tagline">${esc(s.tagline)}</p>`
     + `<nav class="menu-nav" aria-label="${esc(s.mainNav)}"><ul>${items.map(mobItem).join('')}</ul></nav>`
     + `<div class="menu-foot"><p class="eyebrow">${esc(c.write)}</p>`
