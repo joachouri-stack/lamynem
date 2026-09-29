@@ -1524,3 +1524,10 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .about-approach .about-themes { display: none; }
   .cv-row__year--none { visibility: hidden; }
 }
+
+/* Presse sur mobile : sans dossier de presse, le bouton contact est seul dans la
+   barre rapide ; il prend toute la largeur (libellé russe sur une ligne). */
+@media (max-width: 720px) {
+  .press-quick__btn:only-child { grid-column: 1 / -1; }
+  .press-quick__btn--dark { white-space: nowrap; }
+}
