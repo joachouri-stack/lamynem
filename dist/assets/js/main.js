@@ -87,6 +87,20 @@
     updateHeader();
   }
 
+  // --- Page Expositions : filtre par type (liste complète sans JS) --------
+  var filter = document.querySelector('.ex-filter');
+  if (filter) {
+    filter.hidden = false;
+    var cards = document.querySelectorAll('.ex-card');
+    filter.addEventListener('click', function (e) {
+      var btn = e.target.closest('button[data-filter]');
+      if (!btn) return;
+      var t = btn.getAttribute('data-filter');
+      filter.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      cards.forEach(function (c) { c.hidden = t !== 'all' && c.getAttribute('data-type') !== t; });
+    });
+  }
+
   // --- Mémorisation de la langue choisie (utilisée par la page racine) ----
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[data-lang]');
