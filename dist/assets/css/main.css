@@ -1618,3 +1618,16 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   /* Le contact presse est déjà en haut et en bas de page : pas de troisième fois */
   .press-page__aside .press-aside__mail { display: none; }
 }
+
+/* Textes posés sur les étoffes (fiches, vignettes) : lisibles sur toutes les
+   teintes, y compris les zones claires (or, cuivre), grâce à une ombre douce. */
+.etoffe__frame { border-color: rgba(247, 243, 236, .5); }
+.etoffe__num { color: rgba(247, 243, 236, .72); text-shadow: 0 2px 24px rgba(10, 6, 4, .45); }
+.etoffe__sig { color: var(--ivory); font-size: 11.5px; text-shadow: 0 1px 10px rgba(10, 6, 4, .6); }
+.etoffe::after { content: ''; position: absolute; inset: 0; background: radial-gradient(90% 70% at 50% 55%, rgba(10, 6, 4, .28), transparent 70%), linear-gradient(to top, rgba(10, 6, 4, .45), transparent 32%); pointer-events: none; }
+.etoffe__frame, .etoffe__num, .etoffe__sig { z-index: 1; }
+.related__num { color: rgba(247, 243, 236, .85); text-shadow: 0 1px 12px rgba(10, 6, 4, .55); }
+.card__big { color: rgba(247, 243, 236, .6); text-shadow: 0 1px 14px rgba(10, 6, 4, .45); }
+@media (max-width: 720px) {
+  .work-grid .card.card--noimg:nth-child(n) .card__big { color: var(--ivory); text-shadow: 0 1px 8px rgba(10, 6, 4, .7); }
+}
