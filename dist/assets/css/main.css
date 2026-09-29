@@ -1344,3 +1344,20 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .related__list { padding-bottom: 4px; scrollbar-width: none; }
   .related__list::-webkit-scrollbar { display: none; }
 }
+
+/* --- Menu mobile : zones tactiles et très petits écrans ------------------ */
+/* Cibles de moins de 44 px agrandies de façon invisible */
+.menu-overlay .brand, .menu-overlay .menu-sub a, .menu-social a { position: relative; }
+.menu-overlay .brand::before { content: ''; position: absolute; inset: -6px -8px; }
+.menu-overlay .menu-sub a::before { content: ''; position: absolute; inset: -7px -3px; }
+.menu-social a::before { content: ''; position: absolute; inset: -5px -4px; }
+/* Écrans de moins de 600 px de haut (iPhone SE 1re génération) */
+@media (max-height: 600px) {
+  .menu-overlay { padding-top: 14px; }
+  .menu-label { font-size: 26px; }
+  .menu-link { padding: 4px 0; }
+  .menu-overlay .menu-nav { padding: 8px 0; margin-top: 8px; }
+  .menu-mail { padding: 8px 0; font-size: 18px; }
+  .menu-lang a { padding: 9px 6px 8px; }
+  .menu-lang { margin-top: 6px; }
+}
