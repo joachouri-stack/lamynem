@@ -101,6 +101,24 @@
     });
   }
 
+  // --- Carrousels mobiles : compteur et barre de progression ------------
+  document.querySelectorAll('[data-carousel]').forEach(function (track) {
+    var bar = track.nextElementSibling;
+    if (!bar || !bar.classList.contains('carousel-bar')) return;
+    var count = bar.querySelector('[data-carousel-count]');
+    var fill = bar.querySelector('[data-carousel-fill]');
+    var n = track.children.length;
+    var update = function () {
+      var max = track.scrollWidth - track.clientWidth;
+      var p = max > 0 ? track.scrollLeft / max : 0;
+      fill.style.transform = 'scaleX(' + (1 / n + p * (1 - 1 / n)).toFixed(3) + ')';
+      count.textContent = Math.min(n, Math.round(p * (n - 1)) + 1) + ' / ' + n;
+    };
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  });
+
   // --- Mémorisation de la langue choisie (utilisée par la page racine) ----
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[data-lang]');

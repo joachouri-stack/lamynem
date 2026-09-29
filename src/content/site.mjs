@@ -160,10 +160,10 @@ const robe = (image, label) => ({
   medium: { fr: 'Textile', en: 'Textile', ru: 'Текстиль' },
 });
 export const FEATURED_ROBES = [
-  robe('robe-doree-cape-rouge-vitraux', 'robe dorée à la cape rouge (vitraux)'),
   robe('robe-brune-traine-au-vent', 'robe brune à la traîne au vent'),
   robe('robe-vitraux-voute-bleue', 'robe rouge et or sous la voûte bleue'),
   robe('robe-patchwork-jean-donjon', 'robe en patchwork de jeans'),
+  robe('robe-doree-cape-rouge-vitraux', 'robe dorée à la cape rouge (vitraux)'),
 ];
 
 // ---------------------------------------------------------------------------

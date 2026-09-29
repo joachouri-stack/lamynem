@@ -354,9 +354,10 @@ function renderHome(lang) {
       </div>
     </div>
   </div>
-  <div class="robes">
+  <div class="robes" data-carousel>
     ${FEATURED_ROBES.map((r, i) => robeCard(r, lang, roman(i + 2))).join('\n    ')}
   </div>
+  <div class="carousel-bar" aria-hidden="true"><span class="carousel-bar__count" data-carousel-count>1 / ${FEATURED_ROBES.length}</span><span class="carousel-bar__track"><span class="carousel-bar__fill" data-carousel-fill></span></span></div>
   <div class="works-more"><a class="eyebrow link-line" href="${path(lang, 'work')}">${esc(h.allWorks)} ${ARROW}</a></div>
 </section>
 
