@@ -1373,3 +1373,12 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .site-foot .to-top { padding: 4px 0; }
   .site-foot .to-top::before { content: ''; position: absolute; inset: -10px -8px; }
 }
+
+/* --- En-tête mobile : zones tactiles ------------------------------------- */
+@media (max-width: 960px) {
+  .site-header .brand::before { content: ''; position: absolute; inset: -6px -8px; }
+  .header-mobile .lang-switch a { position: relative; }
+  .header-mobile .lang-switch a::before { content: ''; position: absolute; inset: -7px 0; }
+}
+/* Libellé « Menu » visible dès 360 px (seulement masqué sur les plus petits écrans) */
+@media (max-width: 380px) and (min-width: 360px) { .burger__label { display: inline; } }
