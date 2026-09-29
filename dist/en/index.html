@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,400&display=swap">
-<link rel="stylesheet" href="/assets/css/main.css?v=1a16b8a4">
+<link rel="stylesheet" href="/assets/css/main.css?v=726e7bd3">
 <script>(function(h){try{var c=navigator.connection;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(c&&c.saveData))h.classList.add('has-fabric')}catch(e){}})(document.documentElement)</script>
 <script src="/assets/js/main.js?v=f4775b43" defer></script>
 <script src="/assets/js/fabric.js?v=ac63a100" defer></script>
@@ -86,13 +86,20 @@
 </section>
 
 <section class="section artist" aria-labelledby="artist-title">
-  <div class="artist__media reveal"><div class="swatch" style="--c1:#e0a06a;--c2:#a2643a;--c3:#2a1810"><div class="swatch__inner"></div><div class="grain"></div><p class="eyebrow swatch__note">Image to be supplied</p></div></div>
+  <figure class="artist__figure reveal">
+    <div class="artist__mat"><div class="artist__frame"><picture><source type="image/avif" srcset="/assets/img/robe-doree-cape-rouge-vitraux-480.avif 480w, /assets/img/robe-doree-cape-rouge-vitraux-683.avif 683w" sizes="(max-width: 860px) 100vw, 40vw"><source type="image/webp" srcset="/assets/img/robe-doree-cape-rouge-vitraux-480.webp 480w, /assets/img/robe-doree-cape-rouge-vitraux-683.webp 683w" sizes="(max-width: 860px) 100vw, 40vw"><img src="/assets/img/robe-doree-cape-rouge-vitraux-683.jpg" srcset="/assets/img/robe-doree-cape-rouge-vitraux-480.jpg 480w, /assets/img/robe-doree-cape-rouge-vitraux-683.jpg 683w" sizes="(max-width: 860px) 100vw, 40vw" width="683" height="1024" alt="A tall midnight-blue gown with a gold-embroidered bodice and a gold-trimmed red cape, raised on a stone capital between two stained-glass windows; a barefoot man in pale linen gazes up at it." loading="lazy" decoding="async" style="object-position:82% 55%"></picture></div></div>
+    <figcaption class="eyebrow artist__route">Africa · Europe · Asia · Latin America</figcaption>
+  </figure>
   <div class="artist__text reveal">
     <p class="watermark" aria-hidden="true">02</p>
     <div class="label"><svg class="thread" viewBox="0 0 30 8" aria-hidden="true" focusable="false"><path d="M0 4 Q4 0 8 4 T16 4 T24 4 T30 4" stroke="#B5502E" stroke-width="1" fill="none"/></svg><h2 class="eyebrow" id="artist-title">The artist</h2></div>
     <p class="h-lead artist__lead">Born in 1977 in Cameroon, Lamyne M lives and works in Saint-Denis. For more than ten years, he has made textile a medium of engagement.</p>
-    <p class="artist__body">Colonisation, male domination, modern slavery, migration and environmental issues — a hybrid path between Africa, Europe, Asia and Latin America; a work entered the collections of the Harn Museum (Florida) in 2021.</p>
-    <a class="eyebrow link-line" href="/en/about/">Discover Lamyne M <span class="arrow" aria-hidden="true">→</span></a>
+    <dl class="artist__facts"><div><dt>1977</dt><dd class="eyebrow">Born in Cameroon</dd></div><div><dt>Saint-Denis</dt><dd class="eyebrow">Lives and works</dd></div><div><dt>10+ years</dt><dd class="eyebrow">Textile as engagement</dd></div><div><dt>2021</dt><dd class="eyebrow">Harn Museum collection</dd></div></dl>
+    <div class="artist__themes">
+      <p class="eyebrow">Themes</p>
+      <ul><li>Colonisation</li><li>Male domination</li><li>Modern slavery</li><li>Migration</li><li>Environment</li></ul>
+    </div>
+    <a class="artist__cta" href="/en/about/">Discover Lamyne M <span aria-hidden="true">→</span></a>
   </div>
 </section>
 

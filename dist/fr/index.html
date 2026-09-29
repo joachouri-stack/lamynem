@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,400&display=swap">
-<link rel="stylesheet" href="/assets/css/main.css?v=1a16b8a4">
+<link rel="stylesheet" href="/assets/css/main.css?v=726e7bd3">
 <script>(function(h){try{var c=navigator.connection;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(c&&c.saveData))h.classList.add('has-fabric')}catch(e){}})(document.documentElement)</script>
 <script src="/assets/js/main.js?v=f4775b43" defer></script>
 <script src="/assets/js/fabric.js?v=ac63a100" defer></script>
@@ -86,13 +86,20 @@
 </section>
 
 <section class="section artist" aria-labelledby="artist-title">
-  <div class="artist__media reveal"><div class="swatch" style="--c1:#e0a06a;--c2:#a2643a;--c3:#2a1810"><div class="swatch__inner"></div><div class="grain"></div><p class="eyebrow swatch__note">Visuel à fournir</p></div></div>
+  <figure class="artist__figure reveal">
+    <div class="artist__mat"><div class="artist__frame"><picture><source type="image/avif" srcset="/assets/img/robe-doree-cape-rouge-vitraux-480.avif 480w, /assets/img/robe-doree-cape-rouge-vitraux-683.avif 683w" sizes="(max-width: 860px) 100vw, 40vw"><source type="image/webp" srcset="/assets/img/robe-doree-cape-rouge-vitraux-480.webp 480w, /assets/img/robe-doree-cape-rouge-vitraux-683.webp 683w" sizes="(max-width: 860px) 100vw, 40vw"><img src="/assets/img/robe-doree-cape-rouge-vitraux-683.jpg" srcset="/assets/img/robe-doree-cape-rouge-vitraux-480.jpg 480w, /assets/img/robe-doree-cape-rouge-vitraux-683.jpg 683w" sizes="(max-width: 860px) 100vw, 40vw" width="683" height="1024" alt="Une haute robe bleu nuit au plastron brodé d’or et à la cape rouge bordée d’or, dressée sur un chapiteau de pierre entre deux vitraux ; un homme pieds nus, vêtu de lin clair, la contemple." loading="lazy" decoding="async" style="object-position:82% 55%"></picture></div></div>
+    <figcaption class="eyebrow artist__route">Afrique · Europe · Asie · Amérique latine</figcaption>
+  </figure>
   <div class="artist__text reveal">
     <p class="watermark" aria-hidden="true">02</p>
     <div class="label"><svg class="thread" viewBox="0 0 30 8" aria-hidden="true" focusable="false"><path d="M0 4 Q4 0 8 4 T16 4 T24 4 T30 4" stroke="#B5502E" stroke-width="1" fill="none"/></svg><h2 class="eyebrow" id="artist-title">L’artiste</h2></div>
     <p class="h-lead artist__lead">Né en 1977 au Cameroun, Lamyne M vit et travaille à Saint-Denis. Depuis plus de dix ans, il fait du textile un medium d’engagement.</p>
-    <p class="artist__body">Colonisation, domination masculine, esclavage moderne, enjeux migratoires et environnementaux — un parcours hybride entre Afrique, Europe, Asie et Amérique latine ; une œuvre entrée dans les collections du Harn Museum (Floride) en 2021.</p>
-    <a class="eyebrow link-line" href="/fr/a-propos/">Découvrir Lamyne M <span class="arrow" aria-hidden="true">→</span></a>
+    <dl class="artist__facts"><div><dt>1977</dt><dd class="eyebrow">Naissance au Cameroun</dd></div><div><dt>Saint-Denis</dt><dd class="eyebrow">Vit et travaille</dd></div><div><dt>10+ ans</dt><dd class="eyebrow">Le textile comme engagement</dd></div><div><dt>2021</dt><dd class="eyebrow">Collection du Harn Museum</dd></div></dl>
+    <div class="artist__themes">
+      <p class="eyebrow">Thèmes</p>
+      <ul><li>Colonisation</li><li>Domination masculine</li><li>Esclavage moderne</li><li>Migrations</li><li>Environnement</li></ul>
+    </div>
+    <a class="artist__cta" href="/fr/a-propos/">Découvrir Lamyne M <span aria-hidden="true">→</span></a>
   </div>
 </section>
 

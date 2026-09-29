@@ -76,6 +76,10 @@ export const IMAGES = {
   },
 };
 
+// Photo du bloc « L'artiste » de l'accueil (cadrée sur l'artiste face à son œuvre).
+// La personne photographiée doit être confirmée comme étant Lamyne M.
+export const ARTIST_PHOTO = { image: 'robe-doree-cape-rouge-vitraux', focus: '82% 55%' };
+
 // Photo de couverture de l'accueil (sous l'effet « tissu numérique »).
 // TODO tant qu'aucune photo en haute définition (≥ 3000 px de large) n'est fournie :
 // le hero reste alors un fond sombre, le tissu se soulève sur le nom seul.

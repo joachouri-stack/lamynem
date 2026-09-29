@@ -25,6 +25,7 @@ Compléter `src/content/site.mjs` (et `src/originals/` pour les photos), puis re
 - [ ] Année de « Sur leurs 31 »
 - [ ] Année de « Teintuer »
 - [ ] Année de « VENTiLATE »
+- [ ] Bloc « L’artiste » : confirmer que la personne photographiée est Lamyne M, et le crédit photo
 - [ ] Dossier de presse PDF
 - [ ] Lien presse : 14 Minutes de Paris
 - [ ] Lien presse : Axis Gallery
