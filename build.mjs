@@ -370,13 +370,19 @@ function renderHome(lang) {
 
 <section class="section exhibitions" aria-labelledby="ex-title">
   <p class="watermark" aria-hidden="true">04</p>
-  <div class="section__head">
-    ${label(h.exhibitionsEyebrow)}
-    <h2 class="h-section" id="ex-title">${esc(h.exhibitionsTitle)}</h2>
+  <div class="ex-home">
+    <div class="ex-home__aside">
+      ${label(h.exhibitionsEyebrow)}
+      <h2 class="h-section" id="ex-title">${esc(h.exhibitionsTitle)}</h2>
+      <p class="ex-home__intro">${esc(h.exhibitionsIntro)}</p>
+      <a class="eyebrow link-line" href="${path(lang, 'exhibitions')}">${esc(h.allExhibitions)} ${ARROW}</a>
+    </div>
+    ${exTimeline(lang)}
   </div>
-  ${exList(lang)}
-  <ul class="countries">${COUNTRIES[lang].map(c => `<li class="eyebrow">${esc(c)}</li>`).join('')}</ul>
-  <p style="position:relative;margin-top:40px"><a class="eyebrow link-line" href="${path(lang, 'exhibitions')}">${esc(h.allExhibitions)} ${ARROW}</a></p>
+  <div class="territories">
+    <p class="eyebrow">${esc(h.territories)}</p>
+    <ul>${COUNTRIES[lang].map((c, i) => `<li>${i ? THREAD : ''}<span>${esc(c)}</span></li>`).join('')}</ul>
+  </div>
 </section>
 
 <section class="section section--sand masterclass" aria-labelledby="mc-title">
@@ -436,6 +442,24 @@ function exList(lang, { detailed = false } = {}) {
     return `<li class="ex-item reveal"${detailed ? ` id="${e.id}"` : ''}><div class="ex-item__main"><span class="ex-year">${e.year ? esc(e.year) : '<span aria-hidden="true">—</span>'}</span><div>${title}</div></div>`
       + `<p class="eyebrow">${esc(place)}</p></li>`;
   }).join('')}</ul>`;
+}
+
+/** Frise des expositions de l'accueil : année, type, titre, lieu ; lien vers la fiche. */
+function exTimeline(lang) {
+  const s = STRINGS[lang];
+  return `<ol class="ex-tl">${EXHIBITIONS.map(e => {
+    const detail = tr(e.detail, lang);
+    if (!e.year) TODOS.add(`Année : ${tr(e.title, 'fr')}`);
+    const thumb = e.image ? `<span class="ex-tl__thumb" aria-hidden="true">${picture(e.image, lang, { sizes: '220px' })}</span>` : '';
+    return `<li class="reveal"><a class="ex-tl__item" href="${path(lang, 'exhibitions')}#${e.id}">`
+      + `<span class="ex-tl__year">${e.year ? esc(e.year) : '<span aria-hidden="true">—</span>'}</span>`
+      + `<span class="ex-tl__dot" aria-hidden="true"></span>`
+      + `<span class="ex-tl__body"><span class="eyebrow ex-tl__type">${esc(s.exhibitions.types[e.type])}</span>`
+      + `<span class="ex-tl__title">${esc(tr(e.title, lang))}</span>`
+      + (detail ? `<span class="ex-tl__detail">${esc(detail)}</span>` : '')
+      + `<span class="eyebrow ex-tl__place">${esc(tr(e.city, lang))}, ${esc(tr(e.country, lang))}</span></span>`
+      + `<span class="ex-tl__arrow" aria-hidden="true">→</span>${thumb}</a></li>`;
+  }).join('')}</ol>`;
 }
 
 /** Bandeau défilant des noms (décoratif : la liste accessible est juste en dessous). */
