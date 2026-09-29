@@ -99,8 +99,10 @@ function workCard(w, lang, num) {
   const s = STRINGS[lang];
   const kind = tr(w.medium, lang) || s.categories[w.category];
   return `<a class="card reveal" href="${workPath(lang, w)}">`
-    + `<div class="card__media">${workMedia(w, lang, '(max-width: 720px) 100vw, 50vw')}</div>`
-    + `<div class="card__meta"><h3 class="card__title">${num ? `<span class="card__num">${num}.</span> ` : ''}${esc(w.title)}</h3>`
+    + `<div class="card__media">${workMedia(w, lang, '(max-width: 720px) 100vw, 50vw')}`
+    + (num ? `<span class="card__big" aria-hidden="true">${num}</span>` : '')
+    + `<span class="eyebrow card__view" aria-hidden="true">${esc(s.work.view)} →</span></div>`
+    + `<div class="card__meta"><h3 class="card__title">${esc(w.title)}</h3>`
     + `<p class="eyebrow">${esc(kind)}</p></div></a>`;
 }
 
@@ -533,29 +535,47 @@ function catNav(lang, current) {
 
 function renderWorkIndex(lang) {
   const s = STRINGS[lang];
+  const panels = CATEGORIES.map((cat, i) => {
+    const list = WORKS.filter(w => w.category === cat);
+    const cover = list.find(w => w.image) || list[0];
+    return `<li class="practice reveal"><a class="practice__link" href="${catPath(lang, cat)}">
+  <span class="practice__media">${cover.image ? picture(cover.image, lang, { sizes: '(max-width: 860px) 100vw, 34vw' }) : swatch(cover.tone, lang, false)}</span>
+  <span class="practice__num">${pad2(i + 1)}</span>
+  <span class="practice__text">
+    <span class="eyebrow practice__count">${esc(s.work.count(list.length))}</span>
+    <span class="practice__title">${esc(s.categories[cat])}</span>
+    <span class="practice__intro">${esc(s.categoryIntro[cat])}</span>
+    <span class="eyebrow practice__cta">${esc(s.work.seeCat(s.categories[cat]))} →</span>
+  </span></a></li>`;
+  }).join('\n');
+  let n = 0;
+  const index = CATEGORIES.map(cat => WORKS.filter(w => w.category === cat).map(w => {
+    n++;
+    const kind = tr(w.medium, lang) || s.categories[w.category];
+    return `<li><a class="w-index__row" href="${workPath(lang, w)}">`
+      + `<span class="w-index__num">${pad2(n)}</span>`
+      + `<span class="w-index__title">${esc(w.title)}</span>`
+      + `<span class="eyebrow w-index__cat">${esc(s.categories[w.category])}${kind !== s.categories[w.category] ? ` · ${esc(kind)}` : ''}</span>`
+      + `<span class="w-index__year">${w.year ? esc(w.year) : '<span aria-hidden="true">—</span>'}</span>`
+      + `<span class="w-index__arrow" aria-hidden="true">→</span></a></li>`;
+  }).join('')).join('');
   const body = `
-<div class="page-intro">
+<div class="page-intro works-intro">
   <p class="watermark" aria-hidden="true">01</p>
   ${label(s.work.eyebrow)}
   <h1>${esc(s.work.heading)}</h1>
+  <p>${esc(s.work.intro(WORKS.length))}</p>
 </div>
 ${catNav(lang, null)}
-<div class="cat-rows">
-${CATEGORIES.map((cat, i) => {
-  const list = WORKS.filter(w => w.category === cat);
-  const cover = list.find(w => w.image) || list[0];
-  return `<section class="cat-row reveal" aria-labelledby="c-${cat}">
-  <a class="cat-row__media" href="${catPath(lang, cat)}" tabindex="-1" aria-hidden="true">${cover.image ? picture(cover.image, lang, { sizes: '(max-width: 860px) 100vw, 50vw' }) : swatch(cover.tone, lang, false)}</a>
-  <div class="cat-row__text">
-    <p class="eyebrow">${pad2(i + 1)} · ${esc(s.work.count(list.length))}</p>
-    <h2 id="c-${cat}"><a href="${catPath(lang, cat)}">${esc(s.categories[cat])}</a></h2>
-    <p class="cat-row__intro">${esc(s.categoryIntro[cat])}</p>
-    <ul class="cat-row__list">${list.map(w => `<li><a href="${workPath(lang, w)}">${esc(w.title)}</a></li>`).join('')}</ul>
-    <a class="eyebrow link-line" href="${catPath(lang, cat)}">${esc(s.work.seeCat(s.categories[cat]))} ${ARROW}</a>
-  </div>
+<section class="practices" aria-label="${esc(s.work.practices)}">
+  <ol class="practices__list">
+${panels}
+  </ol>
+</section>
+<section class="w-index" aria-labelledby="w-index-t">
+  <div class="w-index__head">${label(s.work.eyebrow)}<h2 class="h-section" id="w-index-t">${esc(s.work.indexTitle)}</h2></div>
+  <ol class="w-index__list">${index}</ol>
 </section>`;
-}).join('\n')}
-</div>`;
   page({
     lang, route: 'work', alternates: alts('work'), xDefault: path(DEFAULT_LANG, 'work'), current: 'work',
     title: s.work.title, description: s.work.description, body,
@@ -613,27 +633,36 @@ function renderWork(w, lang) {
       : [[s.work.medium, medium ? esc(medium) : todo(lang, `Médium de « ${w.title} »`)]]),
   ];
 
+  const prev = inCat[(num - 2 + inCat.length) % inCat.length];
+  const related = inCat.filter(x => x !== w);
   const body = `
 <article>
   <header class="work-hero" data-header-over>
     ${w.image ? picture(w.image, lang, { eager: true }) : swatch(w.tone, lang)}
     <p class="watermark watermark--light" aria-hidden="true">${pad2(num)}</p>
     <div class="work-hero__caption">
-      <nav class="crumbs eyebrow" aria-label="${esc(s.work.crumbs)}"><a href="${path(lang, 'work')}">${esc(s.work.eyebrow)}</a> <span aria-hidden="true">/</span> <a href="${catPath(lang, w.category)}">${esc(s.categories[w.category])}</a>${w.year ? ` <span aria-hidden="true">·</span> ${esc(w.year)}` : ''}</nav>
+      <nav class="crumbs eyebrow" aria-label="${esc(s.work.crumbs)}"><a href="${path(lang, 'work')}">${esc(s.work.eyebrow)}</a> <span aria-hidden="true">/</span> <a href="${catPath(lang, w.category)}">${esc(s.categories[w.category])}</a></nav>
       <h1>${esc(w.title)}</h1>
+      <ul class="work-hero__facts">${facts.map(([k, v]) => `<li><span class="eyebrow">${esc(k)}</span><span class="work-hero__fact">${v}</span></li>`).join('')}</ul>
     </div>
   </header>
   <div class="work-body">
-    <dl class="facts">${facts.map(([k, v]) => `<div><dt class="eyebrow">${esc(k)}</dt><dd>${v}</dd></div>`).join('')}</dl>
+    <aside class="work-side">
+      <p class="eyebrow">${esc(s.work.details)} · ${pad2(num)}/${pad2(inCat.length)}</p>
+      <dl class="facts">${facts.map(([k, v]) => `<div><dt class="eyebrow">${esc(k)}</dt><dd>${v}</dd></div>`).join('')}</dl>
+      <a class="mc-host work-ask" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(w.title)}">${esc(s.work.ask)} <span aria-hidden="true">→</span></a>
+    </aside>
     <div class="work-text">${text ? (Array.isArray(text) ? text : [text]).map(p => `<p>${esc(p)}</p>`).join('') : `<p class="todo-block">${esc(s.work.textTodo)}</p>`}</div>
   </div>
 </article>
-<p class="back-link"><a class="eyebrow link-line" href="${catPath(lang, w.category)}"><span aria-hidden="true">←</span> ${esc(s.work.backCat(s.categories[w.category]))}</a></p>
-<a class="next-work on-dark" href="${workPath(lang, next)}" style="margin-top:clamp(64px,8vw,120px)">
-  <span class="glow" aria-hidden="true"></span>
-  <span class="eyebrow">${esc(s.work.next)} · ${esc(s.categories[w.category])} ${num % inCat.length + 1}/${inCat.length}</span>
-  <span class="next-work__title" style="display:block">${esc(next.title)} ${ARROW}</span>
-</a>`;
+${related.length ? `<section class="related" aria-labelledby="rel-t">
+  <div class="related__head">${label(s.work.related, { tag: 'h2', id: 'rel-t' })}<a class="eyebrow link-line" href="${catPath(lang, w.category)}">${esc(s.work.seeCat(s.categories[w.category]))} ${ARROW}</a></div>
+  <ul class="related__list">${related.map(x => `<li><a class="related__card" href="${workPath(lang, x)}"><span class="related__media">${x.image ? picture(x.image, lang, { sizes: '260px' }) : swatch(x.tone, lang, false)}<span class="related__num" aria-hidden="true">${roman(inCat.indexOf(x) + 1)}</span></span><span class="related__title">${esc(x.title)}</span></a></li>`).join('')}</ul>
+</section>` : ''}
+<nav class="work-nav on-dark" aria-label="${esc(s.work.browse)}">
+  <a class="work-nav__link work-nav__link--prev" href="${workPath(lang, prev)}"><span class="eyebrow"><span aria-hidden="true">←</span> ${esc(s.work.prev)}</span><span class="work-nav__title">${esc(prev.title)}</span></a>
+  <a class="work-nav__link work-nav__link--next" href="${workPath(lang, next)}"><span class="eyebrow">${esc(s.work.next)} <span aria-hidden="true">→</span></span><span class="work-nav__title">${esc(next.title)}</span></a>
+</nav>`;
 
   const url = `${SITE_URL}${workPath(lang, w)}`;
   const creator = { '@id': `${SITE_URL}/#lamyne-m` };
