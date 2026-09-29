@@ -1382,3 +1382,5 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 }
 /* Libellé « Menu » visible dès 360 px (seulement masqué sur les plus petits écrans) */
 @media (max-width: 380px) and (min-width: 360px) { .burger__label { display: inline; } }
+/* « Fermer » suit la même règle que « Menu » : visible dès 360 px */
+@media (max-width: 380px) and (min-width: 360px) { .menu-close__label { display: inline; } }
