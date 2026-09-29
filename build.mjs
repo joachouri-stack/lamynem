@@ -164,7 +164,7 @@ function header(lang, current, alternates, over) {
     + `<div class="nav-desktop"><nav aria-label="${esc(s.mainNav)}" class="nav-links">${items.map(deskItem).join('')}</nav>`
     + `<span class="nav-sep" aria-hidden="true"></span>${langSwitch(lang, alternates)}</div>`
     + `<div class="header-mobile">${langSwitch(lang, alternates)}`
-    + `<button class="burger" type="button" data-menu-open aria-expanded="false" aria-controls="menu"><span></span><span></span><span class="visually-hidden">${esc(s.menu)}</span></button></div>`
+    + `<button class="burger" type="button" data-menu-open aria-expanded="false" aria-controls="menu"><span class="burger__label">${esc(s.menu)}</span><span class="burger__lines" aria-hidden="true"><span></span><span></span></span></button></div>`
     + '<span class="site-header__progress" aria-hidden="true"></span>'
     + '</header>'
     + `<div class="menu-overlay on-dark" id="menu" role="dialog" aria-modal="true" aria-label="${esc(s.menu)}" inert>`
