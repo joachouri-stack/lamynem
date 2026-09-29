@@ -877,7 +877,7 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 
 /* Page presse */
 .press-intro { padding-bottom: clamp(40px, 4vw, 60px); }
-.press-intro + .press-marquee { margin: 0; }
+.press-intro + .press-marquee, .press-quick + .press-marquee { margin: 0; }
 .press-page { display: grid; grid-template-columns: 8fr 4fr; gap: clamp(40px, 6vw, 96px); align-items: start; padding: clamp(56px, 6vw, 88px) var(--gutter) 0; }
 .press-page__list > .eyebrow, .press-page__aside > .eyebrow { margin-bottom: 16px; }
 .press-page__aside { position: sticky; top: calc(var(--header-h, 80px) + 32px); padding: clamp(24px, 2.4vw, 32px); background: var(--ivory-2); }
@@ -1116,4 +1116,29 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .about-facts > div { padding-right: 12px; }
   .about-part { padding-top: 72px; padding-bottom: 72px; }
   .about-part__num { font-size: 56px; }
+}
+
+/* --- Page Presse sur mobile ---------------------------------------------- */
+.press-quick { display: none; }
+.press-row__soon { display: none; }
+@media (max-width: 720px) {
+  /* Raccourcis journalistes, juste sous le titre */
+  .press-quick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 20px 32px; }
+  .press-quick__btn { display: flex; flex-direction: column; justify-content: center; gap: 3px; min-height: 56px; padding: 10px 16px; border: 1px solid var(--ink); border-radius: 16px; font-family: var(--font-ui); font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; line-height: 1.3; }
+  .press-quick__btn small { font-size: 9.5px; letter-spacing: .08em; color: var(--ink-3); text-transform: none; font-weight: 400; }
+  .press-quick__btn--off { border-style: dashed; border-color: var(--rule); color: var(--ink-2); }
+  .press-quick__btn--dark { flex-direction: row; align-items: center; justify-content: space-between; background: var(--ink); color: var(--ivory); }
+  .press-quick__btn--dark:hover { background: var(--terracotta); border-color: var(--terracotta); color: var(--ivory); }
+  .press-intro { padding-bottom: 28px; }
+
+  /* Mentions : statut discret au lieu de l'encadré pointillé */
+  .press-page { padding-top: 40px; gap: 40px; }
+  .press-page .press-row__name { font-size: 26px; }
+  .press-row--static .todo.press-row__status { display: none; }
+  .press-row--static .press-row__soon { display: block; grid-column: 2; margin-top: 6px; font-size: 9.5px; color: var(--ink-3); }
+  .press-row--static { grid-template-columns: 36px 1fr; padding: 18px 0; }
+
+  /* Encadré ressources : pas de coupure maladroite */
+  .press-page__aside { padding: 20px; }
+  .press-page__aside .todo { white-space: normal; line-height: 1.6; text-wrap: balance; }
 }

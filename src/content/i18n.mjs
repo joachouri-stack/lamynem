@@ -150,6 +150,8 @@ export const STRINGS = {
       bioLink: 'Lire la biographie',
       ctaTitle: 'Une interview, un article, des visuels ?',
       ctaMail: 'Contact presse',
+      linkSoon: 'Lien à venir',
+      kitSoon: 'Bientôt disponible',
     },
     notFound: {
       title: 'Page introuvable — Lamyne M',
@@ -306,6 +308,8 @@ export const STRINGS = {
       bioLink: 'Read the biography',
       ctaTitle: 'An interview, an article, images?',
       ctaMail: 'Press contact',
+      linkSoon: 'Link coming soon',
+      kitSoon: 'Coming soon',
     },
     notFound: {
       title: 'Page not found — Lamyne M',
@@ -466,6 +470,8 @@ export const STRINGS = {
       bioLink: 'Читать биографию',
       ctaTitle: 'Интервью, статья, изображения?',
       ctaMail: 'Контакт для прессы',
+      linkSoon: 'Ссылка появится позже',
+      kitSoon: 'Скоро',
     },
     notFound: {
       title: 'Страница не найдена — Lamyne M',
