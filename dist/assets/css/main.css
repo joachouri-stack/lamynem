@@ -1482,7 +1482,7 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 }
 .enter__inner { display: flex; flex-direction: column; align-items: center; gap: 18px; transition: transform .9s var(--ease), opacity .6s var(--ease); animation: enter-in 1.4s var(--ease) both; }
 .enter__thread { width: 64px; height: 10px; }
-.enter__thread path, .enter__note path { fill: none; stroke: var(--terracotta-light); stroke-width: 1.4; stroke-linecap: round; }
+.enter__thread path { fill: none; stroke: var(--terracotta-light); stroke-width: 1.4; stroke-linecap: round; }
 .enter__name { font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 9vw, 104px); line-height: 1; letter-spacing: .04em; }
 .enter__tag { color: rgba(247, 243, 236, .75); }
 .enter__btn {
@@ -1495,8 +1495,6 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 .enter__btn::after { content: ''; position: absolute; inset: -1px; border-radius: 50%; border: 1px solid var(--terracotta-light); opacity: 0; animation: enter-pulse 2.6s var(--ease) 1.2s infinite; }
 .enter__btn:hover, .enter__btn:focus-visible { background: var(--terracotta); border-color: var(--terracotta); transform: scale(1.04); }
 .enter__btn:focus-visible { outline: 2px solid var(--ivory); outline-offset: 6px; }
-.enter__note { display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; color: rgba(247, 243, 236, .6); }
-.enter__note svg { width: 22px; height: 10px; }
 .enter.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
 .enter.is-leaving .enter__inner { transform: translateY(-24px); opacity: 0; }
 @keyframes enter-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -1519,3 +1517,10 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .ex-card__title { overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
 }
 @media (max-width: 360px) { .ex-card__title { font-size: 19px; } }
+
+/* À propos sur mobile : les pastilles de thèmes répètent mot pour mot la citation
+   juste au-dessus (et le paragraphe « Parcours ») ; année inconnue du CV discrète. */
+@media (max-width: 720px) {
+  .about-approach .about-themes { display: none; }
+  .cv-row__year--none { visibility: hidden; }
+}

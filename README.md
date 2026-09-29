@@ -91,7 +91,7 @@ aucun son n'est possible avant un premier geste du visiteur (clic, toucher bref,
 la molette et le glissé du doigt ne comptent pas. Le son démarre dès que le navigateur l'autorise.
 
 Écran « Entrer » : à la première visite de l'accueil dans la session (onglet), un voile nuit
-avec « LAMYNE M » et un bouton « Entrer » précède le rideau ; ce clic est le geste qui autorise
+avec « LAMYNE M » et un bouton « Entrer » (sans mention du son, qui doit surprendre) précède le rideau ; ce clic est le geste qui autorise
 le son. Il n'apparaît pas si le rideau est inactif (mouvement réduit, économie de données, appareil
 trop lent, WebGL absent) ni sans JavaScript, et ne peut jamais bloquer la page (filet de sécurité
 dans `main.js`). Échap entre aussi. Limite : Safari exige un nouveau geste à chaque chargement de
