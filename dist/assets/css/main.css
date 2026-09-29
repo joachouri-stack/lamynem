@@ -1531,3 +1531,9 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .press-quick__btn:only-child { grid-column: 1 / -1; }
   .press-quick__btn--dark { white-space: nowrap; }
 }
+
+/* Accueil mobile : tant que la vidéo « Art in Motion » n'est pas fournie, le cadre
+   décoratif (qui ressemble à un lecteur) est retiré ; il revient avec la vidéo. */
+@media (max-width: 720px) {
+  .video--empty { display: none; }
+}
