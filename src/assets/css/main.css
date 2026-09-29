@@ -1622,7 +1622,7 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 /* Textes posés sur les étoffes (fiches, vignettes) : lisibles sur toutes les
    teintes, y compris les zones claires (or, cuivre), grâce à une ombre douce. */
 .etoffe__frame { border-color: rgba(247, 243, 236, .5); }
-.etoffe__num { color: rgba(247, 243, 236, .72); text-shadow: 0 2px 24px rgba(10, 6, 4, .45); }
+.etoffe__num { color: rgba(247, 243, 236, .4); text-shadow: 0 2px 24px rgba(10, 6, 4, .3); }
 .etoffe__sig { color: var(--ivory); font-size: 11.5px; text-shadow: 0 1px 10px rgba(10, 6, 4, .6); }
 .etoffe::after { content: ''; position: absolute; inset: 0; background: radial-gradient(90% 70% at 50% 55%, rgba(10, 6, 4, .28), transparent 70%), linear-gradient(to top, rgba(10, 6, 4, .45), transparent 32%); pointer-events: none; }
 .etoffe__frame, .etoffe__num, .etoffe__sig { z-index: 1; }
