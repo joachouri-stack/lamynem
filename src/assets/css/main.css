@@ -1537,3 +1537,10 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 @media (max-width: 720px) {
   .video--empty { display: none; }
 }
+
+/* Pages intérieures sur mobile : dans « Dans la même catégorie », une œuvre sans
+   photo garde une vignette de couleur plus basse (pas un grand aplat vide). */
+@media (max-width: 720px) {
+  .related__media--noimg { aspect-ratio: 4 / 3; }
+  .related__media--noimg .related__num { font-size: 32px; }
+}

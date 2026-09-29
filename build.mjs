@@ -679,7 +679,9 @@ function renderWork(w, lang) {
     [s.work.year, w.year ? esc(w.year) : todo(lang, `Année de « ${w.title} »`)],
     ...(w.category === 'masterclass'
       ? [[s.work.place, place ? esc(place) : todo(lang, `Lieu de « ${w.title} »`)]]
-      : [[s.work.medium, medium ? esc(medium) : todo(lang, `Médium de « ${w.title} »`)]]),
+      : medium && medium.toLowerCase() === s.categories[w.category].toLowerCase()
+        ? [] // technique = catégorie (ex. Performance) : pas de redite
+        : [[s.work.medium, medium ? esc(medium) : todo(lang, `Médium de « ${w.title} »`)]]),
   ].filter(([, v]) => v);
 
   const prev = inCat[(num - 2 + inCat.length) % inCat.length];
@@ -706,7 +708,7 @@ function renderWork(w, lang) {
 </article>
 ${related.length ? `<section class="related" aria-labelledby="rel-t">
   <div class="related__head">${label(s.work.related, { tag: 'h2', id: 'rel-t' })}<a class="eyebrow link-line" href="${catPath(lang, w.category)}">${esc(s.work.seeCat(s.categories[w.category]))} ${ARROW}</a></div>
-  <ul class="related__list" data-carousel>${related.map(x => `<li><a class="related__card" href="${workPath(lang, x)}"><span class="related__media">${x.image ? picture(x.image, lang, { sizes: '260px' }) : swatch(x.tone, lang, false)}<span class="related__num" aria-hidden="true">${roman(inCat.indexOf(x) + 1)}</span></span><span class="related__title">${esc(x.title)}</span></a></li>`).join('')}</ul><div class="carousel-bar" aria-hidden="true"><span class="carousel-bar__count" data-carousel-count>1 / ${related.length}</span><span class="carousel-bar__track"><span class="carousel-bar__fill" data-carousel-fill></span></span></div>
+  <ul class="related__list" data-carousel>${related.map(x => `<li><a class="related__card" href="${workPath(lang, x)}"><span class="related__media${x.image ? '' : ' related__media--noimg'}">${x.image ? picture(x.image, lang, { sizes: '260px' }) : swatch(x.tone, lang, false)}<span class="related__num" aria-hidden="true">${roman(inCat.indexOf(x) + 1)}</span></span><span class="related__title">${esc(x.title)}</span></a></li>`).join('')}</ul><div class="carousel-bar" aria-hidden="true"><span class="carousel-bar__count" data-carousel-count>1 / ${related.length}</span><span class="carousel-bar__track"><span class="carousel-bar__fill" data-carousel-fill></span></span></div>
 </section>` : ''}
 <nav class="work-nav on-dark" aria-label="${esc(s.work.browse)}">
   <a class="work-nav__link work-nav__link--prev" href="${workPath(lang, prev)}"><span class="eyebrow"><span aria-hidden="true">←</span> ${esc(s.work.prev)}</span><span class="work-nav__title">${esc(prev.title)}</span></a>
