@@ -85,9 +85,10 @@ et les pages de catégorie, fil d'Ariane sur les pages de catégorie et d'œuvre
 dorés, qui fait ressortir les robes rouges et or de l'artiste, recouvre la photo et le nom ; au scroll il se soulève comme pris dans le vent,
 la souris le soulève localement en desktop. Le rendu s'arrête hors écran et une fois le tissu levé.
 
-Son facultatif (coupé par défaut) : le bouton « Son » du hero active un bruissement de tissu
-synthétisé en direct (Web Audio, aucun fichier), dont le volume suit la vitesse du rideau. Les
-navigateurs interdisent le son sans geste du visiteur ; le choix est retenu d'une visite à l'autre.
+Son : un bruissement de tissu synthétisé en direct (Web Audio, aucun fichier) accompagne la levée
+du rideau, toujours actif, sans bouton ; son volume suit la vitesse du rideau. Limite des navigateurs :
+aucun son n'est possible avant un premier geste du visiteur (clic, toucher bref, touche du clavier) —
+la molette et le glissé du doigt ne comptent pas. Le son démarre dès que le navigateur l'autorise.
 
 Actif sur tous les appareils, sauf si le visiteur a demandé moins d'animations (`prefers-reduced-motion`)
 ou le mode économie de données. Plutôt que de se fier aux cœurs ou à la mémoire annoncés par le

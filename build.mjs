@@ -119,7 +119,8 @@ function workMedia(w, lang, sizes) {
 function workCard(w, lang, num) {
   const s = STRINGS[lang];
   const kind = tr(w.medium, lang) || s.categories[w.category];
-  return `<a class="card reveal" href="${workPath(lang, w)}">`
+  // Sans photo : sur mobile, la carte devient une ligne compacte (voir main.css).
+  return `<a class="card reveal${w.image ? '' : ' card--noimg'}" href="${workPath(lang, w)}">`
     + `<div class="card__media">${workMedia(w, lang, '(max-width: 720px) 100vw, 50vw')}`
     + (num ? `<span class="card__big" aria-hidden="true">${num}</span>` : '')
     + `<span class="eyebrow card__view" aria-hidden="true">${esc(s.work.view)} →</span></div>`
@@ -359,7 +360,6 @@ function renderHome(lang) {
     </div>
     <canvas class="hero__fabric" aria-hidden="true"></canvas>
     <div class="hero__scroll" aria-hidden="true"><span class="eyebrow">${esc(s.scroll)}</span><i></i></div>
-    <button class="hero__sound" type="button" data-sound hidden aria-pressed="false" data-label-on="${esc(s.soundOn)}" data-label-off="${esc(s.soundOff)}" aria-label="${esc(s.soundOn)}"><svg viewBox="0 0 24 10" aria-hidden="true"><path d="M1 5c2.5 0 2.5-4 5-4s2.5 8 5 8 2.5-8 5-8 2.5 4 7 4"/></svg><span class="eyebrow">${esc(s.sound)}</span></button>
   </div>
 </section>
 
@@ -684,10 +684,10 @@ function renderWork(w, lang) {
       <ul class="work-hero__facts">${facts.map(([k, v]) => `<li><span class="eyebrow">${esc(k)}</span><span class="work-hero__fact">${v}</span></li>`).join('')}</ul>
     </div>
   </header>
-  <div class="work-body">
+  <div class="work-body${text ? '' : ' work-body--short'}">
     <aside class="work-side">
       <p class="eyebrow">${esc(s.work.details)} · ${pad2(num)}/${pad2(inCat.length)}</p>
-      <dl class="facts">${facts.map(([k, v]) => `<div><dt class="eyebrow">${esc(k)}</dt><dd>${v}</dd></div>`).join('')}</dl>
+      <dl class="facts${facts.length === 1 ? ' facts--solo' : ''}">${facts.map(([k, v]) => `<div><dt class="eyebrow">${esc(k)}</dt><dd>${v}</dd></div>`).join('')}</dl>
       <a class="mc-host work-ask" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(w.title)}">${esc(s.work.ask)} <span aria-hidden="true">→</span></a>
     </aside>
     <div class="work-text">${text ? (Array.isArray(text) ? text : [text]).map(p => `<p>${esc(p)}</p>`).join('') : SHOW_TODO ? `<p class="todo-block">${esc(s.work.textTodo)}</p>` : ''}</div>
