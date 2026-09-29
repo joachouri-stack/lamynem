@@ -1142,3 +1142,40 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .press-page__aside { padding: 20px; }
   .press-page__aside .todo { white-space: normal; line-height: 1.6; text-wrap: balance; }
 }
+
+/* --- Page Expositions sur mobile ----------------------------------------- */
+@media (max-width: 720px) {
+  /* À la une : titre posé sur la photo, façon couverture de catalogue */
+  .ex-hl { position: relative; display: block; margin: 0 20px; padding-bottom: 48px; }
+  .ex-hl__media { aspect-ratio: 4 / 5; }
+  .ex-hl__media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,4,3,.92), rgba(8,4,3,.55) 45%, rgba(8,4,3,0) 80%); }
+  .ex-hl__text { position: absolute; left: 20px; right: 20px; bottom: 68px; color: var(--ivory); pointer-events: none; }
+  .ex-hl__kicker { color: var(--cream) !important; }
+  .ex-hl__year { margin-top: 10px; font-size: 64px; color: var(--ivory); }
+  .ex-hl__title { margin-top: 6px; font-size: 28px; }
+  .ex-hl__detail { color: rgba(247,243,236,.8); margin-top: 8px; font-size: 14px; }
+  .ex-hl__meta { display: none; }
+
+  /* Fiches en frise : année à gauche, pastille sur un fil pointillé */
+  .ex-cards { position: relative; border-top: 0; }
+  .ex-cards::before { content: ''; position: absolute; top: 10px; bottom: 10px; left: 76px; width: 1px;
+    background: repeating-linear-gradient(to bottom, var(--terracotta) 0 6px, transparent 6px 12px); opacity: .45; }
+  .ex-card { position: relative; display: grid; grid-template-columns: 58px 1fr; column-gap: 36px; row-gap: 0; padding: 22px 0; border-bottom: 1px solid var(--rule); }
+  .ex-card::before { content: ''; position: absolute; left: 70px; top: 30px; width: 13px; height: 13px; border: 1px solid var(--terracotta); border-radius: 50%; background: var(--ivory); }
+  .ex-card:target::before { background: var(--terracotta); }
+  .ex-card__num { display: none; }
+  .ex-card__year { grid-column: 1; grid-row: 1 / span 2; font-size: 24px; padding-top: 2px; }
+  .ex-card__body, .ex-card__place { grid-column: 2; }
+  .ex-card__title { font-size: 21px; margin-top: 4px; }
+  .ex-card__detail { font-size: 14px; margin-top: 4px; }
+  .ex-card__work { margin-top: 10px; }
+  .ex-card__place { margin-top: 10px; text-align: left; }
+  .ex-card__venue { font-size: 15px; }
+  .ex-card:target { box-shadow: -20px 0 0 var(--ivory-2), 20px 0 0 var(--ivory-2); }
+
+  /* Territoires : liste verticale, chaque pays précédé d'un trait terracotta */
+  .territories ul { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .territories li { font-size: 34px; }
+  .territories .thread { display: none; }
+  .territories li::before { content: ''; display: inline-block; width: 26px; height: 1px; margin-right: 14px; background: var(--terracotta); vertical-align: middle; }
+}
