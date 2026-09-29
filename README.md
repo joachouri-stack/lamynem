@@ -57,8 +57,10 @@ La vidéo n'est chargée qu'au clic (performance).
 /fr/  /en/  /ru/      accueil : hero → œuvres → artiste → Art in Motion → expositions → masterclasses → presse → contact
 /fr/oeuvres/                     sommaire : les 3 catégories et la liste de leurs œuvres, visibles d'un coup d'œil
 /fr/oeuvres/art/                 une page par catégorie (art, performance, masterclass)
-/fr/oeuvres/<catégorie>/<slug>/  page d'œuvre (gabarit unique : photo, titre, année, médium/lieu, texte,
-                                 œuvre suivante dans la même catégorie)
+/fr/oeuvres/<catégorie>/<slug>/  fiche d'œuvre « premium » (page produit de galerie) : grande scène (photo,
+                                 ou étoffe encadrée tant qu'elle manque), panneau collant avec numéro et
+                                 navigation, bouton « Demander des informations », accordéons Fiche technique /
+                                 Présentation / Expositions / La pratique ; barre d'action collante sur mobile
 /fr/expositions/      liste chronologique (expositions, collections, représentation)
 /fr/a-propos/         biographie, démarche, CV
 /fr/presse/           mentions presse, dossier de presse
