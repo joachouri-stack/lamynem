@@ -1631,3 +1631,10 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 @media (max-width: 720px) {
   .work-grid .card.card--noimg:nth-child(n) .card__big { color: var(--ivory); text-shadow: 0 1px 8px rgba(10, 6, 4, .7); }
 }
+/* Accueil mobile : l'e-mail presse précède immédiatement la section Contact */
+@media (max-width: 720px) { .press__aside .press-aside__mail { display: none; } }
+@media (max-width: 720px) {
+  /* Flèche centrée sur la carte, avec ou sans ligne de lieu */
+  .mc-session .mc-session__arrow { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
+  .mc-session .mc-session__num { grid-row: 1; }
+}
