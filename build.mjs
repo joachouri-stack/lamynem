@@ -148,8 +148,14 @@ function header(lang, current, alternates, over) {
     const a = `<a class="nav-link" href="${href}"${cur(k)}>${esc(s.nav[k])}</a>`;
     return k === 'work' ? `<div class="nav-drop">${a}<ul class="nav-drop__panel">${sub}</ul></div>` : a;
   };
-  const mobItem = ([k, href], i) => `<li style="--i:${i}"><a href="${href}"${cur(k)}><span class="menu-num" aria-hidden="true">${pad2(i + 1)}</span>${esc(s.nav[k])}</a>`
-    + (k === 'work' ? `<ul class="menu-sub">${sub}</ul>` : '') + '</li>';
+  const mobSub = CATEGORIES.map(k => `<li><a href="${catPath(lang, k)}">${esc(s.categories[k])} <sup>${WORKS.filter(w => w.category === k).length}</sup></a></li>`).join('');
+  const mobItem = ([k, href], i) => `<li style="--i:${i}"><a class="menu-link" href="${href}"${cur(k)}>`
+    + `<span class="menu-num" aria-hidden="true">${pad2(i + 1)}</span><span class="menu-label">${esc(s.nav[k])}</span>`
+    + `<span class="menu-arrow" aria-hidden="true">→</span></a>`
+    + (k === 'work' ? `<ul class="menu-sub">${mobSub}</ul>` : '') + '</li>';
+  const menuLang = `<nav class="menu-lang" aria-label="${esc(s.langSwitch)}">`
+    + LANGS.map(l => `<a href="${alternates[l]}" hreflang="${l}" lang="${l}" data-lang="${l}"${l === lang ? ' aria-current="true"' : ''}>${esc(STRINGS[l].langName)}</a>`).join('')
+    + '</nav>';
   const socials = [['Instagram', CONTACT.instagram], ['Facebook', CONTACT.facebook]].filter(([, u]) => u)
     .map(([n, u]) => `<a href="${esc(u)}" rel="me noopener" target="_blank">${n} <span aria-hidden="true">↗</span><span class="visually-hidden"> ${esc(c.newTab)}</span></a>`).join('');
   const brand = `<a class="brand" href="${path(lang, 'home')}"><span class="brand__name">LAMYNE M</span>${BRAND_THREAD}</a>`;
@@ -162,14 +168,17 @@ function header(lang, current, alternates, over) {
     + '<span class="site-header__progress" aria-hidden="true"></span>'
     + '</header>'
     + `<div class="menu-overlay on-dark" id="menu" role="dialog" aria-modal="true" aria-label="${esc(s.menu)}" inert>`
-    + '<div class="glow" aria-hidden="true"></div>'
+    + '<div class="glow" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>'
+    + '<p class="menu-mark" aria-hidden="true">M</p>'
     + `<div class="menu-overlay__top">${brand}`
     + `<button class="menu-close" type="button" data-menu-close><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="1"/></svg><span class="visually-hidden">${esc(s.close)}</span></button></div>`
+    + `<p class="eyebrow menu-tagline">${esc(s.tagline)}</p>`
     + `<nav class="menu-nav" aria-label="${esc(s.mainNav)}"><ul>${items.map(mobItem).join('')}</ul></nav>`
-    + `<div class="menu-foot"><div class="menu-foot__contact"><p class="eyebrow">${esc(c.write)}</p>`
-    + `<a class="menu-mail" href="mailto:${CONTACT.email}">${esc(CONTACT.email)}</a>`
-    + (socials ? `<p class="menu-social">${socials}</p>` : '') + '</div>'
-    + `${langSwitch(lang, alternates)}</div>`
+    + `<div class="menu-foot"><p class="eyebrow">${esc(c.write)}</p>`
+    + `<a class="menu-mail" href="mailto:${CONTACT.email}">${esc(CONTACT.email)} <span aria-hidden="true">→</span></a>`
+    + (socials ? `<p class="menu-social">${socials}</p>` : '')
+    + menuLang + '</div>'
+    + '<svg class="menu-thread" viewBox="0 0 400 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M0 6 Q12.5 0 25 6 T50 6 T75 6 T100 6 T125 6 T150 6 T175 6 T200 6 T225 6 T250 6 T275 6 T300 6 T325 6 T350 6 T375 6 T400 6"/></svg>'
     + '</div>';
 }
 
