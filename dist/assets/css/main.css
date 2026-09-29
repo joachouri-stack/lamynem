@@ -1243,3 +1243,37 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .work-hero { height: auto; min-height: 58svh; }
   .work-hero .swatch__note { top: 88px; }
 }
+
+/* --- Pied de page sur mobile --------------------------------------------- */
+@media (max-width: 720px) {
+  .contact { padding-top: 88px; }
+  .contact__lines { font-size: clamp(26px, 7.6vw, 32px); text-wrap: balance; }
+  .contact__lines span { text-wrap: balance; }
+
+  /* E-mail : bloc cliquable pleine largeur, soulignement complet, flèche */
+  .contact__mail { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; width: 100%; margin-top: 40px; padding: 20px 0; border-top: 1px solid var(--rule-dark); border-bottom: 1px solid var(--rule-dark); }
+  .contact__mail-label { flex-basis: 100%; margin: 0; }
+  .contact__mail-addr { font-size: clamp(24px, 7.4vw, 32px); }
+  .contact__mail-addr::after { display: none; }
+  .contact__mail-arrow { display: inline-flex; width: 44px; font-size: 18px; }
+
+  .stitch { margin: 48px 0 36px; }
+
+  /* Colonnes : l'e-mail n'est pas répété, réseaux en pastilles */
+  .foot-grid { gap: 32px 20px; }
+  .foot-col li { font-size: 17px; }
+  .foot-col:nth-child(3) li:first-child { display: none; }
+  .foot-grid > .foot-col:last-child ul { display: flex; flex-wrap: wrap; gap: 8px; }
+  .foot-grid > .foot-col:last-child li + li { margin-top: 0; }
+  .foot-grid > .foot-col:last-child a { padding: 7px 12px 6px; border: 1px solid rgba(247,243,236,.25); border-radius: 999px; font-family: var(--font-ui); font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .foot-grid > .foot-col:last-child a::after { display: none; }
+
+  .wordmark { margin-top: 48px; }
+
+  /* Barre finale ordonnée : mentions, puis langues et retour en haut */
+  .site-foot { display: grid; grid-template-columns: 1fr auto; gap: 14px 16px; padding-top: 20px; }
+  .site-foot > .eyebrow:first-child { grid-column: 1; }
+  .site-foot .site-credit { grid-column: 2; justify-self: end; margin: 0; }
+  .site-foot .lang-switch { grid-column: 1; margin: 0; }
+  .site-foot .to-top { grid-column: 2; justify-self: end; }
+}
