@@ -1412,3 +1412,8 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .crumbs { line-height: 1.8; }
   .ex-filter button { min-height: 44px; }
 }
+/* Très petits écrans : langues et pastilles sur deux lignes restent ≥ 40 px */
+@media (max-height: 600px) {
+  .menu-overlay .menu-nav .menu-sub { row-gap: 10px; }
+  .menu-lang a { padding: 12px 6px 11px; }
+}
