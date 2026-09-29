@@ -480,7 +480,7 @@ function renderHome(lang) {
       return `<li><a class="mc-session reveal" href="${workPath(lang, w)}">`
         + `<span class="mc-session__num">${roman(i + 1)}</span>`
         + `<span class="mc-session__title">${esc(w.title)}</span>`
-        + `<span class="eyebrow mc-session__place">${place ? esc(place) : esc(s.categories.masterclass)}</span>`
+        + (place ? `<span class="eyebrow mc-session__place">${esc(place)}</span>` : '')
         + `<span class="mc-session__arrow" aria-hidden="true">→</span></a></li>`;
     }).join('')}</ul>
   </div>
@@ -505,7 +505,7 @@ function renderHome(lang) {
       <p class="press__intro">${esc(h.pressIntro)}</p>
       <dl class="press__meta">
         ${PRESS_KIT || SHOW_TODO ? `<div><dt class="eyebrow">${esc(h.pressKitLabel)}</dt><dd>${pressKit(lang)}</dd></div>` : (pressKit(lang), '')}
-        <div><dt class="eyebrow">${esc(s.press.contactPress)}</dt><dd><a class="link-line" href="mailto:${CONTACT.email}">${esc(CONTACT.email)}</a></dd></div>
+        <div class="press-aside__mail"><dt class="eyebrow">${esc(s.press.contactPress)}</dt><dd><a class="link-line" href="mailto:${CONTACT.email}">${esc(CONTACT.email)}</a></dd></div>
       </dl>
     </div>
     <ol class="press-rows">${PRESS.map((p, i) => {
