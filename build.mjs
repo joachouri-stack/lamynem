@@ -228,7 +228,7 @@ function contactFooter(lang, alternates) {
     + stitchLine()
     + `<div class="foot-grid">`
     + `<nav aria-label="${esc(c.explore)}">${col(c.explore, li(path(lang, 'work'), s.nav.work) + li(path(lang, 'exhibitions'), s.nav.exhibitions) + li(path(lang, 'about'), s.nav.about) + li(path(lang, 'press'), s.nav.press))}</nav>`
-    + `<nav aria-label="${esc(s.work.browse)}">${col(s.nav.work, CATEGORIES.map(k => li(catPath(lang, k), s.categories[k])).join(''))}</nav>`
+    + `<nav class="foot-cats" aria-label="${esc(s.work.browse)}">${col(s.nav.work, CATEGORIES.map(k => li(catPath(lang, k), s.categories[k])).join(''))}</nav>`
     + col(c.eyebrow, `<li><a href="mailto:${CONTACT.email}">${esc(CONTACT.email)}</a></li><li>${esc(c.basedLine(tr(CONTACT.location, lang)))}</li>`)
     + col(c.social, socialLinks || `<li>${todo(lang, 'Liens réseaux sociaux')}</li>`)
     + '</div>'

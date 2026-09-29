@@ -1427,3 +1427,13 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 
 /* Robe déjà utilisée en couverture mobile : pas répétée dans le carrousel */
 @media (max-width: 720px) { .robe--hero { display: none; } }
+
+/* Pied de page mobile, version courte : les catégories d'œuvres (déjà dans le menu)
+   sont retirées ; « Explorer » à gauche, contact et réseaux empilés à droite. */
+@media (max-width: 720px) {
+  .foot-cats { display: none; }
+  .foot-grid { grid-template-areas: "nav contact" "nav social"; row-gap: 28px; }
+  .foot-grid > nav:first-child { grid-area: nav; }
+  .foot-grid > .foot-col:nth-last-child(2) { grid-area: contact; }
+  .foot-grid > .foot-col:last-child { grid-area: social; }
+}
