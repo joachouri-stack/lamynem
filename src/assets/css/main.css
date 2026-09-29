@@ -1076,3 +1076,44 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .robe__media { aspect-ratio: 683 / 1024; }
   .robes::after { content: ''; flex: 0 0 6px; }
 }
+
+/* --- Pages intérieures sur mobile --------------------------------------- */
+@media (max-width: 720px) {
+  /* Le grand numéro d'en-tête passait sous le sélecteur de langue */
+  .page-intro > .watermark { display: none; }
+
+  /* Sommaire Œuvres : les trois pratiques en carrousel horizontal */
+  .practices { padding: 0 0 72px; }
+  .practices__list { flex-direction: row; height: auto; gap: 14px; padding: 0 20px 8px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; scrollbar-width: none; }
+  .practices__list::-webkit-scrollbar { display: none; }
+  .practice, .practices__list:hover .practice, .practices__list .practice:hover { flex: 0 0 78vw; scroll-snap-align: start; }
+  .practice__link { min-height: 0; aspect-ratio: 4 / 5; }
+  .practices__list::after { content: ''; flex: 0 0 6px; }
+
+  /* Pages de catégorie : grille de deux colonnes, cartes compactes */
+  .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 14px; }
+  .work-grid .card, .work-grid .card:nth-child(n) { grid-column: auto; margin-top: 0; }
+  .work-grid .card__meta { display: block; margin-top: 10px; }
+  .work-grid .card__title { font-size: 16px; }
+  .work-grid .card__meta .eyebrow { margin-top: 4px; font-size: 9.5px; }
+  .work-grid .swatch__note { font-size: 8.5px; left: 10px; top: 10px; letter-spacing: .1em; }
+  .work-grid .card__big { font-size: 52px; left: 10px; }
+  .card__view { display: none; }
+
+  /* Page d'œuvre : repères seulement dans la fiche, texte avant la fiche */
+  .work-hero__facts { display: none; }
+  .work-body { display: flex; flex-direction: column; gap: 40px; }
+  .work-text { order: -1; }
+  .work-side { width: 100%; }
+
+  /* Expositions : filtres sur une seule ligne défilante */
+  .ex-filter { flex-wrap: nowrap; overflow-x: auto; margin: 0 -20px 28px; padding: 0 20px 4px; scrollbar-width: none; }
+  .ex-filter::-webkit-scrollbar { display: none; }
+  .ex-filter button { flex: none; }
+
+  /* À propos : repères qui ne débordent plus */
+  .about-facts dt { font-size: clamp(20px, 6.2vw, 30px); white-space: nowrap; }
+  .about-facts > div { padding-right: 12px; }
+  .about-part { padding-top: 72px; padding-bottom: 72px; }
+  .about-part__num { font-size: 56px; }
+}
