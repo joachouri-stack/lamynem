@@ -544,6 +544,13 @@ function motionRing(text) {
     + `<text><textPath href="#ring-path" textLength="488">${t}</textPath></text></svg>`;
 }
 
+/** Exposition dont le lieu correspond à ce nom (« La Friche Belle de Mai » ≈ « Friche la Belle de Mai »). */
+function exhibitionOfVenue(name) {
+  const words = t => new Set(String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/[^a-z0-9]+/).filter(w => w.length > 2 && !['les', 'des', 'the'].includes(w)));
+  const n = words(name);
+  return EXHIBITIONS.find(e => { const v = words(e.venue); return n.size && [...n].every(w => v.has(w)); });
+}
+
 /** Le lieu figure déjà dans le titre (« Seconde vie — Villa D » / « Villa D ») ? */
 function venueInTitle(e, lang) {
   const t = String(tr(e.title, lang) || '').toLowerCase();
@@ -979,6 +986,13 @@ function renderPress(lang) {
   const rows = PRESS.map((x, i) => {
     if (!x.url) TODOS.add(`Lien presse : ${x.name}`);
     const inner = `<span class="press-row__num">${pad2(i + 1)}</span><span class="press-row__name">${esc(x.name)}</span>`;
+    // Sans article en ligne : si ce lieu figure dans les expositions, la ligne y mène
+    // (type et ville confirmés), plutôt que de rester un simple nom.
+    const ex = !x.url && exhibitionOfVenue(x.name);
+    if (ex) {
+      return `<li class="reveal"><a class="press-row press-row--ex" href="${path(lang, 'exhibitions')}#${ex.id}">${inner}`
+        + `<span class="eyebrow press-row__status">${esc(s.exhibitions.types[ex.type])} · ${esc(tr(ex.city, lang))} <span aria-hidden="true">→</span></span></a></li>`;
+    }
     return `<li class="reveal">${x.url
       ? `<a class="press-row" href="${esc(x.url)}" rel="noopener" target="_blank">${inner}<span class="eyebrow press-row__status">${esc(p.read)} ↗</span><span class="visually-hidden"> ${esc(s.contact.newTab)}</span></a>`
       : `<div class="press-row press-row--static">${inner}${SHOW_TODO ? `<span class="todo press-row__status">${esc(p.linkTodo)}</span><span class="eyebrow press-row__soon">${esc(p.linkSoon)}</span>` : ''}</div>`}</li>`;
@@ -1006,7 +1020,7 @@ ${pressMarquee()}
     <p class="eyebrow" id="res-t">${esc(p.resources)}</p>
     <dl class="press__meta">
       ${PRESS_KIT || SHOW_TODO ? `<div><dt class="eyebrow">${esc(h.pressKitLabel)}</dt><dd>${pressKit(lang)}</dd></div>` : (pressKit(lang), '')}
-      <div><dt class="eyebrow">${esc(p.contactPress)}</dt><dd><a class="link-line" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(p.eyebrow)}">${esc(CONTACT.email)}</a></dd></div>
+      <div class="press-aside__mail"><dt class="eyebrow">${esc(p.contactPress)}</dt><dd><a class="link-line" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(p.eyebrow)}">${esc(CONTACT.email)}</a></dd></div>
       <div><dt class="eyebrow">${esc(p.bio)}</dt><dd><a class="link-line" href="${path(lang, 'about')}">${esc(p.bioLink)} →</a></dd></div>
     </dl>
   </aside>

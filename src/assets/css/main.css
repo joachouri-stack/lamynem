@@ -1609,3 +1609,12 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .about-cv .cv-group__head { flex-wrap: nowrap; align-items: baseline; gap: 10px; }
   .about-cv .cv-group__head .eyebrow { flex-basis: auto; margin: 0 0 0 auto; padding: 0; white-space: nowrap; }
 }
+
+/* Presse : mention reliée à son exposition (type · ville) */
+.press-row--ex .press-row__status { color: var(--terracotta); }
+@media (max-width: 720px) {
+  .press-row--ex { grid-template-columns: 36px 1fr; }
+  .press-row--ex .press-row__status { grid-column: 2; justify-self: start; margin-top: 8px; }
+  /* Le contact presse est déjà en haut et en bas de page : pas de troisième fois */
+  .press-page__aside .press-aside__mail { display: none; }
+}
