@@ -993,6 +993,7 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 .w-index__row { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr) minmax(160px, auto) 64px 24px; gap: clamp(12px, 2vw, 28px); align-items: baseline; padding: clamp(16px, 1.6vw, 22px) 0; border-bottom: 1px solid var(--rule); }
 .w-index__row::before { content: ''; position: absolute; inset: 0 calc(-1 * clamp(8px, 1vw, 16px)); background: var(--ivory-2); transform: scaleY(0); transform-origin: bottom; transition: transform .5s var(--ease); z-index: -1; }
 .w-index__list li { position: relative; z-index: 0; }
+.w-index__group { display: none; }
 .w-index__row:hover { color: var(--ink); }
 .w-index__row:hover::before { transform: scaleY(1); }
 .w-index__num { font-family: var(--font-display); font-size: 13px; color: var(--ink-3); }
@@ -1219,4 +1220,26 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .cv-row__title { font-size: 16px; }
   .cv-row__place { grid-column: 2; font-size: 9.5px; }
   .cv-group + .cv-group { margin-top: 36px; }
+}
+
+/* --- Pages Œuvres sur mobile (compléments) -------------------------------- */
+@media (max-width: 720px) {
+  /* Index : regroupé par catégorie, sans répéter la catégorie sur chaque ligne */
+  .w-index__group { display: flex; justify-content: space-between; align-items: baseline; padding: 26px 0 10px; border-bottom: 1px solid var(--ink); font-family: var(--font-ui); font-weight: 500; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+  .w-index__group span:last-child { font-family: var(--font-display); font-size: 14px; letter-spacing: 0; color: var(--terracotta); }
+  .w-index__list { border-top: 0; }
+  .w-index__row { grid-template-columns: 30px minmax(0, 1fr) auto; padding: 14px 0; }
+  .w-index__title { font-size: 19px; }
+  .w-index__cat { display: none; }
+  .w-index__year--none { display: none; }
+
+  /* Catégorie : première œuvre en grand, puis deux colonnes */
+  .work-grid .card:first-child { grid-column: 1 / -1; }
+  .work-grid .card:first-child .card__media { aspect-ratio: 16 / 11; }
+  .work-grid .card:first-child .card__title { font-size: 20px; }
+  .work-grid .card:first-child .card__big { font-size: 80px; }
+
+  /* Page d'œuvre : en-tête moins haut tant que la photo n'est pas fournie */
+  .work-hero { height: auto; min-height: 58svh; }
+  .work-hero .swatch__note { top: 88px; }
 }
