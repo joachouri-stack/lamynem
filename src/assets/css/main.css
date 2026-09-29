@@ -1638,3 +1638,7 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .mc-session .mc-session__arrow { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
   .mc-session .mc-session__num { grid-row: 1; }
 }
+
+/* Page 404 : liens de langue confortables au doigt (≥ 44 px) */
+.bare ul a { position: relative; display: inline-block; }
+.bare ul a::before { content: ''; position: absolute; inset: -10px -8px; }
