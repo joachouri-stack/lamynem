@@ -845,22 +845,42 @@ function renderAbout(lang) {
 }
 
 function renderPress(lang) {
-  const s = STRINGS[lang], p = s.press;
+  const s = STRINGS[lang], p = s.press, h = s.home;
+  const rows = PRESS.map((x, i) => {
+    if (!x.url) TODOS.add(`Lien presse : ${x.name}`);
+    const inner = `<span class="press-row__num">${pad2(i + 1)}</span><span class="press-row__name">${esc(x.name)}</span>`;
+    return `<li class="reveal">${x.url
+      ? `<a class="press-row" href="${esc(x.url)}" rel="noopener" target="_blank">${inner}<span class="eyebrow press-row__status">${esc(p.read)} ↗</span><span class="visually-hidden"> ${esc(s.contact.newTab)}</span></a>`
+      : `<div class="press-row press-row--static">${inner}<span class="todo press-row__status">${esc(p.linkTodo)}</span></div>`}</li>`;
+  }).join('');
   const body = `
-<div class="page-intro">
+<div class="page-intro press-intro">
   <p class="watermark" aria-hidden="true">06</p>
   ${label(p.eyebrow)}
   <h1>${esc(p.heading)}</h1>
+  <p>${esc(h.pressIntro)}</p>
 </div>
-<section class="section" style="padding-top:0" aria-label="${esc(p.eyebrow)}">
-  <ul class="press-list">${PRESS.map(x => {
-    if (!x.url) TODOS.add(`Lien presse : ${x.name}`);
-    return `<li class="reveal"><span class="name">${esc(x.name)}</span>${x.url
-      ? `<a class="eyebrow link-line" href="${esc(x.url)}" rel="noopener" target="_blank">${esc(p.read)} ${ARROW}</a>`
-      : `<span class="todo">${esc(p.linkTodo)}</span>`}</li>`;
-  }).join('')}</ul>
-  ${pressKit(lang)}
-  <p style="margin-top:48px"><span class="eyebrow">${esc(p.contactPress)} — </span><a class="link-line" href="mailto:${CONTACT.email}">${esc(CONTACT.email)}</a></p>
+${pressMarquee()}
+<div class="press-page">
+  <section class="press-page__list" aria-labelledby="mentions-t">
+    <p class="eyebrow" id="mentions-t">${esc(p.mentions)} · ${PRESS.length}</p>
+    <ol class="press-rows">${rows}</ol>
+  </section>
+  <aside class="press-page__aside" aria-labelledby="res-t">
+    <p class="eyebrow" id="res-t">${esc(p.resources)}</p>
+    <dl class="press__meta">
+      <div><dt class="eyebrow">${esc(h.pressKitLabel)}</dt><dd>${pressKit(lang)}</dd></div>
+      <div><dt class="eyebrow">${esc(p.contactPress)}</dt><dd><a class="link-line" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(p.eyebrow)}">${esc(CONTACT.email)}</a></dd></div>
+      <div><dt class="eyebrow">${esc(p.bio)}</dt><dd><a class="link-line" href="${path(lang, 'about')}">${esc(p.bioLink)} →</a></dd></div>
+    </dl>
+  </aside>
+</div>
+<section class="about-cta" aria-label="${esc(p.contactPress)}">
+  <p class="about-cta__title">${esc(p.ctaTitle)}</p>
+  <div class="about-cta__actions">
+    <a class="mc-host" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(p.eyebrow)}">${esc(p.ctaMail)} <span aria-hidden="true">→</span></a>
+    <a class="eyebrow link-line" href="${path(lang, 'exhibitions')}">${esc(h.allExhibitions)} ${ARROW}</a>
+  </div>
 </section>`;
   page({
     lang, route: 'press', alternates: alts('press'), xDefault: path(DEFAULT_LANG, 'press'), current: 'press',
