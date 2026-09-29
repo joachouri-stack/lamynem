@@ -120,6 +120,9 @@
       var t = btn.getAttribute('data-filter');
       filter.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
       cards.forEach(function (c) { c.hidden = t !== 'all' && c.getAttribute('data-type') !== t; });
+      // Filtre actif : l'exposition « À la une » réapparaît dans la liste (voir main.css).
+      var list = document.querySelector('.ex-cards');
+      if (list) list.setAttribute('data-filter', t);
     });
   }
 
