@@ -767,7 +767,7 @@ function renderExhibitions(lang) {
     const work = e.work && workBySlug(e.work);
     return `<li class="ex-card reveal" id="${e.id}" data-type="${e.type}">
   <span class="ex-card__num">${pad2(i + 1)}</span>
-  <span class="ex-card__year">${yearOf(e)}</span>
+  <span class="ex-card__year${e.year ? '' : ' ex-card__year--none'}">${yearOf(e)}</span>
   <div class="ex-card__body">
     <p class="eyebrow ex-card__type">${esc(x.types[e.type])}</p>
     <h2 class="ex-card__title">${esc(tr(e.title, lang))}</h2>
