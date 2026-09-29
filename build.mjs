@@ -889,7 +889,7 @@ function renderPress(lang) {
     const inner = `<span class="press-row__num">${pad2(i + 1)}</span><span class="press-row__name">${esc(x.name)}</span>`;
     return `<li class="reveal">${x.url
       ? `<a class="press-row" href="${esc(x.url)}" rel="noopener" target="_blank">${inner}<span class="eyebrow press-row__status">${esc(p.read)} ↗</span><span class="visually-hidden"> ${esc(s.contact.newTab)}</span></a>`
-      : `<div class="press-row press-row--static">${inner}<span class="todo press-row__status">${esc(p.linkTodo)}</span></div>`}</li>`;
+      : `<div class="press-row press-row--static">${inner}<span class="todo press-row__status">${esc(p.linkTodo)}</span><span class="eyebrow press-row__soon">${esc(p.linkSoon)}</span></div>`}</li>`;
   }).join('');
   const body = `
 <div class="page-intro press-intro">
@@ -898,6 +898,12 @@ function renderPress(lang) {
   <h1>${esc(p.heading)}</h1>
   <p>${esc(h.pressIntro)}</p>
 </div>
+<nav class="press-quick" aria-label="${esc(p.resources)}">
+  ${PRESS_KIT
+    ? `<a class="press-quick__btn" href="/assets/${esc(PRESS_KIT)}" download>${esc(h.pressKitLabel)} <span aria-hidden="true">↓</span></a>`
+    : `<span class="press-quick__btn press-quick__btn--off">${esc(h.pressKitLabel)} <small>${esc(p.kitSoon)}</small></span>`}
+  <a class="press-quick__btn press-quick__btn--dark" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(p.eyebrow)}">${esc(p.ctaMail)} <span aria-hidden="true">→</span></a>
+</nav>
 ${pressMarquee()}
 <div class="press-page">
   <section class="press-page__list" aria-labelledby="mentions-t">
