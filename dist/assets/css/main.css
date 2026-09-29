@@ -1544,3 +1544,6 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .related__media--noimg { aspect-ratio: 4 / 3; }
   .related__media--noimg .related__num { font-size: 32px; }
 }
+
+/* Noms composés (« Saint-Denis ») : jamais coupés au trait d'union */
+.nobr { white-space: nowrap; }

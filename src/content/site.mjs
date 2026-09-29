@@ -26,7 +26,7 @@ export const ROUTES = {
 
 export const CONTACT = {
   email: 'lamyne@yahoo.fr',
-  location: { fr: 'Paris', en: 'Paris', ru: 'Париж' },
+  location: { fr: 'Saint-Denis, Grand Paris', en: 'Saint-Denis, Greater Paris', ru: 'Сен-Дени, Большой Париж' },
   instagram: 'https://www.instagram.com/lamyne_m',
   facebook: 'https://www.facebook.com/ben.lamyne',
 };
