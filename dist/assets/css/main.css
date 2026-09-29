@@ -1361,3 +1361,15 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .menu-lang a { padding: 9px 6px 8px; }
   .menu-lang { margin-top: 6px; }
 }
+
+/* --- Pied de page mobile : zones tactiles -------------------------------- */
+@media (max-width: 720px) {
+  .foot-col a, .site-foot .lang-switch a, .site-foot .to-top { position: relative; }
+  .foot-col li + li { margin-top: 14px; }
+  .foot-col a::before { content: ''; position: absolute; inset: -9px -8px; }
+  .foot-grid > .foot-col:last-child a::before { inset: -6px -4px; }
+  .site-foot .lang-switch { gap: 18px; }
+  .site-foot .lang-switch a::before { content: ''; position: absolute; inset: -9px -8px; }
+  .site-foot .to-top { padding: 4px 0; }
+  .site-foot .to-top::before { content: ''; position: absolute; inset: -10px -8px; }
+}
