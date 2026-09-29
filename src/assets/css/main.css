@@ -1649,3 +1649,12 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 .practice__link::after { content: ''; position: absolute; top: clamp(12px, 1.4vw, 18px); left: clamp(12px, 1.4vw, 18px); z-index: 1; width: 18px; height: 18px; border: solid rgba(247, 243, 236, .8); border-width: 1px 0 0 1px; pointer-events: none; }
 .practice__num { z-index: 1; top: clamp(26px, 2.6vw, 38px); right: clamp(28px, 2.8vw, 40px); color: rgba(247, 243, 236, .4); text-shadow: 0 2px 20px rgba(10, 6, 4, .3); }
 .practice__text { z-index: 2; padding: clamp(28px, 3vw, 44px); }
+
+/* Expositions sur mobile : l'exposition « À la une » (grande carte avec photo)
+   n'est pas répétée en tête de la liste complète ; elle y revient quand un filtre
+   est choisi, ou quand on y arrive par un lien (#ancre). */
+@media (max-width: 720px) {
+  .ex-cards:not([data-filter]) .ex-card--featured,
+  .ex-cards[data-filter="all"] .ex-card--featured { display: none; }
+  .ex-cards .ex-card--featured:target { display: grid; }
+}
