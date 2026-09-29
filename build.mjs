@@ -23,6 +23,10 @@ const OUT = join(ROOT, 'dist');
 const MANIFEST = JSON.parse(readFileSync(join(SRC, 'assets/img/manifest.json'), 'utf8'));
 const LOCALES = { fr: 'fr_FR', en: 'en_US', ru: 'ru_RU' };
 const TODOS = new Set();
+// Version publique (par défaut) : aucun marqueur « à compléter » n'est affiché,
+// un champ manquant disparaît simplement. `node build.mjs --preview` les montre,
+// pour relire le site. A-COMPLETER.md est généré dans les deux cas.
+const SHOW_TODO = process.argv.includes('--preview');
 
 // --- Utilitaires ---------------------------------------------------------
 
@@ -36,7 +40,7 @@ const tr = (v, lang) => (v && typeof v === 'object' && !Array.isArray(v) ? v[lan
 /** Note un champ manquant et renvoie le marqueur visible « à compléter ». */
 function todo(lang, what) {
   TODOS.add(what);
-  return `<span class="todo">${esc(STRINGS[lang].todo)}</span>`;
+  return SHOW_TODO ? `<span class="todo">${esc(STRINGS[lang].todo)}</span>` : '';
 }
 
 function path(lang, route, slug) {
@@ -103,7 +107,7 @@ function heroMobile(lang) {
 function swatch(tone, lang, note = true) {
   const [c1, c2, c3] = tone;
   return `<div class="swatch" style="--c1:${c1};--c2:${c2};--c3:${c3}"><div class="swatch__inner"></div><div class="grain"></div>`
-    + (note ? `<p class="eyebrow swatch__note">${esc(STRINGS[lang].visualTodo)}</p>` : '') + '</div>';
+    + (note && SHOW_TODO ? `<p class="eyebrow swatch__note">${esc(STRINGS[lang].visualTodo)}</p>` : '') + '</div>';
 }
 
 function workMedia(w, lang, sizes) {
@@ -128,9 +132,9 @@ function robeCard(r, lang, num) {
   const s = STRINGS[lang];
   const w = r.work && workBySlug(r.work);
   if (!w) TODOS.add(`Œuvres sélectionnées : titre de l’œuvre (${r.label}), lieu et crédit photo`);
-  const title = w ? esc(w.title) : `<span class="todo">${esc(s.todo)}</span>`;
+  const title = w ? esc(w.title) : SHOW_TODO ? `<span class="todo">${esc(s.todo)}</span>` : '';
   const inner = `<div class="robe__media">${picture(r.image, lang, { sizes: '(max-width: 1024px) 50vw, 26vw' })}</div>`
-    + `<div class="robe__meta"><span class="robe__num">${num}</span><h3 class="robe__title">${title}</h3>`
+    + `<div class="robe__meta"><span class="robe__num">${num}</span>${title ? `<h3 class="robe__title">${title}</h3>` : ''}`
     + `<p class="eyebrow">${esc(tr(r.medium, lang))}</p></div>`;
   // Sur mobile, la robe déjà affichée en couverture n'est pas répétée dans le carrousel.
   const cls = `robe reveal${!HERO.image && r.image === HERO.mobileImage ? ' robe--hero' : ''}`;
@@ -335,7 +339,7 @@ function renderHome(lang) {
 
   const video = MOTION_VIDEO
     ? `<button class="video__play" type="button" data-video="/assets/${esc(MOTION_VIDEO.src)}"${MOTION_VIDEO.poster ? ` data-poster="/assets/${esc(MOTION_VIDEO.poster)}"` : ''} aria-label="${esc(s.home.play)} — ${esc(tr(MOTION_VIDEO.title, lang) || '')}"></button>`
-    : (TODOS.add('Vidéo « Art in Motion »'), `<span class="video__play" aria-hidden="true"></span><p class="eyebrow video__note">[${esc(h.videoTodo)}]</p>`);
+    : (TODOS.add('Vidéo « Art in Motion »'), SHOW_TODO ? `<span class="video__play" aria-hidden="true"></span><p class="eyebrow video__note">[${esc(h.videoTodo)}]</p>` : '');
 
   const body = `
 <section class="hero${HERO.image ? '' : ' hero--plain'}" data-hero data-header-over aria-labelledby="hero-title">
@@ -355,6 +359,7 @@ function renderHome(lang) {
     </div>
     <canvas class="hero__fabric" aria-hidden="true"></canvas>
     <div class="hero__scroll" aria-hidden="true"><span class="eyebrow">${esc(s.scroll)}</span><i></i></div>
+    <button class="hero__sound" type="button" data-sound hidden aria-pressed="false" data-label-on="${esc(s.soundOn)}" data-label-off="${esc(s.soundOff)}" aria-label="${esc(s.soundOn)}"><svg viewBox="0 0 24 10" aria-hidden="true"><path d="M1 5c2.5 0 2.5-4 5-4s2.5 8 5 8 2.5-8 5-8 2.5 4 7 4"/></svg><span class="eyebrow">${esc(s.sound)}</span></button>
   </div>
 </section>
 
@@ -484,7 +489,7 @@ function renderHome(lang) {
     <div class="press__aside">
       <p class="press__intro">${esc(h.pressIntro)}</p>
       <dl class="press__meta">
-        <div><dt class="eyebrow">${esc(h.pressKitLabel)}</dt><dd>${pressKit(lang)}</dd></div>
+        ${PRESS_KIT || SHOW_TODO ? `<div><dt class="eyebrow">${esc(h.pressKitLabel)}</dt><dd>${pressKit(lang)}</dd></div>` : (pressKit(lang), '')}
         <div><dt class="eyebrow">${esc(s.press.contactPress)}</dt><dd><a class="link-line" href="mailto:${CONTACT.email}">${esc(CONTACT.email)}</a></dd></div>
       </dl>
     </div>
@@ -552,7 +557,7 @@ function pressKit(lang) {
   const s = STRINGS[lang];
   if (PRESS_KIT) return `<a class="eyebrow press-kit link-line" href="/assets/${esc(PRESS_KIT)}" download>${esc(s.pressKit)} <span aria-hidden="true">↓</span></a>`;
   TODOS.add('Dossier de presse PDF');
-  return `<span class="press-kit"><span class="todo">${esc(s.pressKitTodo)}</span></span>`;
+  return SHOW_TODO ? `<span class="press-kit"><span class="todo">${esc(s.pressKitTodo)}</span></span>` : '';
 }
 
 /** Barre d'onglets fixe : Tout · Art · Performance · Masterclass. */
@@ -664,7 +669,7 @@ function renderWork(w, lang) {
     ...(w.category === 'masterclass'
       ? [[s.work.place, place ? esc(place) : todo(lang, `Lieu de « ${w.title} »`)]]
       : [[s.work.medium, medium ? esc(medium) : todo(lang, `Médium de « ${w.title} »`)]]),
-  ];
+  ].filter(([, v]) => v);
 
   const prev = inCat[(num - 2 + inCat.length) % inCat.length];
   const related = inCat.filter(x => x !== w);
@@ -685,7 +690,7 @@ function renderWork(w, lang) {
       <dl class="facts">${facts.map(([k, v]) => `<div><dt class="eyebrow">${esc(k)}</dt><dd>${v}</dd></div>`).join('')}</dl>
       <a class="mc-host work-ask" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(w.title)}">${esc(s.work.ask)} <span aria-hidden="true">→</span></a>
     </aside>
-    <div class="work-text">${text ? (Array.isArray(text) ? text : [text]).map(p => `<p>${esc(p)}</p>`).join('') : `<p class="todo-block">${esc(s.work.textTodo)}</p>`}</div>
+    <div class="work-text">${text ? (Array.isArray(text) ? text : [text]).map(p => `<p>${esc(p)}</p>`).join('') : SHOW_TODO ? `<p class="todo-block">${esc(s.work.textTodo)}</p>` : ''}</div>
   </div>
 </article>
 ${related.length ? `<section class="related" aria-labelledby="rel-t">
@@ -825,6 +830,7 @@ function renderAbout(lang) {
     + `<span class="eyebrow cv-row__place">${esc(tr(e.city, lang))}, ${esc(tr(e.country, lang))}</span></a></li>`).join('');
   const cvGroup = (i, title, types, empty) => {
     const n = EXHIBITIONS.filter(e => types.includes(e.type)).length;
+    if (!n && !empty) return ''; // rubrique vide : retirée de la version publique
     return `<div class="cv-group reveal"><div class="cv-group__head"><span class="cv-group__num">${pad2(i)}</span><h3>${esc(title)}</h3>`
       + (n ? `<p class="eyebrow">${esc(a.entries(n))}</p>` : '') + '</div>'
       + (n ? `<ol class="cv-rows">${cvRows(types)}</ol>` : `<div class="cv-empty">${empty}</div>`) + '</div>';
@@ -865,7 +871,7 @@ function renderAbout(lang) {
     <div class="about-part__body reveal">
       <blockquote class="about-quote">${esc(a.approachLead)}</blockquote>
       <ul class="about-themes">${h.artistThemes.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
-      ${approach ? (Array.isArray(approach) ? approach : [approach]).map(p => `<p>${esc(p)}</p>`).join('') : `<p class="todo-block">${esc(s.work.textTodo)}</p>`}
+      ${approach ? (Array.isArray(approach) ? approach : [approach]).map(p => `<p>${esc(p)}</p>`).join('') : SHOW_TODO ? `<p class="todo-block">${esc(s.work.textTodo)}</p>` : ''}
     </div>
   </div>
 </section>
@@ -913,7 +919,7 @@ function renderPress(lang) {
     const inner = `<span class="press-row__num">${pad2(i + 1)}</span><span class="press-row__name">${esc(x.name)}</span>`;
     return `<li class="reveal">${x.url
       ? `<a class="press-row" href="${esc(x.url)}" rel="noopener" target="_blank">${inner}<span class="eyebrow press-row__status">${esc(p.read)} ↗</span><span class="visually-hidden"> ${esc(s.contact.newTab)}</span></a>`
-      : `<div class="press-row press-row--static">${inner}<span class="todo press-row__status">${esc(p.linkTodo)}</span><span class="eyebrow press-row__soon">${esc(p.linkSoon)}</span></div>`}</li>`;
+      : `<div class="press-row press-row--static">${inner}${SHOW_TODO ? `<span class="todo press-row__status">${esc(p.linkTodo)}</span><span class="eyebrow press-row__soon">${esc(p.linkSoon)}</span>` : ''}</div>`}</li>`;
   }).join('');
   const body = `
 <div class="page-intro press-intro">
@@ -925,7 +931,7 @@ function renderPress(lang) {
 <nav class="press-quick" aria-label="${esc(p.resources)}">
   ${PRESS_KIT
     ? `<a class="press-quick__btn" href="/assets/${esc(PRESS_KIT)}" download>${esc(h.pressKitLabel)} <span aria-hidden="true">↓</span></a>`
-    : `<span class="press-quick__btn press-quick__btn--off">${esc(h.pressKitLabel)} <small>${esc(p.kitSoon)}</small></span>`}
+    : SHOW_TODO ? `<span class="press-quick__btn press-quick__btn--off">${esc(h.pressKitLabel)} <small>${esc(p.kitSoon)}</small></span>` : ''}
   <a class="press-quick__btn press-quick__btn--dark" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(p.eyebrow)}">${esc(p.ctaMail)} <span aria-hidden="true">→</span></a>
 </nav>
 ${pressMarquee()}
@@ -937,7 +943,7 @@ ${pressMarquee()}
   <aside class="press-page__aside" aria-labelledby="res-t">
     <p class="eyebrow" id="res-t">${esc(p.resources)}</p>
     <dl class="press__meta">
-      <div><dt class="eyebrow">${esc(h.pressKitLabel)}</dt><dd>${pressKit(lang)}</dd></div>
+      ${PRESS_KIT || SHOW_TODO ? `<div><dt class="eyebrow">${esc(h.pressKitLabel)}</dt><dd>${pressKit(lang)}</dd></div>` : (pressKit(lang), '')}
       <div><dt class="eyebrow">${esc(p.contactPress)}</dt><dd><a class="link-line" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(p.eyebrow)}">${esc(CONTACT.email)}</a></dd></div>
       <div><dt class="eyebrow">${esc(p.bio)}</dt><dd><a class="link-line" href="${path(lang, 'about')}">${esc(p.bioLink)} →</a></dd></div>
     </dl>

@@ -30,8 +30,10 @@ node build.mjs
 ```
 
 Le build liste dans **`A-COMPLETER.md`** chaque information encore manquante (années,
-médiums, textes, photos, liens presse, réseaux sociaux…). Sur le site, ces champs
-s'affichent « À compléter ». **Règle absolue : ne jamais inventer d'information** — seules les
+médiums, textes, photos, liens presse, réseaux sociaux…). Dans la version publique, un champ
+manquant n'apparaît simplement pas (pas de mention « À compléter ») ; il s'affiche dès qu'il est
+renseigné. Pour relire le site avec les marqueurs visibles : `node build.mjs --preview`
+(ne pas déployer ce build). **Règle absolue : ne jamais inventer d'information** — seules les
 données confirmées par Lamyne M sont saisies.
 
 ### Ajouter une photo
@@ -82,6 +84,10 @@ et les pages de catégorie, fil d'Ariane sur les pages de catégorie et d'œuvre
 `src/assets/js/fabric.js` — WebGL pur (aucune librairie) : un patchwork bleu roi à pois et coutures
 dorés, qui fait ressortir les robes rouges et or de l'artiste, recouvre la photo et le nom ; au scroll il se soulève comme pris dans le vent,
 la souris le soulève localement en desktop. Le rendu s'arrête hors écran et une fois le tissu levé.
+
+Son facultatif (coupé par défaut) : le bouton « Son » du hero active un bruissement de tissu
+synthétisé en direct (Web Audio, aucun fichier), dont le volume suit la vitesse du rideau. Les
+navigateurs interdisent le son sans geste du visiteur ; le choix est retenu d'une visite à l'autre.
 
 Actif sur tous les appareils, sauf si le visiteur a demandé moins d'animations (`prefers-reduced-motion`)
 ou le mode économie de données. Plutôt que de se fier aux cœurs ou à la mémoire annoncés par le

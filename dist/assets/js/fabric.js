@@ -12,6 +12,11 @@
  * premières secondes et on baisse la résolution du rendu si besoin ; si
  * l'appareil reste trop lent, ou si WebGL échoue, le tissu est retiré et le
  * hero reste statique.
+ *
+ * Son (facultatif, coupé par défaut) : un bruissement de tissu synthétisé en
+ * direct (Web Audio, aucun fichier), dont le volume et le timbre suivent la
+ * vitesse du rideau. Les navigateurs interdisent le son sans geste du
+ * visiteur : il s'active par le bouton « Son » du hero, et le choix est retenu.
  */
 (function () {
   'use strict';
@@ -147,6 +152,97 @@
   var running = false, visible = true, raf = 0;
   var fine = window.matchMedia('(pointer: fine)').matches;
 
+  // --- Son du rideau --------------------------------------------------------
+  var AC = window.AudioContext || window.webkitAudioContext;
+  var soundBtn = hero.querySelector('[data-sound]');
+  var soundOn = false, audio = null, prevLift = 0;
+
+  function noiseBuffer(ctx) {
+    // Bruit rose (plus doux que le blanc), 2 s bouclées.
+    var len = ctx.sampleRate * 2, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+    var b0 = 0, b1 = 0, b2 = 0;
+    for (var i = 0; i < len; i++) {
+      var w = Math.random() * 2 - 1;
+      b0 = 0.99765 * b0 + w * 0.0990460; b1 = 0.96300 * b1 + w * 0.2965164; b2 = 0.57000 * b2 + w * 1.0526913;
+      d[i] = (b0 + b1 + b2 + w * 0.1848) * 0.11;
+    }
+    return buf;
+  }
+
+  function makeAudio() {
+    var ctx = new AC();
+    var buf = noiseBuffer(ctx);
+    var src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+    var band = ctx.createBiquadFilter(); band.type = 'bandpass'; band.frequency.value = 700; band.Q.value = 0.8;
+    var low = ctx.createBiquadFilter(); low.type = 'lowpass'; low.frequency.value = 3800;
+    // Battement rapide du tissu : une oscillation module légèrement le volume.
+    var flutter = ctx.createGain(); flutter.gain.value = 0.75;
+    var lfo = ctx.createOscillator(); lfo.frequency.value = 9;
+    var lfoAmt = ctx.createGain(); lfoAmt.gain.value = 0.25;
+    lfo.connect(lfoAmt); lfoAmt.connect(flutter.gain);
+    var gain = ctx.createGain(); gain.gain.value = 0;
+    src.connect(band); band.connect(low); low.connect(flutter); flutter.connect(gain); gain.connect(ctx.destination);
+    src.start(); lfo.start();
+    return { ctx: ctx, buf: buf, band: band, lfo: lfo, gain: gain };
+  }
+
+  // Petit « froissé » joué à l'activation, pour entendre tout de suite l'effet.
+  function swoosh() {
+    var ctx = audio.ctx, t0 = ctx.currentTime;
+    var src = ctx.createBufferSource(); src.buffer = audio.buf;
+    var f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 0.9;
+    f.frequency.setValueAtTime(500, t0); f.frequency.exponentialRampToValueAtTime(2200, t0 + 0.35); f.frequency.exponentialRampToValueAtTime(700, t0 + 0.8);
+    var g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.3, t0 + 0.2); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.85);
+    src.connect(f); f.connect(g); g.connect(ctx.destination);
+    src.start(t0, Math.random()); src.stop(t0 + 0.9);
+  }
+
+  function soundLevel(level) {
+    if (!audio || !soundOn) return;
+    var t = audio.ctx.currentTime;
+    audio.gain.gain.setTargetAtTime(0.32 * Math.pow(level, 0.8), t, 0.07);
+    audio.band.frequency.setTargetAtTime(450 + 2000 * level, t, 0.1);
+    audio.lfo.frequency.setTargetAtTime(7 + 11 * level, t, 0.1);
+  }
+
+  function setSound(on, fromClick) {
+    soundOn = on;
+    try { localStorage.setItem('fabric-sound', on ? 'on' : 'off'); } catch (e) { /* stockage indisponible */ }
+    if (soundBtn) {
+      soundBtn.setAttribute('aria-pressed', String(on));
+      soundBtn.setAttribute('aria-label', soundBtn.getAttribute(on ? 'data-label-off' : 'data-label-on'));
+    }
+    if (on) {
+      if (!audio) audio = makeAudio();
+      if (audio.ctx.state !== 'running') audio.ctx.resume();
+      if (fromClick) swoosh();
+    } else if (audio) {
+      audio.gain.gain.setTargetAtTime(0, audio.ctx.currentTime, 0.05);
+      setTimeout(function () { if (!soundOn && audio) audio.ctx.suspend(); }, 400);
+    }
+  }
+
+  if (soundBtn && AC) {
+    soundBtn.hidden = false;
+    soundBtn.addEventListener('click', function () { setSound(!soundOn, true); });
+    // Choix retenu d'une visite à l'autre : le son reprend au premier geste
+    // (le navigateur n'autorise rien avant).
+    var pref = null;
+    try { pref = localStorage.getItem('fabric-sound'); } catch (e) { /* stockage indisponible */ }
+    if (pref === 'on') {
+      soundBtn.setAttribute('aria-pressed', 'true');
+      soundBtn.setAttribute('aria-label', soundBtn.getAttribute('data-label-off'));
+      var unlock = function (e) {
+        if (soundBtn.contains(e.target)) return; // le bouton gère lui-même son clic
+        ['pointerdown', 'keydown', 'touchend'].forEach(function (n) { window.removeEventListener(n, unlock, true); });
+        if (soundBtn.getAttribute('aria-pressed') === 'true') setSound(true, false);
+      };
+      soundOn = true;
+      ['pointerdown', 'keydown', 'touchend'].forEach(function (n) { window.addEventListener(n, unlock, true); });
+    }
+  }
+
   // Qualité adaptative : 1 = pleine résolution, réduite si les images tardent.
   var quality = 1;
   var perf = { frames: 0, time: 0, checks: 0 };
@@ -205,6 +301,11 @@
     mouse.amt += (mouse.tamt - mouse.amt) * Math.min(1, dt * 2.5);
     gust += (0.3 + Math.min(mouse.speed, 1) * 0.9 + (target - lift) * 3 - gust) * Math.min(1, dt * 2);
 
+    // Son : suit la vitesse du rideau (scroll) et, en desktop, les mouvements de souris.
+    var speed = Math.abs(lift - prevLift) / Math.max(dt, 0.001);
+    prevLift = lift;
+    soundLevel(Math.min(speed * 0.55 + Math.min(mouse.speed, 1) * mouse.amt * 0.35, 1));
+
     var done = lift > DONE_LIFT && target > DONE_LIFT;
     canvas.style.visibility = done ? 'hidden' : 'visible';
 
@@ -220,7 +321,7 @@
     }
 
     // Tissu totalement levé et immobile : on arrête la boucle jusqu'au prochain scroll.
-    if (done && Math.abs(target - lift) < 0.001) { running = false; return; }
+    if (done && Math.abs(target - lift) < 0.001) { running = false; soundLevel(0); return; }
     if (running && visible) raf = requestAnimationFrame(frame);
   }
 
@@ -232,12 +333,15 @@
 
   function stop() {
     running = false;
+    soundLevel(0);
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
   }
 
   function fallback() {
     root.classList.remove('has-fabric');
+    if (typeof soundBtn !== 'undefined' && soundBtn) soundBtn.hidden = true;
+    if (typeof audio !== 'undefined' && audio) { soundOn = false; audio.ctx.close(); audio = null; }
     if (canvas) canvas.remove();
   }
 
