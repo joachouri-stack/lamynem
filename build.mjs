@@ -471,22 +471,6 @@ function renderHome(lang) {
   });
 }
 
-function exList(lang, { detailed = false } = {}) {
-  const s = STRINGS[lang];
-  return `<ul class="ex-list">${EXHIBITIONS.map(e => {
-    const place = `${tr(e.city, lang)}, ${tr(e.country, lang)}`;
-    const detail = tr(e.detail, lang);
-    const title = detailed
-      ? `<span class="ex-title">${esc(tr(e.title, lang))}</span>`
-        + `<span class="ex-sub eyebrow">${esc(s.exhibitions.types[e.type])}${detail ? ` · ${esc(detail)}` : ''}`
-        + (e.work ? `<a href="${workPath(lang, workBySlug(e.work))}">${esc(s.exhibitions.linkedWork)}</a>` : '') + '</span>'
-      : `<span class="ex-title">${esc(tr(e.title, lang))}${detail ? ` <small>(${esc(detail)})</small>` : ''}</span>`;
-    if (!e.year) TODOS.add(`Année : ${tr(e.title, 'fr')}`);
-    return `<li class="ex-item reveal"${detailed ? ` id="${e.id}"` : ''}><div class="ex-item__main"><span class="ex-year">${e.year ? esc(e.year) : '<span aria-hidden="true">—</span>'}</span><div>${title}</div></div>`
-      + `<p class="eyebrow">${esc(place)}</p></li>`;
-  }).join('')}</ul>`;
-}
-
 /** Ondulations de tissu (SVG) qui dérivent lentement derrière le lecteur vidéo. */
 function motionWaves() {
   const wave = (y, amp, len) => {
@@ -681,19 +665,67 @@ function renderWork(w, lang) {
 }
 
 function renderExhibitions(lang) {
-  const s = STRINGS[lang];
+  const s = STRINGS[lang], x = s.exhibitions;
   const sv = EXHIBITIONS.find(e => e.image);
+  const types = [...new Set(EXHIBITIONS.map(e => e.type))];
+  const yearOf = e => (e.year ? esc(e.year) : '<span aria-hidden="true">—</span>');
+  const placeOf = e => `${esc(tr(e.city, lang))}, ${esc(tr(e.country, lang))}`;
+
+  const feature = sv ? `
+<article class="ex-hl reveal" aria-labelledby="hl-${sv.id}">
+  <a class="ex-hl__media" href="#${sv.id}" tabindex="-1" aria-hidden="true">${picture(sv.image, lang, { sizes: '(max-width: 860px) 100vw, 58vw' })}</a>
+  <div class="ex-hl__text">
+    <p class="eyebrow ex-hl__kicker">${esc(x.featured)} · ${esc(x.types[sv.type])}</p>
+    <p class="ex-hl__year">${yearOf(sv)}</p>
+    <h2 class="ex-hl__title" id="hl-${sv.id}">${esc(tr(sv.title, lang))}</h2>
+    ${tr(sv.detail, lang) ? `<p class="ex-hl__detail">${esc(tr(sv.detail, lang))}</p>` : ''}
+    <dl class="ex-hl__meta"><div><dt class="eyebrow">${esc(x.venue)}</dt><dd>${esc(sv.venue)} — ${placeOf(sv)}</dd></div></dl>
+  </div>
+</article>` : '';
+
+  const rows = EXHIBITIONS.map((e, i) => {
+    const detail = tr(e.detail, lang);
+    const work = e.work && workBySlug(e.work);
+    return `<li class="ex-card reveal" id="${e.id}" data-type="${e.type}">
+  <span class="ex-card__num">${pad2(i + 1)}</span>
+  <span class="ex-card__year">${yearOf(e)}</span>
+  <div class="ex-card__body">
+    <p class="eyebrow ex-card__type">${esc(x.types[e.type])}</p>
+    <h2 class="ex-card__title">${esc(tr(e.title, lang))}</h2>
+    ${detail ? `<p class="ex-card__detail">${esc(detail)}</p>` : ''}
+    ${work ? `<a class="eyebrow link-line ex-card__work" href="${workPath(lang, work)}">${esc(x.linkedWork)} ${ARROW}</a>` : ''}
+  </div>
+  <div class="ex-card__place"><p class="ex-card__venue">${esc(e.venue)}</p><p class="eyebrow">${placeOf(e)}</p></div>
+</li>`;
+  }).join('\n');
+
   const body = `
-<div class="page-intro">
+<div class="page-intro ex-intro">
   <p class="watermark" aria-hidden="true">04</p>
-  ${label(s.exhibitions.eyebrow)}
-  <h1>${esc(s.exhibitions.heading)}</h1>
-  <p>${esc(s.exhibitions.intro)}</p>
+  ${label(x.eyebrow)}
+  <h1>${esc(x.heading)}</h1>
+  <p>${esc(x.intro)}</p>
 </div>
-${sv ? `<figure class="ex-feature reveal">${picture(sv.image, lang, { sizes: '100vw' })}<figcaption class="eyebrow">${esc(tr(sv.title, lang))} · ${esc(sv.year)}</figcaption></figure>` : ''}
-<section class="section ex-page" style="padding-top:0" aria-label="${esc(s.exhibitions.eyebrow)}">
-  ${exList(lang, { detailed: true })}
-  <ul class="countries">${COUNTRIES[lang].map(c => `<li class="eyebrow">${esc(c)}</li>`).join('')}</ul>
+${feature}
+<section class="ex-archive" aria-label="${esc(x.eyebrow)}">
+  <div class="ex-filter" role="group" aria-label="${esc(x.filterLabel)}" hidden>
+    <button type="button" data-filter="all" aria-pressed="true">${esc(x.filterAll)} <sup>${EXHIBITIONS.length}</sup></button>
+    ${types.map(t => `<button type="button" data-filter="${t}" aria-pressed="false">${esc(x.types[t])} <sup>${EXHIBITIONS.filter(e => e.type === t).length}</sup></button>`).join('\n    ')}
+  </div>
+  <ol class="ex-cards">
+${rows}
+  </ol>
+</section>
+<div class="territories about-territories">
+  <p class="eyebrow">${esc(s.home.territories)}</p>
+  <ul>${COUNTRIES[lang].map((c, i) => `<li>${i ? THREAD : ''}<span>${esc(c)}</span></li>`).join('')}</ul>
+</div>
+<section class="about-cta" aria-label="${esc(s.contact.eyebrow)}">
+  <p class="about-cta__title">${esc(x.ctaTitle)}</p>
+  <div class="about-cta__actions">
+    <a class="mc-host" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(x.ctaMail)}">${esc(x.ctaMail)} <span aria-hidden="true">→</span></a>
+    <a class="eyebrow link-line" href="${path(lang, 'work')}">${esc(s.about.ctaWorks)} ${ARROW}</a>
+  </div>
 </section>`;
 
   const events = EXHIBITIONS.filter(e => e.type === 'exhibition').map(e => ({
