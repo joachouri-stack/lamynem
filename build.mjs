@@ -718,50 +718,95 @@ ${sv ? `<figure class="ex-feature reveal">${picture(sv.image, lang, { sizes: '10
 }
 
 function renderAbout(lang) {
-  const s = STRINGS[lang], a = s.about;
-  const cvList = types => `<ul class="ex-list">${EXHIBITIONS.filter(e => types.includes(e.type)).map(e =>
-    `<li class="ex-item"><div class="ex-item__main"><span class="ex-year">${e.year ? esc(e.year) : '<span aria-hidden="true">—</span>'}</span><span class="ex-title">${esc(tr(e.title, lang))}</span></div><p class="eyebrow">${esc(tr(e.city, lang))}, ${esc(tr(e.country, lang))}</p></li>`).join('')}</ul>`;
+  const s = STRINGS[lang], a = s.about, h = s.home;
   if (!BIO.approach) TODOS.add('Texte de démarche artistique (page À propos)');
   if (!BIO.residencies) TODOS.add('Liste des résidences (CV)');
-  TODOS.add('Portrait de l’artiste');
+  if (!ARTIST_PHOTO.image) TODOS.add('Portrait de l’artiste');
 
   const approach = tr(BIO.approach, lang);
+  const cvRows = types => EXHIBITIONS.filter(e => types.includes(e.type)).map(e =>
+    `<li><a class="cv-row" href="${path(lang, 'exhibitions')}#${e.id}">`
+    + `<span class="cv-row__year">${e.year ? esc(e.year) : '<span aria-hidden="true">—</span>'}</span>`
+    + `<span class="cv-row__title">${esc(tr(e.title, lang))}</span>`
+    + `<span class="eyebrow cv-row__place">${esc(tr(e.city, lang))}, ${esc(tr(e.country, lang))}</span></a></li>`).join('');
+  const cvGroup = (i, title, types, empty) => {
+    const n = EXHIBITIONS.filter(e => types.includes(e.type)).length;
+    return `<div class="cv-group reveal"><div class="cv-group__head"><span class="cv-group__num">${pad2(i)}</span><h3>${esc(title)}</h3>`
+      + (n ? `<p class="eyebrow">${esc(a.entries(n))}</p>` : '') + '</div>'
+      + (n ? `<ol class="cv-rows">${cvRows(types)}</ol>` : `<div class="cv-empty">${empty}</div>`) + '</div>';
+  };
+
+  const photo = ARTIST_PHOTO.image
+    ? picture(ARTIST_PHOTO.image, lang, { eager: true, sizes: '(max-width: 860px) 100vw, 42vw', style: `object-position:${ARTIST_PHOTO.focus}` })
+    : swatch(['#e0a06a', '#a2643a', '#2a1810'], lang);
+
   const body = `
-<div class="page-intro">
-  <p class="watermark" aria-hidden="true">02</p>
-  ${label(a.eyebrow)}
-  <h1>${esc(a.heading)}</h1>
-  <p>${esc(s.tagline)} — ${esc(s.disciplines)}</p>
-</div>
-<div class="about-grid">
-  <div class="artist__media reveal">${swatch(['#e0a06a', '#a2643a', '#2a1810'], lang)}</div>
-  <div>
-    <section class="about-block reveal" aria-labelledby="bio-t">
-      ${label(a.bioTitle, { tag: 'h2', id: 'bio-t' })}
-      <p class="h-lead">${esc(s.home.artistLead)}</p>
-      <p>${esc(s.home.artistBody)}</p>
-    </section>
-    <section class="about-block reveal" aria-labelledby="app-t">
-      ${label(a.approachTitle, { tag: 'h2', id: 'app-t' })}
-      <p>${esc(a.approachLead)}</p>
-      ${approach ? (Array.isArray(approach) ? approach : [approach]).map(p => `<p>${esc(p)}</p>`).join('') : `<p class="todo-block">${esc(s.work.textTodo)}</p>`}
-    </section>
+<header class="about-hero">
+  <div class="about-hero__text">
+    ${label(a.eyebrow)}
+    <h1>${esc(a.heading)}</h1>
+    <p class="about-hero__tagline">${esc(s.tagline)}</p>
+    <ul class="about-hero__disciplines">${s.disciplines.split(' • ').map(d => `<li>${esc(d)}</li>`).join('')}</ul>
   </div>
+  <figure class="about-hero__figure artist__figure">
+    <div class="artist__mat"><div class="artist__frame">${photo}</div></div>
+    <figcaption class="eyebrow artist__route">${esc(h.artistRoute)}</figcaption>
+  </figure>
+</header>
+
+<dl class="about-facts">${h.artistFacts.map(([k, v]) => `<div class="reveal"><dt>${esc(k)}</dt><dd class="eyebrow">${esc(v)}</dd></div>`).join('')}</dl>
+
+<section class="about-part" aria-labelledby="bio-t">
+  <div class="about-part__side"><span class="about-part__num">01</span>${label(a.bioTitle, { tag: 'h2', id: 'bio-t' })}</div>
+  <div class="about-part__body reveal">
+    <p class="h-lead">${esc(h.artistLead)}</p>
+    <p>${esc(h.artistBody)}</p>
+  </div>
+</section>
+
+<section class="about-approach section--dark on-dark" aria-labelledby="app-t">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="about-part">
+    <div class="about-part__side"><span class="about-part__num">02</span>${label(a.approachTitle, { tag: 'h2', id: 'app-t' })}</div>
+    <div class="about-part__body reveal">
+      <blockquote class="about-quote">${esc(a.approachLead)}</blockquote>
+      <ul class="about-themes">${h.artistThemes.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+      ${approach ? (Array.isArray(approach) ? approach : [approach]).map(p => `<p>${esc(p)}</p>`).join('') : `<p class="todo-block">${esc(s.work.textTodo)}</p>`}
+    </div>
+  </div>
+</section>
+
+<section class="about-part about-cv" aria-labelledby="cv-t">
+  <div class="about-part__side"><span class="about-part__num">03</span>${label(a.cvTitle)}<h2 class="h-section" id="cv-t">${esc(a.cvTitle)} — Lamyne M</h2>
+    <dl class="cv-id">
+      <div><dt class="eyebrow">${esc(a.bornLabel)}</dt><dd>${esc(BIO.born)}, ${esc(tr(BIO.birthplace, lang))}</dd></div>
+      <div><dt class="eyebrow">${esc(a.basedLabel)}</dt><dd>${esc(tr(BIO.basedIn, lang))}</dd></div>
+    </dl>
+  </div>
+  <div class="about-part__body">
+    ${cvGroup(1, a.cvExhibitions, ['exhibition', 'event'])}
+    ${cvGroup(2, a.cvCollections, ['collection'])}
+    ${cvGroup(3, a.cvRepresentation, ['representation'])}
+    ${cvGroup(4, a.cvResidencies, [], BIO.residencies ? '' : todo(lang, 'Liste des résidences (CV)'))}
+  </div>
+</section>
+
+<div class="territories about-territories">
+  <p class="eyebrow">${esc(h.territories)}</p>
+  <ul>${COUNTRIES[lang].map((c, i) => `<li>${i ? THREAD : ''}<span>${esc(c)}</span></li>`).join('')}</ul>
 </div>
-<section class="cv" aria-labelledby="cv-t">
-  <div class="section__head">${label(a.cvTitle)}<h2 class="h-section" id="cv-t">${esc(a.cvTitle)} — Lamyne M</h2></div>
-  <dl class="facts" style="max-width:560px;margin-bottom:56px">
-    <div><dt class="eyebrow">${esc(a.bornLabel)}</dt><dd>${esc(BIO.born)}, ${esc(tr(BIO.birthplace, lang))}</dd></div>
-    <div><dt class="eyebrow">${esc(a.basedLabel)}</dt><dd>${esc(tr(BIO.basedIn, lang))}</dd></div>
-  </dl>
-  <div class="cv-group"><h3 class="eyebrow">${esc(a.cvExhibitions)}</h3>${cvList(['exhibition', 'event'])}</div>
-  <div class="cv-group"><h3 class="eyebrow">${esc(a.cvCollections)}</h3>${cvList(['collection'])}</div>
-  <div class="cv-group"><h3 class="eyebrow">${esc(a.cvRepresentation)}</h3>${cvList(['representation'])}</div>
-  <div class="cv-group"><h3 class="eyebrow">${esc(a.cvResidencies)}</h3>${BIO.residencies ? '' : todo(lang, 'Liste des résidences (CV)')}</div>
+
+<section class="about-cta" aria-label="${esc(s.contact.eyebrow)}">
+  <p class="about-cta__title">${esc(a.ctaTitle)}</p>
+  <div class="about-cta__actions">
+    <a class="mc-host" href="mailto:${CONTACT.email}">${esc(s.contact.write)} <span aria-hidden="true">→</span></a>
+    <a class="eyebrow link-line" href="${path(lang, 'work')}">${esc(a.ctaWorks)} ${ARROW}</a>
+  </div>
 </section>`;
 
   page({
     lang, route: 'about', alternates: alts('about'), xDefault: path(DEFAULT_LANG, 'about'), current: 'about', ogType: 'profile',
+    ogImage: ARTIST_PHOTO.image || undefined,
     title: a.title, description: a.description, body,
     jsonld: [{ '@type': 'ProfilePage', url: `${SITE_URL}${path(lang, 'about')}`, inLanguage: lang, mainEntity: { '@id': `${SITE_URL}/#lamyne-m` } }, personLd(lang)],
   });

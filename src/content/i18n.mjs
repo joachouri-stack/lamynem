@@ -118,6 +118,9 @@ export const STRINGS = {
       cvRepresentation: 'Représentation',
       bornLabel: 'Né en',
       basedLabel: 'Vit et travaille à',
+      ctaTitle: 'Une exposition, une résidence, une collaboration ?',
+      ctaWorks: 'Voir les œuvres',
+      entries: n => `${n} entrée${n > 1 ? 's' : ''}`,
     },
     press: {
       title: 'Presse — Lamyne M',
@@ -251,6 +254,9 @@ export const STRINGS = {
       cvRepresentation: 'Representation',
       bornLabel: 'Born',
       basedLabel: 'Lives and works in',
+      ctaTitle: 'An exhibition, a residency, a collaboration?',
+      ctaWorks: 'See the work',
+      entries: n => `${n} entr${n > 1 ? 'ies' : 'y'}`,
     },
     press: {
       title: 'Press — Lamyne M',
@@ -388,6 +394,9 @@ export const STRINGS = {
       cvRepresentation: 'Представительство',
       bornLabel: 'Год рождения',
       basedLabel: 'Живёт и работает в',
+      ctaTitle: 'Выставка, резиденция, сотрудничество?',
+      ctaWorks: 'Смотреть работы',
+      entries: n => `${n}`,
     },
     press: {
       title: 'Пресса — Lamyne M',

@@ -67,7 +67,6 @@ Compléter `src/content/site.mjs` (et `src/originals/` pour les photos), puis re
 - [ ] Photo de l'œuvre « Sur leurs 31 »
 - [ ] Photo de l'œuvre « Teintuer »
 - [ ] Photo de l'œuvre « VENTiLATE »
-- [ ] Portrait de l’artiste
 - [ ] Texte de démarche artistique (page À propos)
 - [ ] Texte de présentation de « Autoportrait » (fr, en, ru)
 - [ ] Texte de présentation de « Corona curius » (fr, en, ru)
