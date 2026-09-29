@@ -315,12 +315,15 @@ body.header-shown .cat-nav { top: var(--header-h, 0px); }
 
 @media (max-width: 720px) {
   .hero__stage { min-height: 560px; }
-  .hero__content { --hs: clamp(64px, 21.5vw, 120px); --hpad: 20px; bottom: 48px; }
+  /* Le nom occupe toute la largeur ; statut et disciplines calés à côté du « M » */
+  .hero__content { --hs: calc((100vw - 40px) / 3.96); --hpad: 20px; bottom: 92px; }
   .hero__title { line-height: .8; }
   .hero__m { line-height: .8; }
-  .hero__meta { position: static; margin-top: 18px; max-width: none; }
-  .hero__scroll { bottom: auto; top: 88px; right: 20px; }
-  .hero__scroll i { display: none; }
+  .hero__meta { position: absolute; left: calc(var(--hpad) + var(--hs) * .9 + 14px); right: 20px; bottom: 2px; max-width: none; }
+  .hero__tagline { font-size: 15px; line-height: 1.3; }
+  .hero__meta .eyebrow { margin-top: 8px; font-size: 9.5px; letter-spacing: .12em; }
+  .hero__scroll { top: auto; bottom: 30px; left: 20px; right: 20px; justify-content: space-between; }
+  .hero__scroll i { display: block; flex: 1; margin-left: 16px; }
 }
 
 /* --- Sections génériques ----------------------------------------------- */
@@ -1056,4 +1059,20 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .related__head { flex-wrap: wrap; }
   .work-nav { grid-template-columns: 1fr; }
   .work-nav__link--next { border-left: 0; border-top: 1px solid var(--rule-dark); }
+}
+
+/* --- Accueil mobile ------------------------------------------------------ */
+@media (max-width: 720px) {
+  /* Numéros de section : en haut à droite, sans chevaucher les titres */
+  .section > .watermark, .section .artist__text > .watermark, .page-intro > .watermark {
+    top: 18px; right: 14px; left: auto; font-size: 104px;
+  }
+  .exhibitions > .watermark, .masterclass > .watermark, .press > .watermark, .motion > .watermark { top: 18px; right: 14px; left: auto; font-size: 104px; }
+
+  /* Robes : carrousel horizontal, la carte suivante dépasse pour inviter au geste */
+  .robes { display: flex; gap: 14px; margin: 0; padding: 36px 20px 8px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .robes::-webkit-scrollbar { display: none; }
+  .robe, .robe:nth-child(n), .robe:nth-child(even), .robe:nth-child(3) { flex: 0 0 74vw; margin-top: 0; scroll-snap-align: start; }
+  .robe__media { aspect-ratio: 683 / 1024; }
+  .robes::after { content: ''; flex: 0 0 6px; }
 }
