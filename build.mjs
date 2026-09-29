@@ -118,14 +118,18 @@ function workMedia(w, lang, sizes) {
 
 function workCard(w, lang, num) {
   const s = STRINGS[lang];
-  const kind = tr(w.medium, lang) || s.categories[w.category];
+  // Sous le titre, seulement ce qui n'est pas déjà la catégorie de la page :
+  // la technique (ex. Installation) ou, pour une masterclass, le lieu.
+  const medium = tr(w.medium, lang);
+  const kind = w.category === 'masterclass' ? tr(w.place, lang)
+    : medium && medium.toLowerCase() !== s.categories[w.category].toLowerCase() ? medium : '';
   // Sans photo : sur mobile, la carte devient une ligne compacte (voir main.css).
   return `<a class="card reveal${w.image ? '' : ' card--noimg'}" href="${workPath(lang, w)}">`
     + `<div class="card__media">${workMedia(w, lang, '(max-width: 720px) 100vw, 50vw')}`
     + (num ? `<span class="card__big" aria-hidden="true">${num}</span>` : '')
     + `<span class="eyebrow card__view" aria-hidden="true">${esc(s.work.view)} →</span></div>`
     + `<div class="card__meta"><h3 class="card__title">${esc(w.title)}</h3>`
-    + `<p class="eyebrow">${esc(kind)}</p></div></a>`;
+    + (kind ? `<p class="eyebrow">${esc(kind)}</p>` : '') + '</div></a>';
 }
 
 /** Robe verticale des « Œuvres sélectionnées » : lien vers l'œuvre dès qu'elle est confirmée. */
