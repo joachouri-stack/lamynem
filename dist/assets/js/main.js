@@ -6,6 +6,16 @@
   var root = document.documentElement;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Écran « Entrer » : géré par fabric.js. Filet de sécurité : si ce script ne
+  // s'est pas exécuté (réseau, erreur), l'écran est retiré pour ne jamais bloquer la page.
+  window.addEventListener('load', function () {
+    var en = document.querySelector('[data-enter]');
+    if (en && !en.hasAttribute('data-ready')) {
+      root.classList.remove('needs-enter');
+      en.remove();
+    }
+  });
+
   // --- Menu mobile ------------------------------------------------------
   var burger = document.querySelector('[data-menu-open]');
   var menu = document.getElementById('menu');

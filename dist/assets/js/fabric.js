@@ -219,6 +219,48 @@
     ['pointerdown', 'keydown', 'touchend', 'click'].forEach(function (n) { window.addEventListener(n, unlock, true); });
   }
 
+  // Froissé d'accueil, joué au clic sur « Entrer ».
+  function swoosh() {
+    if (!audio) return;
+    var ctx = audio.ctx, t0 = ctx.currentTime;
+    var src = ctx.createBufferSource(); src.buffer = audio.buf;
+    var f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = 0.9;
+    f.frequency.setValueAtTime(420, t0); f.frequency.exponentialRampToValueAtTime(2000, t0 + 0.45); f.frequency.exponentialRampToValueAtTime(600, t0 + 1.1);
+    var g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.28, t0 + 0.3); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.2);
+    src.connect(f); f.connect(g); g.connect(ctx.destination);
+    src.start(t0, Math.random()); src.stop(t0 + 1.25);
+  }
+
+  // --- Écran « Entrer » -----------------------------------------------------
+  // Première visite de la session : le clic sur « Entrer » est le geste qui
+  // autorise le son ; le rideau rejoue alors son premier frémissement.
+  var enterEl = document.querySelector('[data-enter]');
+  var entering = root.classList.contains('needs-enter') && enterEl;
+  function closeEnter(withSound) {
+    if (!enterEl || !root.classList.contains('needs-enter')) return;
+    try { sessionStorage.setItem('entered', '1'); } catch (e) { /* stockage indisponible */ }
+    if (withSound) { wakeAudio(); swoosh(); }
+    enterEl.classList.add('is-leaving');
+    start = performance.now(); // l'intro du rideau repart, avec le son
+    play();
+    setTimeout(function () { root.classList.remove('needs-enter'); enterEl.remove(); enterEl = null; }, 900);
+    document.removeEventListener('keydown', enterKeys, true);
+  }
+  function enterKeys(e) {
+    if (e.key === 'Tab') { e.preventDefault(); enterBtn.focus(); }
+    else if (e.key === 'Escape') { closeEnter(true); }
+  }
+  if (entering) {
+    enterEl.setAttribute('data-ready', '');
+    var enterBtn = enterEl.querySelector('[data-enter-btn]');
+    enterBtn.addEventListener('click', function () { closeEnter(true); });
+    document.addEventListener('keydown', enterKeys, true);
+    enterBtn.focus({ preventScroll: true });
+  } else if (enterEl) {
+    enterEl.remove(); enterEl = null;
+  }
+
   // Qualité adaptative : 1 = pleine résolution, réduite si les images tardent.
   var quality = 1;
   var perf = { frames: 0, time: 0, checks: 0 };
@@ -316,6 +358,9 @@
 
   function fallback() {
     root.classList.remove('has-fabric');
+    // Sans rideau, l'écran d'entrée n'a plus de raison d'être.
+    root.classList.remove('needs-enter');
+    var en = document.querySelector('[data-enter]'); if (en) en.remove();
     if (typeof audio !== 'undefined' && audio) { soundOn = false; audio.ctx.close(); audio = null; }
     if (canvas) canvas.remove();
   }

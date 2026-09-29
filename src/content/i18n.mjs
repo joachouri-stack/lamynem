@@ -15,6 +15,8 @@ export const STRINGS = {
     visualTodo: 'Visuel à fournir',
     scroll: 'Défiler',
     tagline: 'Artiste plasticien & performeur',
+    enter: 'Entrer',
+    enterNote: 'Le son fait partie de l’expérience',
     disciplines: 'Textile • Installation • Performance • Transmission',
     categories: { art: 'Art', performance: 'Performance', masterclass: 'Masterclass' },
     categoryIntro: {
@@ -173,6 +175,8 @@ export const STRINGS = {
     visualTodo: 'Image to be supplied',
     scroll: 'Scroll',
     tagline: 'Visual artist & performer',
+    enter: 'Enter',
+    enterNote: 'Sound is part of the experience',
     disciplines: 'Textile • Installation • Performance • Transmission',
     categories: { art: 'Art', performance: 'Performance', masterclass: 'Masterclass' },
     categoryIntro: {
@@ -331,6 +335,8 @@ export const STRINGS = {
     visualTodo: 'Изображение будет добавлено',
     scroll: 'Листайте',
     tagline: 'Художник и перформер',
+    enter: 'Войти',
+    enterNote: 'Звук — часть впечатления',
     disciplines: 'Текстиль • Инсталляция • Перформанс • Передача опыта',
     categories: { art: 'Искусство', performance: 'Перформанс', masterclass: 'Мастер-класс' },
     categoryIntro: {

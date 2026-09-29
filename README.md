@@ -90,6 +90,13 @@ du rideau, toujours actif, sans bouton ; son volume suit la vitesse du rideau. L
 aucun son n'est possible avant un premier geste du visiteur (clic, toucher bref, touche du clavier) —
 la molette et le glissé du doigt ne comptent pas. Le son démarre dès que le navigateur l'autorise.
 
+Écran « Entrer » : à la première visite de l'accueil dans la session (onglet), un voile nuit
+avec « LAMYNE M » et un bouton « Entrer » précède le rideau ; ce clic est le geste qui autorise
+le son. Il n'apparaît pas si le rideau est inactif (mouvement réduit, économie de données, appareil
+trop lent, WebGL absent) ni sans JavaScript, et ne peut jamais bloquer la page (filet de sécurité
+dans `main.js`). Échap entre aussi. Limite : Safari exige un nouveau geste à chaque chargement de
+page ; en revenant sur l'accueil dans la même session, le son y reprend au premier clic ou toucher.
+
 Actif sur tous les appareils, sauf si le visiteur a demandé moins d'animations (`prefers-reduced-motion`)
 ou le mode économie de données. Plutôt que de se fier aux cœurs ou à la mémoire annoncés par le
 navigateur (peu fiables, surtout sous Safari), le script mesure la fluidité réelle au démarrage : sous
