@@ -306,7 +306,7 @@ ${LANGS.filter(l => l !== lang).map(l => `<meta property="og:locale:alternate" c
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="${fontsHref(lang)}">
 <link rel="stylesheet" href="/assets/css/main.css?v=${ASSET_V.css}">
-${fabric ? `<script>(function(h){try{var c=navigator.connection;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(c&&c.saveData))h.classList.add('has-fabric')}catch(e){}})(document.documentElement)</script>\n` : ''}<script src="/assets/js/main.js?v=${ASSET_V.main}" defer></script>
+${fabric ? `<script>(function(h){try{var c=navigator.connection;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(c&&c.saveData)){h.classList.add('has-fabric');try{if(!sessionStorage.getItem('entered'))h.classList.add('needs-enter')}catch(e){}}}catch(e){}})(document.documentElement)</script>\n` : ''}<script src="/assets/js/main.js?v=${ASSET_V.main}" defer></script>
 ${fabric ? `<script src="/assets/js/fabric.js?v=${ASSET_V.fabric}" defer></script>\n` : ''}${ld}
 </head>
 <body>
@@ -342,7 +342,19 @@ function renderHome(lang) {
     ? `<button class="video__play" type="button" data-video="/assets/${esc(MOTION_VIDEO.src)}"${MOTION_VIDEO.poster ? ` data-poster="/assets/${esc(MOTION_VIDEO.poster)}"` : ''} aria-label="${esc(s.home.play)} — ${esc(tr(MOTION_VIDEO.title, lang) || '')}"></button>`
     : (TODOS.add('Vidéo « Art in Motion »'), SHOW_TODO ? `<span class="video__play" aria-hidden="true"></span><p class="eyebrow video__note">[${esc(h.videoTodo)}]</p>` : '');
 
-  const body = `
+  // Écran « Entrer » : affiché seulement si le rideau est actif (classe posée dans <head>).
+  // Le clic est le geste qui autorise le son du rideau.
+  const enter = `<div class="enter" data-enter role="dialog" aria-modal="true" aria-labelledby="enter-t">
+  <div class="enter__inner">
+    <svg class="enter__thread" viewBox="0 0 64 10" aria-hidden="true"><path d="M1 5c5 0 5-4 10-4s5 8 10 8 5-8 10-8 5 8 10 8 5-8 10-8 5 4 12 4"/></svg>
+    <p class="enter__name" id="enter-t">LAMYNE M</p>
+    <p class="eyebrow enter__tag">${esc(s.tagline)}</p>
+    <button class="enter__btn" type="button" data-enter-btn><span>${esc(s.enter)}</span></button>
+    <p class="eyebrow enter__note"><svg viewBox="0 0 24 10" aria-hidden="true"><path d="M1 5c2.5 0 2.5-4 5-4s2.5 8 5 8 2.5-8 5-8 2.5 4 7 4"/></svg>${esc(s.enterNote)}</p>
+  </div>
+</div>`;
+
+  const body = `${enter}
 <section class="hero${HERO.image ? '' : ' hero--plain'}" data-hero data-header-over aria-labelledby="hero-title">
   <div class="hero__stage">
     ${HERO.image ? picture(HERO.image, lang, { eager: true, cls: 'hero__media', style: `object-position:${HERO.focus}` }) : heroMobile(lang)}
