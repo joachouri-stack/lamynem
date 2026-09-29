@@ -371,11 +371,26 @@ function renderHome(lang) {
 
 <section class="section section--dark motion on-dark" aria-labelledby="motion-title">
   <div class="glow" aria-hidden="true"></div>
-  <div class="section__head">
+  <p class="watermark" aria-hidden="true">03</p>
+  <div class="section__head motion__head">
     ${label(h.motionEyebrow, { tag: 'h2', id: 'motion-title' })}
-    <p class="h-section">${esc(h.motionTitle)}</p>
+    <p class="motion__title">${esc(h.motionTitle)}</p>
   </div>
-  <div class="video reveal"><div class="grain" aria-hidden="true"></div>${video}</div>
+  <div class="motion__grid">
+    <div class="video reveal">
+      ${motionWaves()}
+      <div class="grain" aria-hidden="true"></div>
+      <span class="video__corner video__corner--tl" aria-hidden="true"></span><span class="video__corner video__corner--br" aria-hidden="true"></span>
+      ${motionRing(h.motionRing)}
+      ${video}
+    </div>
+    <nav class="motion__prog" aria-label="${esc(h.motionProgramme)}">
+      <p class="eyebrow">${esc(h.motionProgramme)}</p>
+      <ol>${WORKS.filter(w => w.category === 'performance').map((w, i) =>
+        `<li><a href="${workPath(lang, w)}"><span class="motion__num">${pad2(i + 1)}</span><span class="motion__name">${esc(w.title)}</span><span class="motion__arrow" aria-hidden="true">→</span></a></li>`).join('')}</ol>
+      <a class="eyebrow link-line" href="${catPath(lang, 'performance')}">${esc(h.motionAll)} ${ARROW}</a>
+    </nav>
+  </div>
 </section>
 
 <section class="section exhibitions" aria-labelledby="ex-title">
@@ -470,6 +485,25 @@ function exList(lang, { detailed = false } = {}) {
     return `<li class="ex-item reveal"${detailed ? ` id="${e.id}"` : ''}><div class="ex-item__main"><span class="ex-year">${e.year ? esc(e.year) : '<span aria-hidden="true">—</span>'}</span><div>${title}</div></div>`
       + `<p class="eyebrow">${esc(place)}</p></li>`;
   }).join('')}</ul>`;
+}
+
+/** Ondulations de tissu (SVG) qui dérivent lentement derrière le lecteur vidéo. */
+function motionWaves() {
+  const wave = (y, amp, len) => {
+    let d = `M-200 ${y}`;
+    for (let x = -200; x < 1600; x += len) d += ` q${len / 4} ${-amp} ${len / 2} 0 t${len / 2} 0`;
+    return d;
+  };
+  const paths = [[140, 26, 240, .5], [220, 40, 320, .35], [300, 22, 200, .45], [380, 34, 280, .3], [460, 18, 180, .4]]
+    .map(([y, a, l, o], i) => `<path class="wave wave--${i % 3}" d="${wave(y, a, l)}" style="opacity:${o}"/>`).join('');
+  return `<svg class="video__waves" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${paths}</svg>`;
+}
+
+/** Texte circulaire qui tourne autour du bouton lecture. */
+function motionRing(text) {
+  const t = esc(text.repeat(2));
+  return `<svg class="video__ring" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><defs><path id="ring-path" d="M100 100 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0"/></defs>`
+    + `<text><textPath href="#ring-path" textLength="488">${t}</textPath></text></svg>`;
 }
 
 /** Frise des expositions de l'accueil : année, type, titre, lieu ; lien vers la fiche. */

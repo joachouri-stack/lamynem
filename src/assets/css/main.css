@@ -411,16 +411,57 @@ body.header-shown .cat-nav { top: var(--header-h, 0px); }
 /* --- 03 Art in motion -------------------------------------------------- */
 
 .motion .glow { width: 40%; height: 60%; left: -10%; top: 10%; background: #7a3420; filter: blur(160px); }
-.motion .h-section { max-width: 660px; position: relative; }
-.video { position: relative; aspect-ratio: 1312 / 600; overflow: hidden; background:
+.motion .watermark { top: clamp(20px, 4vw, 60px); right: clamp(8px, 3vw, 44px); }
+.motion__head { position: relative; z-index: 1; }
+.motion__title { font-family: var(--font-display); font-size: clamp(28px, 3.4vw, 50px); line-height: 1.18; max-width: 880px; letter-spacing: -.005em; }
+
+.motion__grid { position: relative; z-index: 1; display: grid; grid-template-columns: 8fr 3fr; gap: clamp(32px, 4vw, 64px); align-items: stretch; }
+
+/* Écran : dégradé sombre, ondulations de tissu, coins de cadrage, texte tournant */
+.video { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background:
   radial-gradient(90% 100% at 70% 20%, #6b2f1c 0%, transparent 55%),
   linear-gradient(150deg, #241009, #0c0503 85%); }
-.video video { width: 100%; height: 100%; object-fit: cover; }
-.video__play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: clamp(64px, 6.4vw, 92px); aspect-ratio: 1; border: 1px solid rgba(247,243,236,.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background .3s var(--ease), transform .4s var(--ease); z-index: 2; }
-button.video__play:hover { background: rgba(247,243,236,.1); transform: translate(-50%, -50%) scale(1.05); }
+.video video { position: relative; z-index: 3; width: 100%; height: 100%; object-fit: cover; }
+.video__waves { position: absolute; inset: 0; width: 100%; height: 100%; }
+.video__waves .wave { fill: none; stroke: var(--terracotta-light); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.video__waves .wave--0 { animation: wave-drift 18s linear infinite; }
+.video__waves .wave--1 { animation: wave-drift 26s linear infinite reverse; }
+.video__waves .wave--2 { animation: wave-drift 34s linear infinite; }
+@keyframes wave-drift { to { transform: translateX(-240px); } }
+.video__corner { position: absolute; z-index: 2; width: 28px; height: 28px; border-color: rgba(247,243,236,.55); border-style: solid; pointer-events: none; }
+.video__corner--tl { top: 20px; left: 20px; border-width: 1px 0 0 1px; }
+.video__corner--br { bottom: 20px; right: 20px; border-width: 0 1px 1px 0; }
+.video__ring { position: absolute; z-index: 2; top: 50%; left: 50%; width: clamp(150px, 15vw, 210px); height: auto; transform: translate(-50%, -50%); pointer-events: none; overflow: visible; animation: ring-spin 28s linear infinite; }
+.video__ring text { fill: rgba(247,243,236,.7); font-family: var(--font-ui); font-weight: 500; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; }
+@keyframes ring-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+.video__play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: clamp(64px, 6.4vw, 92px); aspect-ratio: 1; border: 1px solid rgba(247,243,236,.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(20,8,5,.35); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: background .3s var(--ease), transform .4s var(--ease), border-color .3s; z-index: 3; }
+button.video__play:hover { background: var(--terracotta); border-color: var(--terracotta); transform: translate(-50%, -50%) scale(1.06); }
 .video__play::before { content: ''; border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-left: 15px solid var(--ivory); margin-left: 4px; }
-.video__note { position: absolute; bottom: 24px; right: 28px; color: rgba(247,243,236,.7) !important; z-index: 2; }
-@media (max-width: 720px) { .video { aspect-ratio: 350 / 260; } }
+.video__note { position: absolute; bottom: 24px; left: 60px; color: rgba(247,243,236,.7) !important; z-index: 3; }
+
+/* Programme des performances */
+.motion__prog { display: flex; flex-direction: column; }
+.motion__prog > .eyebrow { margin-bottom: 14px; }
+.motion__prog ol { border-top: 1px solid var(--rule-dark); margin-bottom: 28px; }
+.motion__prog li a { display: grid; grid-template-columns: 30px 1fr auto; align-items: baseline; gap: 10px; padding: 16px 0; border-bottom: 1px solid var(--rule-dark); color: var(--ivory); }
+.motion__num { font-family: var(--font-display); font-size: 13px; color: var(--terracotta-light); }
+.motion__name { font-family: var(--font-display); font-size: clamp(18px, 1.6vw, 23px); line-height: 1.2; transition: transform .5s var(--ease), color .3s; }
+.motion__arrow { color: var(--ink-3-soft); opacity: 0; transform: translateX(-6px); transition: opacity .4s var(--ease), transform .4s var(--ease), color .3s; }
+.motion__prog li a:hover .motion__name { transform: translateX(6px); color: var(--terracotta-light); }
+.motion__prog li a:hover .motion__arrow { opacity: 1; transform: none; color: var(--terracotta-light); }
+.motion__prog > .link-line { margin-top: auto; align-self: flex-start; }
+
+@media (max-width: 960px) {
+  .motion__grid { grid-template-columns: 1fr; }
+  .motion__arrow { opacity: 1; transform: none; }
+}
+@media (max-width: 720px) {
+  .video { aspect-ratio: 4 / 3; }
+  .video__note { left: 20px; bottom: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .video__waves .wave, .video__ring { animation: none; }
+}
 
 /* --- 04 Expositions ---------------------------------------------------- */
 
