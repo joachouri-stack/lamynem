@@ -578,9 +578,10 @@ function renderWorkIndex(lang) {
 </div>
 ${catNav(lang, null)}
 <section class="practices" aria-label="${esc(s.work.practices)}">
-  <ol class="practices__list">
+  <ol class="practices__list" data-carousel>
 ${panels}
   </ol>
+  <div class="carousel-bar" aria-hidden="true"><span class="carousel-bar__count" data-carousel-count>1 / ${CATEGORIES.length}</span><span class="carousel-bar__track"><span class="carousel-bar__fill" data-carousel-fill></span></span></div>
 </section>
 <section class="w-index" aria-labelledby="w-index-t">
   <div class="w-index__head">${label(s.work.eyebrow)}<h2 class="h-section" id="w-index-t">${esc(s.work.indexTitle)}</h2></div>
@@ -667,7 +668,7 @@ function renderWork(w, lang) {
 </article>
 ${related.length ? `<section class="related" aria-labelledby="rel-t">
   <div class="related__head">${label(s.work.related, { tag: 'h2', id: 'rel-t' })}<a class="eyebrow link-line" href="${catPath(lang, w.category)}">${esc(s.work.seeCat(s.categories[w.category]))} ${ARROW}</a></div>
-  <ul class="related__list">${related.map(x => `<li><a class="related__card" href="${workPath(lang, x)}"><span class="related__media">${x.image ? picture(x.image, lang, { sizes: '260px' }) : swatch(x.tone, lang, false)}<span class="related__num" aria-hidden="true">${roman(inCat.indexOf(x) + 1)}</span></span><span class="related__title">${esc(x.title)}</span></a></li>`).join('')}</ul>
+  <ul class="related__list" data-carousel>${related.map(x => `<li><a class="related__card" href="${workPath(lang, x)}"><span class="related__media">${x.image ? picture(x.image, lang, { sizes: '260px' }) : swatch(x.tone, lang, false)}<span class="related__num" aria-hidden="true">${roman(inCat.indexOf(x) + 1)}</span></span><span class="related__title">${esc(x.title)}</span></a></li>`).join('')}</ul><div class="carousel-bar" aria-hidden="true"><span class="carousel-bar__count" data-carousel-count>1 / ${related.length}</span><span class="carousel-bar__track"><span class="carousel-bar__fill" data-carousel-fill></span></span></div>
 </section>` : ''}
 <nav class="work-nav on-dark" aria-label="${esc(s.work.browse)}">
   <a class="work-nav__link work-nav__link--prev" href="${workPath(lang, prev)}"><span class="eyebrow"><span aria-hidden="true">←</span> ${esc(s.work.prev)}</span><span class="work-nav__title">${esc(prev.title)}</span></a>

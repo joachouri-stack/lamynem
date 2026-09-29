@@ -1332,3 +1332,15 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .carousel-bar__fill { position: absolute; inset: 0; background: var(--ink); transform-origin: left; transform: scaleX(.25); transition: transform .2s linear; }
   .works-more { padding-top: 28px; }
 }
+
+/* --- Pages intérieures mobile (compléments) ------------------------------ */
+@media (max-width: 720px) {
+  /* Liens texte : zone tactile de 44 px sans changer le rendu */
+  main .link-line { position: relative; }
+  main .link-line::before { content: ''; position: absolute; inset: -12px -6px -10px; }
+  /* Barres de progression des carrousels intérieurs */
+  .related .carousel-bar { padding: 14px 0 0; }
+  .practices .carousel-bar { padding-top: 18px; }
+  .related__list { padding-bottom: 4px; scrollbar-width: none; }
+  .related__list::-webkit-scrollbar { display: none; }
+}
