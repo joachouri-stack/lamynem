@@ -107,8 +107,9 @@
     if (!bar || !bar.classList.contains('carousel-bar')) return;
     var count = bar.querySelector('[data-carousel-count]');
     var fill = bar.querySelector('[data-carousel-fill]');
-    var n = track.children.length;
     var update = function () {
+      // Seuls les éléments affichés comptent (ex. robe de couverture masquée sur mobile).
+      var n = Array.prototype.filter.call(track.children, function (c) { return c.offsetParent !== null; }).length || 1;
       var max = track.scrollWidth - track.clientWidth;
       var p = max > 0 ? track.scrollLeft / max : 0;
       fill.style.transform = 'scaleX(' + (1 / n + p * (1 - 1 / n)).toFixed(3) + ')';

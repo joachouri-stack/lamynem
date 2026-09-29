@@ -1424,3 +1424,6 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .hero__mobile, .hero__mobile img { display: block; position: absolute; inset: 0; width: 100%; height: 100%; }
   .hero__mobile img { object-fit: cover; filter: contrast(1.08) saturate(1.1) brightness(.92); }
 }
+
+/* Robe déjà utilisée en couverture mobile : pas répétée dans le carrousel */
+@media (max-width: 720px) { .robe--hero { display: none; } }

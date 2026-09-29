@@ -132,9 +132,11 @@ function robeCard(r, lang, num) {
   const inner = `<div class="robe__media">${picture(r.image, lang, { sizes: '(max-width: 1024px) 50vw, 26vw' })}</div>`
     + `<div class="robe__meta"><span class="robe__num">${num}</span><h3 class="robe__title">${title}</h3>`
     + `<p class="eyebrow">${esc(tr(r.medium, lang))}</p></div>`;
+  // Sur mobile, la robe déjà affichée en couverture n'est pas répétée dans le carrousel.
+  const cls = `robe reveal${!HERO.image && r.image === HERO.mobileImage ? ' robe--hero' : ''}`;
   return w
-    ? `<a class="robe reveal" href="${workPath(lang, w)}">${inner}</a>`
-    : `<div class="robe reveal">${inner}</div>`;
+    ? `<a class="${cls}" href="${workPath(lang, w)}">${inner}</a>`
+    : `<div class="${cls}">${inner}</div>`;
 }
 
 // --- Gabarit commun -------------------------------------------------------
@@ -374,7 +376,7 @@ function renderHome(lang) {
   <div class="robes" data-carousel>
     ${FEATURED_ROBES.map((r, i) => robeCard(r, lang, roman(i + 2))).join('\n    ')}
   </div>
-  <div class="carousel-bar" aria-hidden="true"><span class="carousel-bar__count" data-carousel-count>1 / ${FEATURED_ROBES.length}</span><span class="carousel-bar__track"><span class="carousel-bar__fill" data-carousel-fill></span></span></div>
+  <div class="carousel-bar" aria-hidden="true"><span class="carousel-bar__count" data-carousel-count>1 / ${FEATURED_ROBES.filter(r => HERO.image || r.image !== HERO.mobileImage).length}</span><span class="carousel-bar__track"><span class="carousel-bar__fill" data-carousel-fill></span></span></div>
   <div class="works-more"><a class="eyebrow link-line" href="${path(lang, 'work')}">${esc(h.allWorks)} ${ARROW}</a></div>
 </section>
 
