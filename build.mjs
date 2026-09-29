@@ -414,7 +414,10 @@ function renderHome(lang) {
       <p class="ex-home__intro">${esc(h.exhibitionsIntro)}</p>
       <a class="eyebrow link-line" href="${path(lang, 'exhibitions')}">${esc(h.allExhibitions)} ${ARROW}</a>
     </div>
-    ${exTimeline(lang)}
+    <div class="ex-home__list">
+      ${exTimeline(lang)}
+      <a class="eyebrow link-line ex-home__more" href="${path(lang, 'exhibitions')}">${esc(h.allExhibitions)} ${ARROW}</a>
+    </div>
   </div>
   <div class="territories">
     <p class="eyebrow">${esc(h.territories)}</p>

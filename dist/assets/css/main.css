@@ -1384,3 +1384,23 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
 @media (max-width: 380px) and (min-width: 360px) { .burger__label { display: inline; } }
 /* « Fermer » suit la même règle que « Menu » : visible dès 360 px */
 @media (max-width: 380px) and (min-width: 360px) { .menu-close__label { display: inline; } }
+
+/* --- Accueil mobile : version courte -------------------------------------
+   Sur téléphone, chaque section de l'accueil ne garde que l'essentiel ;
+   le détail reste sur les pages dédiées (liens « Voir … »). */
+.ex-home__more { display: none; }
+@media (max-width: 720px) {
+  /* Art in Motion : 2 performances sur 5 */
+  .motion__prog ol > li:nth-child(n+3) { display: none; }
+  /* Expositions : 2 étapes sur 4, lien vers la page complète juste après */
+  .ex-tl > li:nth-child(n+3) { display: none; }
+  .ex-home__aside > .link-line { display: none; }
+  .ex-home__more { display: inline-block; margin-top: 24px; }
+  /* Presse : le bandeau des noms suffit, la liste détaillée est sur la page Presse */
+  .press .press-rows { display: none; }
+  /* Éléments qui répètent une information déjà donnée ou présente sur les pages dédiées */
+  .artist .artist__themes, .exhibitions .territories, .masterclass .mc-pillars { display: none; }
+  .mc-top { gap: 0; }
+  .mc-sessions { margin-top: 36px; }
+  .press__grid { margin-top: 32px; }
+}
