@@ -558,14 +558,14 @@ function renderWorkIndex(lang) {
   </span></a></li>`;
   }).join('\n');
   let n = 0;
-  const index = CATEGORIES.map(cat => WORKS.filter(w => w.category === cat).map(w => {
+  const index = CATEGORIES.map(cat => `<li class="w-index__group" aria-hidden="true"><span>${esc(s.categories[cat])}</span><span>${WORKS.filter(w => w.category === cat).length}</span></li>` + WORKS.filter(w => w.category === cat).map(w => {
     n++;
     const kind = tr(w.medium, lang) || s.categories[w.category];
     return `<li><a class="w-index__row" href="${workPath(lang, w)}">`
       + `<span class="w-index__num">${pad2(n)}</span>`
       + `<span class="w-index__title">${esc(w.title)}</span>`
       + `<span class="eyebrow w-index__cat">${esc(s.categories[w.category])}${kind !== s.categories[w.category] ? ` · ${esc(kind)}` : ''}</span>`
-      + `<span class="w-index__year">${w.year ? esc(w.year) : '<span aria-hidden="true">—</span>'}</span>`
+      + `<span class="w-index__year${w.year ? '' : ' w-index__year--none'}">${w.year ? esc(w.year) : '<span aria-hidden="true">—</span>'}</span>`
       + `<span class="w-index__arrow" aria-hidden="true">→</span></a></li>`;
   }).join('')).join('');
   const body = `
