@@ -1597,3 +1597,7 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .pdp .crumbs { white-space: nowrap; }
 }
 @media (max-width: 960px) { .pdp .crumbs a::before { inset: -16px -8px; } }
+
+/* Expositions sur mobile : le lieu déjà cité dans le titre n'est pas répété
+   (la ville reste affichée). */
+@media (max-width: 720px) { .ex-card__venue--dup { display: none; } }

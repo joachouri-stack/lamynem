@@ -544,6 +544,14 @@ function motionRing(text) {
     + `<text><textPath href="#ring-path" textLength="488">${t}</textPath></text></svg>`;
 }
 
+/** Le lieu figure déjà dans le titre (« Seconde vie — Villa D » / « Villa D ») ? */
+function venueInTitle(e, lang) {
+  const t = String(tr(e.title, lang) || '').toLowerCase();
+  const v = String(e.venue || '').toLowerCase();
+  const after = t.split(' — ').pop().replace(/[«»"]/g, '').trim();
+  return !!v && (t.includes(v) || (after.length > 3 && v.startsWith(after)));
+}
+
 /** Frise des expositions de l'accueil : année, type, titre, lieu ; lien vers la fiche. */
 function exTimeline(lang) {
   const s = STRINGS[lang];
@@ -816,7 +824,7 @@ function renderExhibitions(lang) {
     ${detail ? `<p class="ex-card__detail">${esc(detail)}</p>` : ''}
     ${work ? `<a class="eyebrow link-line ex-card__work" href="${workPath(lang, work)}">${esc(x.linkedWork)} ${ARROW}</a>` : ''}
   </div>
-  <div class="ex-card__place"><p class="ex-card__venue">${esc(e.venue)}</p><p class="eyebrow">${placeOf(e)}</p></div>
+  <div class="ex-card__place"><p class="ex-card__venue${venueInTitle(e, lang) ? ' ex-card__venue--dup' : ''}">${esc(e.venue)}</p><p class="eyebrow">${placeOf(e)}</p></div>
 </li>`;
   }).join('\n');
 
