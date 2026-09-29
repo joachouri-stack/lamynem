@@ -30,7 +30,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,400&family=Onest:wght@400;500&display=swap">
-<link rel="stylesheet" href="/assets/css/main.css?v=1a16b8a4">
+<link rel="stylesheet" href="/assets/css/main.css?v=726e7bd3">
 <script>(function(h){try{var c=navigator.connection;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(c&&c.saveData))h.classList.add('has-fabric')}catch(e){}})(document.documentElement)</script>
 <script src="/assets/js/main.js?v=f4775b43" defer></script>
 <script src="/assets/js/fabric.js?v=ac63a100" defer></script>
@@ -86,13 +86,20 @@
 </section>
 
 <section class="section artist" aria-labelledby="artist-title">
-  <div class="artist__media reveal"><div class="swatch" style="--c1:#e0a06a;--c2:#a2643a;--c3:#2a1810"><div class="swatch__inner"></div><div class="grain"></div><p class="eyebrow swatch__note">Изображение будет добавлено</p></div></div>
+  <figure class="artist__figure reveal">
+    <div class="artist__mat"><div class="artist__frame"><picture><source type="image/avif" srcset="/assets/img/robe-doree-cape-rouge-vitraux-480.avif 480w, /assets/img/robe-doree-cape-rouge-vitraux-683.avif 683w" sizes="(max-width: 860px) 100vw, 40vw"><source type="image/webp" srcset="/assets/img/robe-doree-cape-rouge-vitraux-480.webp 480w, /assets/img/robe-doree-cape-rouge-vitraux-683.webp 683w" sizes="(max-width: 860px) 100vw, 40vw"><img src="/assets/img/robe-doree-cape-rouge-vitraux-683.jpg" srcset="/assets/img/robe-doree-cape-rouge-vitraux-480.jpg 480w, /assets/img/robe-doree-cape-rouge-vitraux-683.jpg 683w" sizes="(max-width: 860px) 100vw, 40vw" width="683" height="1024" alt="Высокое тёмно-синее платье с расшитым золотом лифом и красной накидкой с золотой каймой, установленное на каменной капители между двумя витражами; босой мужчина в светлом льне смотрит на него." loading="lazy" decoding="async" style="object-position:82% 55%"></picture></div></div>
+    <figcaption class="eyebrow artist__route">Африка · Европа · Азия · Латинская Америка</figcaption>
+  </figure>
   <div class="artist__text reveal">
     <p class="watermark" aria-hidden="true">02</p>
     <div class="label"><svg class="thread" viewBox="0 0 30 8" aria-hidden="true" focusable="false"><path d="M0 4 Q4 0 8 4 T16 4 T24 4 T30 4" stroke="#B5502E" stroke-width="1" fill="none"/></svg><h2 class="eyebrow" id="artist-title">Художник</h2></div>
     <p class="h-lead artist__lead">Lamyne M родился в 1977 году в Камеруне, живёт и работает в Сен-Дени. Уже более десяти лет он делает текстиль средством гражданского высказывания.</p>
-    <p class="artist__body">Колониализм, мужское доминирование, современное рабство, миграция и экология — гибридный путь между Африкой, Европой, Азией и Латинской Америкой; в 2021 году одна из его работ вошла в коллекцию Harn Museum (Флорида).</p>
-    <a class="eyebrow link-line" href="/ru/o-khudozhnike/">Узнать больше о Lamyne M <span class="arrow" aria-hidden="true">→</span></a>
+    <dl class="artist__facts"><div><dt>1977</dt><dd class="eyebrow">Родился в Камеруне</dd></div><div><dt>Сен-Дени</dt><dd class="eyebrow">Живёт и работает</dd></div><div><dt>10+ лет</dt><dd class="eyebrow">Текстиль как высказывание</dd></div><div><dt>2021</dt><dd class="eyebrow">Коллекция Harn Museum</dd></div></dl>
+    <div class="artist__themes">
+      <p class="eyebrow">Темы</p>
+      <ul><li>Колониализм</li><li>Мужское доминирование</li><li>Современное рабство</li><li>Миграция</li><li>Экология</li></ul>
+    </div>
+    <a class="artist__cta" href="/ru/o-khudozhnike/">Узнать больше о Lamyne M <span aria-hidden="true">→</span></a>
   </div>
 </section>
 

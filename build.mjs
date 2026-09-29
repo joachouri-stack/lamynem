@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
-  BIO, CONTACT, COUNTRIES, DEFAULT_LANG, EXHIBITIONS, FEATURED_ROBES, HERO, IMAGES, LANGS,
+  ARTIST_PHOTO, BIO, CONTACT, COUNTRIES, DEFAULT_LANG, EXHIBITIONS, FEATURED_ROBES, HERO, IMAGES, LANGS,
   MOTION_VIDEO, PRESS, PRESS_KIT, ROUTES, SITE_URL, WORKS,
 } from './src/content/site.mjs';
 import { STRINGS } from './src/content/i18n.mjs';
@@ -300,6 +300,7 @@ function renderHome(lang) {
   const s = STRINGS[lang], h = s.home;
   const alternates = alts('home');
   const secondeVie = EXHIBITIONS.find(e => e.id === 'seconde-vie');
+  if (ARTIST_PHOTO.image) TODOS.add('Bloc « L’artiste » : confirmer que la personne photographiée est Lamyne M, et le crédit photo');
   if (!HERO.image) TODOS.add('Photo de couverture de l’accueil en haute définition (≥ 3000 px de large), avec titre, lieu et crédit');
 
   const video = MOTION_VIDEO
@@ -349,13 +350,22 @@ function renderHome(lang) {
 </section>
 
 <section class="section artist" aria-labelledby="artist-title">
-  <div class="artist__media reveal">${swatch(['#e0a06a', '#a2643a', '#2a1810'], lang)}</div>
+  <figure class="artist__figure reveal">
+    <div class="artist__mat"><div class="artist__frame">${ARTIST_PHOTO.image
+      ? picture(ARTIST_PHOTO.image, lang, { sizes: '(max-width: 860px) 100vw, 40vw', style: `object-position:${ARTIST_PHOTO.focus}` })
+      : swatch(['#e0a06a', '#a2643a', '#2a1810'], lang)}</div></div>
+    <figcaption class="eyebrow artist__route">${esc(h.artistRoute)}</figcaption>
+  </figure>
   <div class="artist__text reveal">
     <p class="watermark" aria-hidden="true">02</p>
     ${label(h.artistEyebrow, { tag: 'h2', id: 'artist-title' })}
     <p class="h-lead artist__lead">${esc(h.artistLead)}</p>
-    <p class="artist__body">${esc(h.artistBody)}</p>
-    <a class="eyebrow link-line" href="${path(lang, 'about')}">${esc(h.artistCta)} ${ARROW}</a>
+    <dl class="artist__facts">${h.artistFacts.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd class="eyebrow">${esc(v)}</dd></div>`).join('')}</dl>
+    <div class="artist__themes">
+      <p class="eyebrow">${esc(h.artistThemesLabel)}</p>
+      <ul>${h.artistThemes.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+    </div>
+    <a class="artist__cta" href="${path(lang, 'about')}">${esc(h.artistCta)} <span aria-hidden="true">→</span></a>
   </div>
 </section>
 
