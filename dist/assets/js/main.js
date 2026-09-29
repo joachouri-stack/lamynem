@@ -142,6 +142,26 @@
     update();
   });
 
+  // --- Fiche d'œuvre : barre d'action collante (mobile) ---------------------
+  // Visible dès que le bouton principal n'est pas à l'écran (pas encore atteint
+  // ou déjà passé), masquée sur le pied de page.
+  var bar = document.querySelector('[data-pdp-bar]');
+  var cta = document.querySelector('[data-pdp-cta]');
+  var foot = document.getElementById('contact');
+  if (bar && cta && 'IntersectionObserver' in window) {
+    var ctaGone = false, footIn = false;
+    var sync = function () {
+      var on = ctaGone && !footIn;
+      bar.classList.toggle('is-shown', on);
+      bar.setAttribute('aria-hidden', String(!on));
+      bar.querySelector('a').tabIndex = on ? 0 : -1;
+    };
+    new IntersectionObserver(function (en) {
+      ctaGone = !en[0].isIntersecting; sync();
+    }).observe(cta);
+    if (foot) new IntersectionObserver(function (en) { footIn = en[0].isIntersecting; sync(); }).observe(foot);
+  }
+
   // --- Mémorisation de la langue choisie (utilisée par la page racine) ----
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[data-lang]');

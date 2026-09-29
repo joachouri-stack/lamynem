@@ -690,26 +690,63 @@ function renderWork(w, lang) {
 
   const prev = inCat[(num - 2 + inCat.length) % inCat.length];
   const related = inCat.filter(x => x !== w);
+  const catName = s.categories[w.category];
+  // Ligne sous le titre : ce qu'on sait (technique ou lieu, année), sinon la pratique.
+  const sub = [w.category === 'masterclass' ? place : (medium && medium.toLowerCase() !== catName.toLowerCase() ? medium : ''), w.year]
+    .filter(Boolean).map(esc).join(' · ') || esc(catName);
+  // Fiche technique : uniquement des informations confirmées.
+  const specs = [
+    [s.work.artist, 'Lamyne M'],
+    [s.work.category, esc(catName)],
+    ...facts.filter(([k]) => k !== s.work.category),
+  ];
+  const shown = EXHIBITIONS.filter(e => e.work === w.slug);
+  const mail = `mailto:${CONTACT.email}?subject=${encodeURIComponent(`${w.title} — Lamyne M`)}`;
+  const paras = text ? (Array.isArray(text) ? text : [text]) : [];
+  // Sans photo : une « étoffe » encadrée comme un cartel de galerie, pas un aplat vide.
+  const stage = w.image
+    ? picture(w.image, lang, { eager: true, sizes: '(max-width: 960px) 100vw, 58vw' })
+    : `<div class="etoffe">${swatch(w.tone, lang, false)}<span class="etoffe__frame" aria-hidden="true"></span>`
+      + `<span class="etoffe__num" aria-hidden="true">${roman(num)}</span>`
+      + `<span class="etoffe__sig" aria-hidden="true">Lamyne M — ${esc(w.title)}</span></div>`;
   const body = `
-<article>
-  <header class="work-hero" data-header-over>
-    ${w.image ? picture(w.image, lang, { eager: true }) : swatch(w.tone, lang)}
-    <p class="watermark watermark--light" aria-hidden="true">${pad2(num)}</p>
-    <div class="work-hero__caption">
-      <nav class="crumbs eyebrow" aria-label="${esc(s.work.crumbs)}"><a href="${path(lang, 'work')}">${esc(s.work.eyebrow)}</a> <span aria-hidden="true">/</span> <a href="${catPath(lang, w.category)}">${esc(s.categories[w.category])}</a></nav>
-      <h1>${esc(w.title)}</h1>
-      <ul class="work-hero__facts">${facts.map(([k, v]) => `<li><span class="eyebrow">${esc(k)}</span><span class="work-hero__fact">${v}</span></li>`).join('')}</ul>
+<article class="pdp">
+  <div class="pdp__media">
+    <figure class="pdp__stage${w.image ? '' : ' pdp__stage--etoffe'}">${stage}</figure>
+  </div>
+  <div class="pdp__info">
+    <div class="pdp__panel">
+      <div class="pdp__top">
+        <nav class="crumbs eyebrow" aria-label="${esc(s.work.crumbs)}"><a href="${path(lang, 'work')}">${esc(s.work.eyebrow)}</a> <span aria-hidden="true">/</span> <a href="${catPath(lang, w.category)}">${esc(catName)}</a></nav>
+        <div class="pdp__pager">
+          <a href="${workPath(lang, prev)}" aria-label="${esc(s.work.prev)} : ${esc(prev.title)}"><span aria-hidden="true">←</span></a>
+          <span class="eyebrow">${pad2(num)} <span class="pdp__of">/ ${pad2(inCat.length)}</span></span>
+          <a href="${workPath(lang, next)}" aria-label="${esc(s.work.next)} : ${esc(next.title)}"><span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <p class="eyebrow pdp__maker">Lamyne M</p>
+      <h1 class="pdp__title">${esc(w.title)}</h1>
+      <p class="pdp__sub">${sub}</p>
+      <div class="pdp__actions">
+        <a class="pdp__cta" href="${mail}" data-pdp-cta>${esc(s.work.ask)} <span aria-hidden="true">→</span></a>
+        <a class="eyebrow link-line pdp__more" href="${catPath(lang, w.category)}">${esc(s.work.seeCat(catName))} ${ARROW}</a>
+      </div>
+      <div class="pdp__acc">
+        <details open><summary>${esc(s.work.specs)}</summary>
+          <dl class="pdp__specs">${specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${v}</dd></div>`).join('')}</dl>
+        </details>
+        ${paras.length ? `<details open><summary>${esc(s.work.about)}</summary><div class="pdp__text">${paras.map(p => `<p>${esc(p)}</p>`).join('')}</div></details>`
+          : SHOW_TODO ? `<p class="todo-block">${esc(s.work.textTodo)}</p>` : ''}
+        ${shown.length ? `<details><summary>${esc(s.work.shownIn)} <sup>${shown.length}</sup></summary><ul class="pdp__shows">${shown.map(e => `<li><a href="${path(lang, 'exhibitions')}#${e.id}"><span class="pdp__show-t">${esc(tr(e.title, lang))}</span><span class="eyebrow">${e.year ? `${esc(e.year)} · ` : ''}${esc(tr(e.city, lang))}</span></a></li>`).join('')}</ul></details>` : ''}
+        <details><summary>${esc(s.work.practice)}</summary><p class="pdp__practice">${esc(s.categoryIntro[w.category])} <a class="link-line" href="${catPath(lang, w.category)}">${esc(s.work.count(inCat.length))}</a></p></details>
+      </div>
     </div>
-  </header>
-  <div class="work-body${text ? '' : ' work-body--short'}">
-    <aside class="work-side">
-      <p class="eyebrow">${esc(s.work.details)} · ${pad2(num)}/${pad2(inCat.length)}</p>
-      <dl class="facts${facts.length === 1 ? ' facts--solo' : ''}">${facts.map(([k, v]) => `<div><dt class="eyebrow">${esc(k)}</dt><dd>${v}</dd></div>`).join('')}</dl>
-      <a class="mc-host work-ask" href="mailto:${CONTACT.email}?subject=${encodeURIComponent(w.title)}">${esc(s.work.ask)} <span aria-hidden="true">→</span></a>
-    </aside>
-    <div class="work-text">${text ? (Array.isArray(text) ? text : [text]).map(p => `<p>${esc(p)}</p>`).join('') : SHOW_TODO ? `<p class="todo-block">${esc(s.work.textTodo)}</p>` : ''}</div>
   </div>
 </article>
+<div class="pdp-bar" data-pdp-bar aria-hidden="true">
+  <span class="pdp-bar__t"><span class="eyebrow">${pad2(num)} / ${pad2(inCat.length)}</span>${esc(w.title)}</span>
+  <a class="pdp-bar__btn" href="${mail}" tabindex="-1">${esc(s.work.askShort)} <span aria-hidden="true">→</span></a>
+</div>
 ${related.length ? `<section class="related" aria-labelledby="rel-t">
   <div class="related__head">${label(s.work.related, { tag: 'h2', id: 'rel-t' })}<a class="eyebrow link-line" href="${catPath(lang, w.category)}">${esc(s.work.seeCat(s.categories[w.category]))} ${ARROW}</a></div>
   <ul class="related__list" data-carousel>${related.map(x => `<li><a class="related__card" href="${workPath(lang, x)}"><span class="related__media${x.image ? '' : ' related__media--noimg'}">${x.image ? picture(x.image, lang, { sizes: '260px' }) : swatch(x.tone, lang, false)}<span class="related__num" aria-hidden="true">${roman(inCat.indexOf(x) + 1)}</span></span><span class="related__title">${esc(x.title)}</span></a></li>`).join('')}</ul><div class="carousel-bar" aria-hidden="true"><span class="carousel-bar__count" data-carousel-count>1 / ${related.length}</span><span class="carousel-bar__track"><span class="carousel-bar__fill" data-carousel-fill></span></span></div>
@@ -742,7 +779,7 @@ ${related.length ? `<section class="related" aria-labelledby="rel-t">
 
   page({
     lang, route: 'work', slug: w.slug, alternates: Object.fromEntries(LANGS.map(l => [l, workPath(l, w)])), xDefault: workPath(DEFAULT_LANG, w),
-    current: 'work', over: true, ogType: 'article', ogImage: w.image || undefined,
+    current: 'work', ogType: 'article', ogImage: w.image || undefined,
     title: `${w.title} — Lamyne M`, description: desc, body,
     jsonld: [ld, personLd(lang)],
   });
