@@ -699,7 +699,6 @@ function renderWork(w, lang) {
     [s.work.artist, 'Lamyne M'],
     [s.work.category, esc(catName)],
     ...facts.filter(([k]) => k !== s.work.category),
-    [s.work.ref, `${esc(s.work.no)} ${pad2(num)} / ${pad2(inCat.length)}`],
   ];
   const shown = EXHIBITIONS.filter(e => e.work === w.slug);
   const mail = `mailto:${CONTACT.email}?subject=${encodeURIComponent(`${w.title} — Lamyne M`)}`;
