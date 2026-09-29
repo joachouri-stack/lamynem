@@ -87,6 +87,11 @@ export const ARTIST_PHOTO = { image: 'robe-doree-cape-rouge-vitraux', focus: '82
 export const HERO = {
   image: TODO,
   focus: 'center 50%',
+  // Sur téléphone (écran vertical), une photo verticale existante reste nette
+  // en plein écran : elle est affichée sous 720 px uniquement (et n'est pas
+  // téléchargée sur ordinateur).
+  mobileImage: 'robe-patchwork-jean-donjon',
+  mobileFocus: 'center 30%',
 };
 
 // ---------------------------------------------------------------------------

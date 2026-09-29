@@ -82,6 +82,23 @@ function picture(key, lang, { sizes = '100vw', eager = false, cls = '', style = 
     + (style ? ` style="${style}"` : '') + '></picture>';
 }
 
+/** Photo de couverture réservée au mobile : <source media> seulement, l'<img> de repli
+ *  est une image vide, donc rien n'est téléchargé sur ordinateur. */
+function heroMobile(lang) {
+  const key = HERO.mobileImage;
+  if (!key || HERO.image) return '';
+  const m = MANIFEST[key];
+  const base = `/assets/img/${key}`;
+  const set = ext => m.widths.map(w => `${base}-${w}.${ext} ${w}w`).join(', ');
+  const q = '(max-width: 720px)';
+  return `<picture class="hero__mobile">`
+    + `<source media="${q}" type="image/avif" srcset="${set('avif')}" sizes="100vw">`
+    + `<source media="${q}" type="image/webp" srcset="${set('webp')}" sizes="100vw">`
+    + `<source media="${q}" srcset="${set('jpg')}" sizes="100vw">`
+    + `<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="${esc(tr(IMAGES[key]?.alt, lang) || '')}" width="${m.width}" height="${m.height}" fetchpriority="high" decoding="async" style="object-position:${HERO.mobileFocus}">`
+    + '</picture>';
+}
+
 /** Aplat coloré de remplacement quand la photo d'une œuvre n'est pas encore fournie. */
 function swatch(tone, lang, note = true) {
   const [c1, c2, c3] = tone;
@@ -321,7 +338,7 @@ function renderHome(lang) {
   const body = `
 <section class="hero${HERO.image ? '' : ' hero--plain'}" data-hero data-header-over aria-labelledby="hero-title">
   <div class="hero__stage">
-    ${HERO.image ? picture(HERO.image, lang, { eager: true, cls: 'hero__media', style: `object-position:${HERO.focus}` }) : ''}
+    ${HERO.image ? picture(HERO.image, lang, { eager: true, cls: 'hero__media', style: `object-position:${HERO.focus}` }) : heroMobile(lang)}
     <div class="hero__veil hero__veil--a" aria-hidden="true"></div>
     <div class="glow" aria-hidden="true"></div>
     <div class="grain" aria-hidden="true"></div>
