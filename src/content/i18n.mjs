@@ -16,7 +16,6 @@ export const STRINGS = {
     scroll: 'Défiler',
     tagline: 'Artiste plasticien & performeur',
     enter: 'Entrer',
-    enterNote: 'Le son fait partie de l’expérience',
     disciplines: 'Textile • Installation • Performance • Transmission',
     categories: { art: 'Art', performance: 'Performance', masterclass: 'Masterclass' },
     categoryIntro: {
@@ -176,7 +175,6 @@ export const STRINGS = {
     scroll: 'Scroll',
     tagline: 'Visual artist & performer',
     enter: 'Enter',
-    enterNote: 'Sound is part of the experience',
     disciplines: 'Textile • Installation • Performance • Transmission',
     categories: { art: 'Art', performance: 'Performance', masterclass: 'Masterclass' },
     categoryIntro: {
@@ -336,7 +334,6 @@ export const STRINGS = {
     scroll: 'Листайте',
     tagline: 'Художник и перформер',
     enter: 'Войти',
-    enterNote: 'Звук — часть впечатления',
     disciplines: 'Текстиль • Инсталляция • Перформанс • Передача опыта',
     categories: { art: 'Искусство', performance: 'Перформанс', masterclass: 'Мастер-класс' },
     categoryIntro: {
@@ -460,7 +457,7 @@ export const STRINGS = {
       basedLabel: 'Живёт и работает в',
       ctaTitle: 'Выставка, резиденция, сотрудничество?',
       ctaWorks: 'Смотреть работы',
-      entries: n => `${n}`,
+      entries: n => `${n} ${n % 10 === 1 && n % 100 !== 11 ? 'запись' : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? 'записи' : 'записей'}`,
     },
     press: {
       title: 'Пресса — Lamyne M',

@@ -350,7 +350,6 @@ function renderHome(lang) {
     <p class="enter__name" id="enter-t">LAMYNE M</p>
     <p class="eyebrow enter__tag">${esc(s.tagline)}</p>
     <button class="enter__btn" type="button" data-enter-btn><span>${esc(s.enter)}</span></button>
-    <p class="eyebrow enter__note"><svg viewBox="0 0 24 10" aria-hidden="true"><path d="M1 5c2.5 0 2.5-4 5-4s2.5 8 5 8 2.5-8 5-8 2.5 4 7 4"/></svg>${esc(s.enterNote)}</p>
   </div>
 </div>`;
 
@@ -837,7 +836,7 @@ function renderAbout(lang) {
   const approach = tr(BIO.approach, lang);
   const cvRows = types => EXHIBITIONS.filter(e => types.includes(e.type)).map(e =>
     `<li><a class="cv-row" href="${path(lang, 'exhibitions')}#${e.id}">`
-    + `<span class="cv-row__year">${e.year ? esc(e.year) : '<span aria-hidden="true">—</span>'}</span>`
+    + `<span class="cv-row__year${e.year ? '' : ' cv-row__year--none'}">${e.year ? esc(e.year) : '<span aria-hidden="true">—</span>'}</span>`
     + `<span class="cv-row__title">${esc(tr(e.title, lang))}</span>`
     + `<span class="eyebrow cv-row__place">${esc(tr(e.city, lang))}, ${esc(tr(e.country, lang))}</span></a></li>`).join('');
   const cvGroup = (i, title, types, empty) => {
