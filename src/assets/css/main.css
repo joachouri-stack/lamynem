@@ -1437,3 +1437,9 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .foot-grid > .foot-col:nth-last-child(2) { grid-area: contact; }
   .foot-grid > .foot-col:last-child { grid-area: social; }
 }
+
+/* En-tête mobile compact pendant la lecture : grand et aéré sur la couverture,
+   plus fin une fois la barre ivoire affichée (≈ 56 px au lieu de 72). */
+@media (max-width: 720px) {
+  .site-header.is-solid { padding-top: 6px; padding-bottom: 6px; }
+}

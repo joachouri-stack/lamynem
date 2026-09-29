@@ -59,12 +59,15 @@
     var startsOver = hdr.classList.contains('site-header--over');
     var lastY = window.scrollY;
     var ticking = false;
+    // Hauteur de référence, mesurée hors état compact : la barre ivoire rétrécit
+    // sur mobile, et le seuil ne doit pas bouger avec elle (pas d'oscillation).
+    var baseH = hdr.offsetHeight;
 
     var updateHeader = function () {
       ticking = false;
       var y = window.scrollY;
       // Fin de la zone sombre, mesurée en coordonnées de page.
-      var limit = overEl ? overEl.getBoundingClientRect().bottom + y - hdr.offsetHeight : 0;
+      var limit = overEl ? overEl.getBoundingClientRect().bottom + y - baseH : 0;
       var solid = y > Math.max(limit, 8);
       hdr.classList.toggle('is-solid', solid);
       if (startsOver) hdr.classList.toggle('site-header--over', !solid);
@@ -83,7 +86,16 @@
     window.addEventListener('scroll', function () {
       if (!ticking) { ticking = true; window.requestAnimationFrame(updateHeader); }
     }, { passive: true });
-    window.addEventListener('resize', updateHeader, { passive: true });
+    window.addEventListener('resize', function () {
+      if (!hdr.classList.contains('is-solid')) baseH = hdr.offsetHeight;
+      updateHeader();
+    }, { passive: true });
+    // Hauteur finale connue une fois la transition terminée (barre d'onglets fixe).
+    hdr.addEventListener('transitionend', function (e) {
+      if (e.target === hdr && e.propertyName === 'padding-top') {
+        document.documentElement.style.setProperty('--header-h', hdr.offsetHeight + 'px');
+      }
+    });
     updateHeader();
   }
 
