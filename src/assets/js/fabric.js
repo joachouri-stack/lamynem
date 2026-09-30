@@ -1,8 +1,9 @@
 /* Lamyne M — effet signature « tissu numérique » du hero.
  *
- * Un tissu patchwork (écho aux robes à pois de l'artiste) recouvre la photo
- * et le nom. Au scroll, il se soulève comme pris dans le vent et révèle
- * l'œuvre ; en desktop, la souris le soulève localement.
+ * Un tissu patchwork recouvre la photo et le nom. Au clic sur « Entrer »
+ * (ou dès le chargement si le visiteur est déjà entré), il se lève tout seul
+ * comme pris dans le vent et révèle l'accueil ; la page défile ensuite
+ * normalement jusqu'aux œuvres. En desktop, la souris le soulève localement.
  *
  * WebGL pur, sans dépendance : un seul triangle plein écran + shader.
  * Activé partout sauf si le visiteur demande moins d'animations ou le mode
@@ -148,7 +149,11 @@
   var DONE_LIFT = 1.18;
   var start = performance.now();
   var last = start;
-  var lift = 0, intro = 0, scrollP = 0;
+  var lift = 0, intro = 0;
+  // Levée automatique : liftAt = moment où le rideau commence à s'ouvrir
+  // (au clic sur « Entrer », ou peu après le chargement).
+  var LIFT_DURATION = 2.4;
+  var liftAt = Infinity;
   var mouse = { x: 0.5, y: 0.3, tx: 0.5, ty: 0.3, amt: 0, tamt: 0, speed: 0 };
   var gust = 0.3;
   var running = false, visible = true, raf = 0;
@@ -242,7 +247,7 @@
     try { sessionStorage.setItem('entered', '1'); } catch (e) { /* stockage indisponible */ }
     if (withSound) { wakeAudio(); swoosh(); }
     enterEl.classList.add('is-leaving');
-    start = performance.now(); // l'intro du rideau repart, avec le son
+    liftAt = performance.now() + 250; // le rideau s'ouvre, avec le son
     play();
     setTimeout(function () { root.classList.remove('needs-enter'); enterEl.remove(); enterEl = null; }, 900);
     document.removeEventListener('keydown', enterKeys, true);
@@ -260,6 +265,7 @@
   } else if (enterEl) {
     enterEl.remove(); enterEl = null;
   }
+  if (!entering) liftAt = start + 700;
 
   // Qualité adaptative : 1 = pleine résolution, réduite si les images tardent.
   var quality = 1;
@@ -276,12 +282,6 @@
       canvas.width = w; canvas.height = h;
       gl.viewport(0, 0, w, h);
     }
-  }
-
-  function readScroll() {
-    var total = hero.offsetHeight - window.innerHeight;
-    var y = -hero.getBoundingClientRect().top;
-    scrollP = total > 0 ? Math.min(Math.max(y / total, 0), 1) : 0;
   }
 
   function ease(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
@@ -310,7 +310,8 @@
 
     // Intro : le tissu se soulève légèrement après le chargement.
     intro = INTRO_LIFT * ease(Math.min(Math.max((t - 0.5) / 2.2, 0), 1));
-    var target = intro + (DONE_LIFT + 0.05 - intro) * ease(Math.min(scrollP / 0.82, 1));
+    var autoP = Math.min(Math.max((now - liftAt) / 1000 / LIFT_DURATION, 0), 1);
+    var target = intro + (DONE_LIFT + 0.05 - intro) * ease(autoP);
     lift += (target - lift) * Math.min(1, dt * 3.2);
 
     mouse.x += (mouse.tx - mouse.x) * Math.min(1, dt * 4);
@@ -322,7 +323,7 @@
     // Son : suit la vitesse du rideau (scroll) et, en desktop, les mouvements de souris.
     var speed = Math.abs(lift - prevLift) / Math.max(dt, 0.001);
     prevLift = lift;
-    soundLevel(Math.min(speed * 0.55 + Math.min(mouse.speed, 1) * mouse.amt * 0.35, 1));
+    soundLevel(Math.min(speed * 0.9 + Math.min(mouse.speed, 1) * mouse.amt * 0.35, 1));
 
     var done = lift > DONE_LIFT && target > DONE_LIFT;
     canvas.style.visibility = done ? 'hidden' : 'visible';
@@ -366,8 +367,8 @@
   }
 
   // --- Événements -------------------------------------------------------
-  window.addEventListener('scroll', function () { readScroll(); play(); wakeAudio(); }, { passive: true });
-  window.addEventListener('resize', function () { readScroll(); play(); }, { passive: true });
+  window.addEventListener('scroll', function () { wakeAudio(); }, { passive: true });
+  window.addEventListener('resize', function () { play(); }, { passive: true });
 
   if (fine) {
     hero.addEventListener('pointermove', function (e) {
@@ -399,7 +400,5 @@
   if (reduce.addEventListener) reduce.addEventListener('change', onMotionPref);
   else if (reduce.addListener) reduce.addListener(onMotionPref);
 
-  readScroll();
-  lift = scrollP > 0 ? INTRO_LIFT + (DONE_LIFT - INTRO_LIFT) * ease(Math.min(scrollP / 0.82, 1)) : 0;
   play();
 })();
