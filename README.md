@@ -84,8 +84,10 @@ et les pages de catégorie, fil d'Ariane sur les pages de catégorie et d'œuvre
 ## Effet « tissu numérique » (hero)
 
 `src/assets/js/fabric.js` — WebGL pur (aucune librairie) : un patchwork bleu roi à pois et coutures
-dorés, qui fait ressortir les robes rouges et or de l'artiste, recouvre la photo et le nom ; au scroll il se soulève comme pris dans le vent,
-la souris le soulève localement en desktop. Le rendu s'arrête hors écran et une fois le tissu levé.
+dorés, qui fait ressortir les robes rouges et or de l'artiste, recouvre la photo et le nom. Au clic sur
+« Entrer » (ou peu après le chargement si le visiteur est déjà entré), il se lève tout seul, comme pris
+dans le vent, et révèle l'accueil ; la page défile ensuite normalement jusqu'aux œuvres. La souris le
+soulève localement en desktop. Le rendu s'arrête hors écran et une fois le tissu levé.
 
 Son : un bruissement de tissu synthétisé en direct (Web Audio, aucun fichier) accompagne la levée
 du rideau, toujours actif, sans bouton ; son volume suit la vitesse du rideau. Limite des navigateurs :
