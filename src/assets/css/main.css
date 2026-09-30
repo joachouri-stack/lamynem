@@ -278,8 +278,8 @@ body.header-shown .cat-nav { top: var(--header-h, 0px); }
 
 .hero { position: relative; background: var(--night); color: var(--ivory); }
 .hero__stage { position: relative; height: 100vh; height: 100svh; min-height: 620px; max-height: 1200px; overflow: hidden; }
-/* Le rideau se lève tout seul (au clic sur « Entrer ») : le hero garde sa hauteur
-   normale, la molette mène directement aux œuvres. */
+.has-fabric .hero { height: 230vh; }
+.has-fabric .hero__stage { position: sticky; top: 0; max-height: none; }
 
 .hero__media, .hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; }
 .hero__media img { object-fit: cover; object-position: center 28%; filter: contrast(1.14) saturate(1.35) sepia(.12) brightness(.94); }
@@ -1408,7 +1408,11 @@ button.video__play:hover { background: var(--terracotta); border-color: var(--te
   .site-header.is-solid { padding-top: 6px; padding-bottom: 6px; }
 }
 
-
+/* Rideau sur mobile : parcours plus court (le tissu se lève sur ~la moitié,
+   puis courte pause sur l'œuvre dévoilée), sans long défilement immobile. */
+@media (max-width: 720px) {
+  .has-fabric .hero { height: 195vh; }
+}
 
 /* Œuvres sur mobile, tant que les photos manquent : une œuvre sans photo devient
    une ligne compacte (vignette de couleur, titre, technique, flèche) au lieu d'une
